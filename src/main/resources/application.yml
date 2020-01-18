@@ -4,6 +4,8 @@ server:
   tomcat:
     uri-encoding: UTF-8
 spring:
+  main:
+    allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
   #激活哪一个环境的配置文件
   profiles:
     active: dev
@@ -33,13 +35,31 @@ spring:
       poolPreparedStatements: true
       maxOpenPreparedStatements: 100
 
+  # jackson时间格式化
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  #Redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    #password: 1102837040
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+    lettuce:
+      shutdown-timeout: 0
+
 mybatis:
   mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.example.demo.entity
+  type-aliases-package: com.xvls.alexander.entity
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
-  #实体扫描，多个package用逗号或者分号隔离
-  typeAliasesPackage: com.example.demo.entity
+  #实体扫描，多个package用逗号或者分号隔离，这样就不用写全路径了，直接写实体名就可以了
+  typeAliasesPackage: com.xvls.alexander.entity
 
   global-config:
     #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
@@ -61,6 +81,8 @@ mybatis-plus:
     #metaObjectHandler: com.mysiteforme.admin.config.SysMetaObjectHandler
     #自定义SQL注入器
     #sql-injector: com.baomidou.springboot.xxx
+    #db-config:
+    #  id-type: auto  #全局配置主键生成策略，此处是自增长
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
