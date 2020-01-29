@@ -25,14 +25,13 @@ import java.util.Map;
 @SpringBootTest(classes = AlexanderApplication.class)
 public class TestUserMapper {
 
-    @Autowired
     private testDao testd;
 
     @Test
     public void testInsert(){
         User user = new User();
         user.setId(null);
-        user.setUName("Glitter");
+        user.setuName("Glitter");
         user.setPassword("1102837040");
         int result = this.testd.insert(user);
         System.out.println("数据库受影响的行数："+result);
@@ -45,7 +44,7 @@ public class TestUserMapper {
     public void testUpdateById(){
         User user = new User();
         user.setId(2L);//条件，根据id更新
-        user.setUName("GlitterL");//需要更新的字段
+        user.setuName("GlitterL");//需要更新的字段
         int result = this.testd.updateById(user);
         System.out.println("result => "+result);
     }
@@ -53,7 +52,7 @@ public class TestUserMapper {
     @Test
     public void testUpdate(){
         User user = new User();
-        user.setUName("GlitterS");//更新的字段
+        user.setuName("GlitterS");//更新的字段
 
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("id",2);//更新的条件
