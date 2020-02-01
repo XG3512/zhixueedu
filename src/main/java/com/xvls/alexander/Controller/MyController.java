@@ -40,7 +40,7 @@ public class MyController {
         return "login";
     }
 
-    @RequestMapping("/login")
+    /*@RequestMapping("/login")
     @ResponseBody
     public String login(String username,String password){
         //获取当前的用户
@@ -61,7 +61,7 @@ public class MyController {
         }
 
         return "success";
-    }
+    }*/
 
     @RequestMapping("/unauthorized")
     @ResponseBody

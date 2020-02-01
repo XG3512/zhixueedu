@@ -1,8 +1,10 @@
 package com.xvls.alexander.config;
 
 import com.xvls.alexander.entity.User;
+import com.xvls.alexander.entity.wx.WxUserInfo;
 import com.xvls.alexander.service.UserService;
 import com.xvls.alexander.service.impl.UserServiceImpl;
+import com.xvls.alexander.service.wx.WxUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -17,6 +19,8 @@ public class UserRealm extends AuthorizingRealm {
 
     @Autowired
     UserServiceImpl userService;
+    @Autowired
+    WxUserService wxUserService;
 
     /*授权*/
     @Override
@@ -45,8 +49,8 @@ public class UserRealm extends AuthorizingRealm {
         String password = "123456";*/
 
         UsernamePasswordToken userToken = (UsernamePasswordToken) token ;
-        //连接真是数据库
-        User user = userService.queryUserByName(userToken.getUsername());
+        /*******连接真实数据库**********/
+        WxUserInfo user = wxUserService.getWxStudentInfoByUserNum(userToken.getUsername());
 
         if(user==null){//没有这个人
             return null;//UnknownAccountException

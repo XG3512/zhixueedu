@@ -24,6 +24,9 @@
         <druid.version>1.1.9</druid.version>
         <commons-lang3.version>3.8</commons-lang3.version>
         <commons-codec.version>1.10</commons-codec.version>
+        <shiro.version>1.4.0</shiro.version>
+        <thymeleaf.version>2.0.0</thymeleaf.version>
+        <weixin.version>3.3.0</weixin.version>
     </properties>
 
     <repositories>
@@ -90,6 +93,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
             <optional>true</optional>
         </dependency>
         <!--mysql驱动-->
@@ -189,17 +193,29 @@
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro.version}</version>
         </dependency>
         <!--thymeleaf模板-->
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.theborakompanioni</groupId>
             <artifactId>thymeleaf-extras-shiro</artifactId>
-            <version>2.0.0</version>
+            <version>${thymeleaf.version}</version>
+        </dependency>-->
+
+        <!--微信小程序配置-->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>${weixin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>${weixin.version}</version>
         </dependency>
 
 

@@ -54,7 +54,7 @@ public class RedisTest {
 
         User user2=new User();
         user2.setId(10L);
-        user2.setuName("Glitter");
+        user2.setUName("Glitter");
 
         redisTemplate.opsForValue().set("2", JacksonUtil.to(user2));
         System.out.println("输出redis中的User对象："+ redisTemplate.opsForValue().get("2"));
