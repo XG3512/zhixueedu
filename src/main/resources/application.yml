@@ -101,3 +101,10 @@ spring:
     url: jdbc:mysql://139.159.240.77:3306/xvls_alexander?useUnicode=true&characterEncoding=utf-8&useSSL=false&tinyInt1isBit=true&serverTimezone=UTC
     username: myuser
     password: 1102837040
+
+# xvls自定义全局数据
+# shiroConfig.java中的密码加密设置
+xvls_shiro:
+  setHashAlgorithmName: MD5
+  setHashIterations: 6
+  setStoredCredentialsHexEncoded: true

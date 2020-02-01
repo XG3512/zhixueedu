@@ -38,6 +38,6 @@ public class WxUserServiceImpl implements WxUserService {
      */
     @Override
     public void saveWxStudentInfo(WxUserInfo wxUserInfo) {
-        wxUserMapper.insert(wxUserInfo);
+        wxUserMapper.updateById(wxUserInfo);
     }
 }

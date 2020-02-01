@@ -6,6 +6,7 @@ import com.xvls.alexander.entity.User;
 import com.xvls.alexander.entity.wx.WxUserInfo;
 import com.xvls.alexander.service.impl.UserServiceImpl;
 import com.xvls.alexander.service.wx.WxUserService;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AlexanderApplication.class)
@@ -88,6 +90,45 @@ public class TestUserMapper2 {
     public void getWxUserInfoByOpenid(){
         WxUserInfo wxStudentInfoByOpenId = wxUserMapper.getWxStudentInfoByOpenId("123456");
         System.out.println(wxStudentInfoByOpenId);
+    }
+
+    /**
+     * 根据用户学号，进行MD5加密，并进行信息更新
+     */
+    @Test
+    public void updateWxUserInfoByUser_num(){
+
+        WxUserInfo wxUserInfo = wxUserService.getWxStudentInfoByUserNum("2017414540");
+
+        String password = wxUserInfo.getPassword();
+
+        String salt = UUID.randomUUID().toString();
+        salt = salt.replaceAll("-","");
+        wxUserInfo.setSalt(salt);
+        System.out.println("salt:"+salt);
+
+        //加密：MD5
+        Md5Hash md5Hash = new Md5Hash(password,wxUserInfo.getSalt(),6);
+        System.out.println("md5Hash.toHex() :"+md5Hash.toHex());
+        wxUserInfo.setPassword(md5Hash.toHex());//注意一致
+
+        //更新用户信息
+        wxUserService.saveWxStudentInfo(wxUserInfo);
+    }
+
+    @Test
+    public void testUUID(){
+        String s = UUID.randomUUID().toString();
+        System.out.println(s.length());
+        System.out.println(s);
+        String s1 = s.replaceAll("-", "");
+        System.out.println(s1.length());
+        System.out.println(s1);
+        System.out.println("---------");
+        Md5Hash md5Hash = new Md5Hash("password","wxUserInfo",6);
+        System.out.println(md5Hash.toHex());//与toString()方法的结果一样
+        System.out.println(md5Hash.toBase64());
+        System.out.println(md5Hash.toString());
     }
 
 

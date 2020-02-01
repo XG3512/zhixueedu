@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.google.common.collect.Sets;
+import com.xvls.alexander.entity.Permission;
 import com.xvls.alexander.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * 微信用户
@@ -50,6 +53,11 @@ public class WxUserInfo extends Model<WxUserInfo> implements Serializable {
     private int wxstatus;
 
     @TableField(exist = false)//该字段在数据库表中不存在
-    private ArrayList<Role> roleList;
+    private Set<Role> roleList = Sets.newHashSet();//角色列表
+
+    @TableField(exist = false)
+    private Set<Permission> permissions = Sets.newHashSet();//权限列表
+
+
 
 }
