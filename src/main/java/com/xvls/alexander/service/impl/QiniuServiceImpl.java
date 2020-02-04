@@ -6,13 +6,16 @@ import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.service.QiniuService;
 import com.xvls.alexander.utils.QiniuFileUtil;
+import com.xvls.alexander.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+@Service
 public class QiniuServiceImpl implements QiniuService {
 
     @Autowired
@@ -48,9 +51,13 @@ public class QiniuServiceImpl implements QiniuService {
         return map;
     }
 
+    /**
+     * 删除已经上传的图片
+     * @param imgPath
+     */
     @Override
-    public void deleteQiniu(String imgPath) {
-
+    public RestResponse deleteQiniu(String imgPath) {
+        return qiniuFileUtil.deleteQiniuP(imgPath);
     }
 
     @Override
@@ -63,8 +70,14 @@ public class QiniuServiceImpl implements QiniuService {
         return null;
     }
 
+    /**
+     * 上传base64位的图片
+     * @param base64
+     * @param name
+     * @return
+     */
     @Override
-    public String uploadBase64(String base64, String name) {
-        return null;
+    public RestResponse uploadBase64(String base64, String name) {
+        return qiniuFileUtil.uploadBase64(base64,name);
     }
 }

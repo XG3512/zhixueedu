@@ -2,6 +2,7 @@ package com.xvls.alexander.service;
 
 
 import com.xvls.alexander.entity.File_belong;
+import com.xvls.alexander.utils.RestResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public interface QiniuService {
      * 删除已经上传的图片
      * @param imgPath
      */
-    public void deleteQiniu(String imgPath);
+    public RestResponse deleteQiniu(String imgPath);
 
     /**
      * 上传网络图片
@@ -43,6 +44,7 @@ public interface QiniuService {
      * @param name
      * @return
      */
-    public String uploadBase64(String base64,String name);
+    public RestResponse uploadBase64(String base64,String name);
+
 
 }

@@ -71,7 +71,7 @@ public class QiniuFileUtil {
 			QueryWrapper<File_download> wrapper = new QueryWrapper<>();
 			wrapper.eq("file_hash",hash);
 			rescource = rescource.selectOne(wrapper);
-			System.out.println("selectOne:"+rescource);
+			//System.out.println("selectOne:"+rescource);
 			if( rescource != null){
 				return rescource;
 			}
@@ -79,8 +79,6 @@ public class QiniuFileUtil {
 				Response r = uploadManager.put(data, fileName, token);
 				//解析上传成功的结果
 				DefaultPutRet putRet = new Gson().fromJson(r.bodyString(), DefaultPutRet.class);
-				System.out.println(putRet.key);
-				System.out.println(putRet.hash);
 				if (r.isOK()) {
 					filePath = path + fileName;
 					rescource = new File_download();
