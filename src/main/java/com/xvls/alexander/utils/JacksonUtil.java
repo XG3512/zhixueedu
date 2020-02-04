@@ -23,6 +23,7 @@ import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -1069,6 +1070,10 @@ public class JacksonUtil {
             e.printStackTrace();
         }
         return null;
+    }
+    public static <T> T parseObject(String body, Class<T> clazz) {
+        Gson gson = new Gson();
+        return gson.fromJson(body, clazz);
     }
     public static String parseString(String body, String field) {
         ObjectMapper mapper = new ObjectMapper();

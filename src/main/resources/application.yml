@@ -108,3 +108,8 @@ xvls_shiro:
   setHashAlgorithmName: MD5
   setHashIterations: 6
   setStoredCredentialsHexEncoded: true
+xvls_qiniu:
+  path: http://xvls.top/
+  qiniuAccess: fVm1qUAtREn6wyBjzJhB7JE4piRHgzypdtvTTCFV
+  qiniuKey: 3MngPq1ovKCCCjkOwucoQC7Gxg_clZRJMRFTnKKy
+  bucketName: test01
