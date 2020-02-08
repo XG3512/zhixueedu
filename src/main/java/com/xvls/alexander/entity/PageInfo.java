@@ -11,6 +11,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class PageInfo implements Serializable {
 
-    private int pageNum;//页数
-    private int pageSize;//每页显示的条数
+    private Integer pageNum;//页数
+    private Integer pageSize;//每页显示的条数
 }

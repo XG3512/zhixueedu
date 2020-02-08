@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Permission implements Serializable {
 
-    private int permissionId;
+    private Integer permissionId;
     private String permissionName;
     private String permissionCode;
 }

@@ -27,4 +27,14 @@ public class WxArticleServiceImpl implements WxArticleService {
     public List<Article> getAllArticle() {
         return wxArticleMapper.getAllArticle();
     }
+
+    @Override
+    public Article getArticleById(int articleId) {
+        return wxArticleMapper.getArticleById(articleId);
+    }
+
+    @Override
+    public List<Article> getArticleBySchoolId(Integer schoolId) {
+        return wxArticleMapper.getArticleBySchoolId(schoolId);
+    }
 }

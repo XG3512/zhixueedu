@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxCommentsMapper">
+
+    <!--<resultMap id="getComments" type="com.xvls.alexander.entity.wx.Comments">
+        <id column="comment_id" property="commentId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="belong_type" property="belongType"></result>
+        <result column="belong_id" property="belongId"></result>
+        <result column="vc_content" property="vcContent"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="vc_date" property="vcDate"></result>
+        <result column="parent_vc_id" property="parentVcId"></result>
+        <collection property="members" ofType="com.xvls.alexander.entity.wx.Comments">
+            <id column="comment_id" property="commentId"></id>
+            <result column="user_id" property="userId"></result>
+            <result column="belong_type" property="belongType"></result>
+            <result column="belong_id" property="belongId"></result>
+            <result column="vc_content" property="vcContent"></result>
+            <result column="good_num" property="goodNum"></result>
+            <result column="vc_date" property="vcDate"></result>
+            <result column="parent_vc_id" property="parentVcId"></result>
+        </collection>
+    </resultMap>-->
+
+    <resultMap id="getAllComments" type="com.xvls.alexander.entity.wx.Comments">
+        <id column="comment_id" property="commentId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="belong_type" property="belongType"></result>
+        <result column="belong_id" property="belongId"></result>
+        <result column="vc_content" property="vcContent"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="vc_date" property="vcDate"></result>
+        <result column="parent_vc_id" property="parentVcId"></result>
+        <collection property="members" ofType="com.xvls.alexander.entity.wx.Comments" column="comment_id" select="getCommentsMembers"></collection>
+    </resultMap>
+
+    <!--<select id="getComments" resultMap="getComments">
+        SELECT comments.*,members.* FROM comments
+        LEFT JOIN comments members ON comments.`comment_id`=members.`parent_vc_id`
+        WHERE comments.belong_type=#{belongType} AND comments.belong_id = #{articleId} and comments.parent_vc_id = 0
+    </select>-->
+
+    <!--递归查询-->
+    <select id="getAllComments" resultMap="getAllComments">
+        select * from comments where parent_vc_id=0 and belong_type=#{belongType} and belong_id=#{articleId}
+    </select>
+
+    <select id="getCommentsMembers" resultMap="getAllComments">
+        select * from comments where parent_vc_id=#{comment_id}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.FileCrudMapper">
+
+    <resultMap id="file_belong" type="com.xvls.alexander.entity.File_belong">
+        <result column="user_id" property="userId"></result>
+        <result column="belong_type" property="belongType"></result>
+        <result column="belong_id" property="belongId"></result>
+        <result column="file_hash" property="fileHash"></result>
+        <result column="name" property="name"></result>
+        <result column="file_url" property="fileUrl"></result>
+        <result column="file_type" property="fileType"></result>
+        <result column="file_size" property="fileSize"></result>
+        <result column="file_status" property="fileStatus"></result>
+    </resultMap>
+
+    <select id="getFileList" resultMap="file_belong">
+        select file_belong.*,file_download.file_url,file_download.file_type,file_download.file_size, file_download.file_status
+        from file_belong
+        left join file_download on file_belong.file_hash=file_download.file_hash
+        where file_belong.user_id=#{userId} limit #{m},#{n}
+    </select>
+
+
+</mapper>

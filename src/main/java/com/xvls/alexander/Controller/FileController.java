@@ -4,18 +4,19 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.xvls.alexander.entity.File_belong;
+import com.xvls.alexander.entity.PageInfo;
+import com.xvls.alexander.service.FileCrudService;
 import com.xvls.alexander.service.QiniuService;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.QiniuFileUtil;
 import com.xvls.alexander.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class FileController {
     @Autowired
     QiniuService qiniuService;
 
+    @Autowired
+    FileCrudService fileCrudService;
+
     /**
      * 普通上传图片,需要上传文件,userId,belongType,belongId,name,
      * @param file
@@ -41,9 +45,9 @@ public class FileController {
     @PostMapping("uploadFile")
     public RestResponse uploadFile(@RequestParam("file")MultipartFile file, HttpServletRequest httpServletRequest){
         String getParameter = httpServletRequest.getParameter("file_belong");
-        System.out.println(getParameter);
+        //System.out.println(getParameter);
         File_belong file_belong = new Gson().fromJson(getParameter,File_belong.class);
-        //System.out.println(file_belong);
+        System.out.println(file_belong);
         if(file_belong==null){
             return RestResponse.failure("加载信息错误，参数传入错误");
         }
@@ -135,4 +139,37 @@ public class FileController {
         return RestResponse.success().setData(lists);
     }
 
+    /**
+     * 根据用户id，获取用户所上传的资料
+     * @param httpServletRequest
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "getFileList")
+    public RestResponse getFileList(@RequestParam("userId") int userId,HttpServletRequest httpServletRequest){
+
+        PageInfo pageInfo = JacksonUtil.parseObject(httpServletRequest.getParameter("pageInfo"), PageInfo.class);
+        System.out.println(pageInfo);
+        System.out.println(userId);
+        if(userId==0||pageInfo==null){
+            return RestResponse.failure("参数错误");
+        }
+        List<File_belong> fileList = fileCrudService.getFileList(userId, pageInfo);
+
+        return RestResponse.success().setData(fileList);
+    }
+
+    /**
+     * 批量删除资料信息，仅仅是删除file_belong中的信息，并未删除真正的资料
+     * @param userId
+     * @param httpServletRequest
+     * @return
+     */
+    @RequestMapping("deleteFiles")
+    public RestResponse deleteFiles(@RequestParam("userId") int userId , HttpServletRequest httpServletRequest){
+
+
+
+        return null;
+    }
 }

@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class Role implements Serializable {
 
-    private int roleId;
+    private Integer roleId;
     private String roleName;
 
     private Set<Permission> permissions  = Sets.newHashSet();//权限列表

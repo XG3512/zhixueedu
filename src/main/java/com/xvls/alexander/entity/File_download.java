@@ -19,7 +19,7 @@ public class File_download extends Model<File_download> implements Serializable 
 
 
     @TableId(type = IdType.AUTO)//在这里设置id的自增长，否则id将不会自增长且为随机数
-    private int fileDownloadId;
+    private Integer fileDownloadId;
 
     private String fileHash;//文件标识
     //@TableField("file_name")

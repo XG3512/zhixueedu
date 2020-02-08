@@ -17,10 +17,19 @@ import java.io.Serializable;
 @TableName("file_belong")
 public class File_belong extends Model<File_belong> implements Serializable {
 
-    private int userId;
+    private Integer userId;
     private char belongType;// V(视频) | A(文章)
-    private int belongId;
+    private Integer belongId;
     private String fileHash;//文件标识
     private String name;//原名称
+
+    @TableField(exist = false)
+    private String fileUrl;//文件地址
+    @TableField(exist = false)
+    private String fileType;//文件类型
+    @TableField(exist = false)
+    private String fileSize;//文件大小
+    @TableField(exist = false)
+    private String fileStatus;//文件状态
 
 }

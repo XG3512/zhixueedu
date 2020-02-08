@@ -1,22 +1,24 @@
 package com.xvls.alexander;
 
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.extra.qrcode.QrConfig;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xvls.alexander.dao.FileBelongMapper;
-import com.xvls.alexander.dao.FileUploadMapper;
-import com.xvls.alexander.dao.WxUserMapper;
+import com.xvls.alexander.dao.*;
 import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.File_download;
+import com.xvls.alexander.entity.School;
 import com.xvls.alexander.entity.User;
-import com.xvls.alexander.entity.wx.WxUserInfo;
+import com.xvls.alexander.entity.wx.*;
 import com.xvls.alexander.service.impl.UserServiceImpl;
-import com.xvls.alexander.service.wx.WxUserService;
+import com.xvls.alexander.service.wx.*;
+import com.xvls.alexander.utils.CalculateUtil;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.UUID;
 
@@ -173,7 +175,86 @@ public class TestUserMapper2 {
         }
     }
 
+    @Test
+    public void testQrCodeUtil(){
+        QrConfig config = new QrConfig(300, 300);
+        // 设置边距，既二维码和背景之间的边距
+        config.setMargin(3);
+        BufferedImage generate = QrCodeUtil.generate("http://hutool.cn/", config);
 
+    }
 
+    @Autowired
+    FileCrudMapper fileCrudMapper;
+    @Test
+    public void testGetFileList(){
+        List<File_belong> fileList = fileCrudMapper.getFileList(2, 1, 2);
+        for(File_belong file_belong : fileList){
+            System.out.println(file_belong);
+        }
+    }
+
+    @Autowired
+    WxCommentsMapper wxCommentsMapper;
+    @Test
+    public void testWxCommentsMapper(){
+        List<Comments> comments = wxCommentsMapper.getAllComments("A", 1);
+        for(Comments comment : comments){
+            System.out.println(comment);
+        }
+    }
+
+    @Autowired
+    WxArticleService wxArticleService;
+    @Test
+    public void testgetArticleById(){
+        Article article = wxArticleService.getArticleById(1);
+        System.out.println(article);
+    }
+
+    @Autowired
+    WxVideoMapper wxVideoMapper;
+    @Test
+    public void testgetPublicArticleList(){
+        List<Video_main> publicVideoList = wxVideoMapper.getPublicVideoList();
+        for(Video_main video_main : publicVideoList){
+            System.out.println(video_main);
+        }
+    }
+
+    @Autowired
+    WxSchoolService wxSchoolService;
+    @Autowired
+    WxNoticeService wxNoticeService;
+    @Test
+    public void testGetSchoolMainPage(){
+        School schoolInfo = wxSchoolService.getSchoolInfo(1);
+        System.out.println(schoolInfo);
+        List<Article> articleList = wxArticleService.getArticleBySchoolId(1);
+        for(Article article : articleList){
+            System.out.println(article);
+        }
+        System.out.println("-------------------------------------");
+        List<Notice> noticeList = wxNoticeService.getNoticeListBySchoolId(1);
+        for(Notice notice : noticeList){
+            System.out.println(notice);
+        }
+
+        List<Video_main> video_mainList = wxVideoMapper.getPublicVideoListBySchoolId(1);
+        for(Video_main video_main :video_mainList){
+            System.out.println(video_main);
+        }
+    }
+
+    @Autowired
+    WxVideoService videoService;
+    @Test
+    public void testGetVideoInfoById(){
+        Video videoInfoById = videoService.getVideoInfoById(1, 1);
+        System.out.println(videoInfoById);
+
+        Video_main videoMainInfo = videoService.getVideoMainInfo(1);
+        System.out.println(videoMainInfo);
+    }
 
 }

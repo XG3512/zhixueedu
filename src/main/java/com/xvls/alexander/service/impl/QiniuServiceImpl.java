@@ -43,6 +43,7 @@ public class QiniuServiceImpl implements QiniuService {
                 .eq("file_hash",file_download.getFileHash())
                 .eq("belong_type",file_belong.getBelongType())
                 .eq("belong_id",file_belong.getBelongId());
+        System.out.println(file_belong);
         Integer count = file_belong.selectCount(queryWrapper);
         if(count==0){
             file_belong.insert();

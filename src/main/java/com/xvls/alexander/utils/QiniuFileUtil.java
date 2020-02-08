@@ -11,20 +11,21 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FetchRet;
 import com.qiniu.util.Auth;
+import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.exception.MyException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -46,7 +47,7 @@ public class QiniuFileUtil {
 	private static String bucketName="test01";
 
 	/***
-	 * 普通上传图片
+	 * 普通用户上传图片
 	 * @param file
 	 * @return
 	 * @throws QiniuException
@@ -79,6 +80,8 @@ public class QiniuFileUtil {
 				Response r = uploadManager.put(data, fileName, token);
 				//解析上传成功的结果
 				DefaultPutRet putRet = new Gson().fromJson(r.bodyString(), DefaultPutRet.class);
+				System.out.println(putRet.key);
+				System.out.println(putRet.hash);
 				if (r.isOK()) {
 					filePath = path + fileName;
 					rescource = new File_download();
@@ -105,6 +108,48 @@ public class QiniuFileUtil {
 		return rescource;
 	}
 
+	/**
+	 * 系统普通上传图片,仅仅将文件上传至七牛云，并设置生存时间，用于二维码生成
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static String uploadBySystem(BufferedImage file) throws IOException, NoSuchAlgorithmException {
+		Configuration config = new Configuration(Region.region0());
+		String fileName = "", extName = "Qrcode", filePath = "";
+		if (null != file) {
+			fileName = extName + UUID.randomUUID();
+			UploadManager uploadManager = new UploadManager(config);
+			Auth auth = Auth.create(qiniuAccess, qiniuKey);
+			String token = auth.uploadToken(bucketName);
+			InputStream data = BufferedImageToInputStream.bufferedImageToInputStream(file);
+
+			try {
+				Response r = uploadManager.put(data, fileName, token,null,null);
+				//解析上传成功的结果
+				DefaultPutRet putRet = new Gson().fromJson(r.bodyString(), DefaultPutRet.class);
+				String result_key = putRet.key;
+				System.out.println(putRet.key);
+				System.out.println(putRet.hash);
+				if (r.isOK()) {
+					/**设置生存时间*/
+					SetFileExistsDays(result_key, 1);
+					filePath = path + fileName;
+				}
+			} catch (QiniuException e) {
+				Response response = e.response;
+				System.err.println(response.toString());
+				try {
+					System.err.println(response.bodyString());
+				} catch (QiniuException ex2) {
+					//ignore
+				}
+			}
+		}
+		return filePath;
+	}
+
 	/***
 	 * 删除已经上传的图片
 	 * @param imgPath
@@ -116,6 +161,22 @@ public class QiniuFileUtil {
 		imgPath = imgPath.replace(path, "");
 		try {
 			bucketManager.delete(bucketName, imgPath);
+
+			/**
+			 * 删除资料记录记录
+			 */
+			File_download file_download = new File_download();
+			QueryWrapper<File_download> queryWrapper = new QueryWrapper<>();
+			queryWrapper.eq("file_url",path+imgPath);
+			File_download file_download1 = file_download.selectOne(queryWrapper);
+
+			File_belong file_belong = new File_belong();
+			file_belong.setFileHash(file_download1.getFileHash());
+			QueryWrapper<File_belong> queryWrapper1 = new QueryWrapper<>();
+			queryWrapper1.eq("file_hash",file_belong.getFileHash());
+			file_belong.delete(queryWrapper1);
+
+			file_download1.deleteById();
 		} catch (QiniuException e) {
 			e.printStackTrace();
 			return RestResponse.failure("删除失败");
@@ -221,6 +282,28 @@ public class QiniuFileUtil {
 		}
 		filePath = path+name;
 		return RestResponse.success().setData(filePath);
+	}
+
+	/**
+	 * 通过键设置或更新文件的生存时间
+	 * @param key
+	 * @param days 过期天数
+	 * @return
+	 */
+	public static void SetFileExistsDays(String key,int days){
+		//构造一个带指定 Region 对象的配置类
+		Configuration cfg = new Configuration(Region.region0());
+		//...其他参数参考类注释
+		//过期天数，该文件10天后删除
+		//int days = 10;
+
+		Auth auth = Auth.create(qiniuAccess, qiniuKey);
+		BucketManager bucketManager = new BucketManager(auth, cfg);
+		try {
+			bucketManager.deleteAfterDays(bucketName, key, days);
+		} catch (QiniuException ex) {
+			System.err.println(ex.response.toString());
+		}
 	}
 
 

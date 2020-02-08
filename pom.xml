@@ -30,6 +30,7 @@
         <thymeleaf.version>2.0.0</thymeleaf.version>
         <weixin.version>3.3.0</weixin.version>
         <hutool-all.version>5.1.2</hutool-all.version>
+        <zxing.version>3.3.3</zxing.version>
     </properties>
 
     <repositories>
@@ -247,6 +248,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool-all.version}</version>
+        </dependency>
+        <!--二维码工具-->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>${zxing.version}</version>
         </dependency>
 
 

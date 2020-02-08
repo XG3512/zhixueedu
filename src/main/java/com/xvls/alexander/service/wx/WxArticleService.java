@@ -15,4 +15,8 @@ public interface WxArticleService {
     List<Article> getArticleByPage(PageInfo pageInfo);
 
     List<Article> getAllArticle();
+
+    Article getArticleById(int articleId);
+
+    List<Article> getArticleBySchoolId(Integer schoolId);
 }
