@@ -12,4 +12,8 @@ public interface WxUserMapper extends BaseMapper<WxUserInfo> {
     WxUserInfo getWxStudentInfoByUserNum(String user_num);//加学校！！！
 
     //void saveWxStudentInfo(WxUserInfo wxUserInfo);
+
+    Integer getUserId(String userNum, Integer schoolId, String role);
+
+    WxUserInfo getWxStudentInfoByUserId(Integer userId);
 }

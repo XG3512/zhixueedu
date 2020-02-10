@@ -42,7 +42,7 @@ public class UserRealm extends AuthorizingRealm {
         Subject subject = SecurityUtils.getSubject();
         WxUserInfo currentUser = (WxUserInfo) subject.getPrincipal();//拿到user对象
 
-        /** 从数据库中添加权限 **/
+        /************ 从数据库中添加权限 *************/
         Set<Role> roles = currentUser.getRoleList();
         Set<String> roleNames = Sets.newHashSet();
         for(Role role : roles){
@@ -52,7 +52,7 @@ public class UserRealm extends AuthorizingRealm {
         }
         info.setRoles(roleNames);
 
-        info.addStringPermission("user:add");
+        //info.addStringPermission("user:add");
 
         //info.addStringPermission(currentUser.getPerms());
         // 授权
@@ -79,7 +79,7 @@ public class UserRealm extends AuthorizingRealm {
 
         UsernamePasswordToken userToken = (UsernamePasswordToken) token ;
         /*******连接真实数据库**********/
-        WxUserInfo user = wxUserService.getWxStudentInfoByUserNum(userToken.getUsername());
+        WxUserInfo user = wxUserService.getWxStudentInfoByUserId(Integer.valueOf(userToken.getUsername()));
 
         if(user==null){//没有这个人
             return null;//UnknownAccountException

@@ -267,4 +267,10 @@ public class TestUserMapper2 {
 //        wxToolBarService.decreaseNoticeGoodNum(good);
     }
 
+    @Test
+    public void testGetUserId(){
+        Integer userId = wxUserMapper.getUserId("2017414540", 1, "学生");
+        System.out.println(userId);
+    }
+
 }

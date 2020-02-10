@@ -9,4 +9,8 @@ public interface WxUserService {
     WxUserInfo getWxStudentInfoByUserNum(String user_num);
 
     void saveWxStudentInfo(WxUserInfo wxUserInfo);
+
+    Integer getUserId(String userNum,Integer schoolId,String role);
+
+    WxUserInfo getWxStudentInfoByUserId(Integer userId);
 }

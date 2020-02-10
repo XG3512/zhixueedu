@@ -71,15 +71,25 @@ public class WxLoginController{
     public Object login(@RequestBody String body){
         String user_num = JacksonUtil.parseString(body,"uid");
         String password = JacksonUtil.parseString(body,"pwd");
+
+        String role = JacksonUtil.parseString(body,"role");//用户角色 教师、学生
+        if(role  == null){
+            /**默认为学生**/
+            role="学生";
+        }
+        Integer schoolId = JacksonUtil.parseInteger(body,"schoolId");//用户学校
+
         UserInfo userInfo = JacksonUtil.parseObject(body,"userInfo",UserInfo.class);
         String code = JacksonUtil.parseString(body,"code");
-        if (code == null || userInfo == null || user_num == null || password == null) {
+        if (code == null || userInfo == null || user_num == null || password == null || role == null || schoolId == null) {
             return WeChatResponseUtil.badArgument();
         }
         /*    shiro 获取当前的用户    */
         Subject user = SecurityUtils.getSubject();
         /*shiro 封装用户的登录数据*/
-        UsernamePasswordToken token = new UsernamePasswordToken(user_num,password);
+        /**根据user_num,school,role获取userId**/
+        String userId = wxUserService.getUserId(user_num,schoolId,role).toString();
+        UsernamePasswordToken token = new UsernamePasswordToken(userId,password);
         String shiroerror = null;
         try {
             user.login(token);//执行登录方法，如果没有异常就登录成功
@@ -115,7 +125,7 @@ public class WxLoginController{
             if (sessionKey == null || openId == null) {
                 return WeChatResponseUtil.fail();
             }
-            WxUserInfo wxUserInfo = wxUserService.getWxStudentInfoByUserNum(user_num);//通过user_num获取用户信息
+            WxUserInfo wxUserInfo = wxUserService.getWxStudentInfoByUserId(Integer.valueOf(userId));//通过user_num获取用户信息
             wxUserInfo.setOpenid(openId);
             wxUserInfo.setSessionKey(sessionKey);
             wxUserInfo.setNickname(userInfo.getNickName());

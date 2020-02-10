@@ -40,4 +40,23 @@ public class WxUserServiceImpl implements WxUserService {
     public void saveWxStudentInfo(WxUserInfo wxUserInfo) {
         wxUserMapper.updateById(wxUserInfo);
     }
+
+    /**
+     * 通过userNum,schoolId,role获取userId
+     * @param userNum
+     * @param schoolId
+     * @param role
+     * @return
+     */
+    @Override
+    public Integer getUserId(String userNum, Integer schoolId, String role) {
+        return wxUserMapper.getUserId(userNum,schoolId,role);
+    }
+
+    @Override
+    public WxUserInfo getWxStudentInfoByUserId(Integer userId) {
+        return wxUserMapper.getWxStudentInfoByUserId(userId);
+    }
+
+
 }
