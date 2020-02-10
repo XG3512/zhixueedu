@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * 动态信息
  */
+// TODO: 2020/2/9 点赞、收藏、评论数的字符化，并放入数据库中
 @Service
 public class WxArticleServiceImpl implements WxArticleService {
 
@@ -37,4 +38,51 @@ public class WxArticleServiceImpl implements WxArticleService {
     public List<Article> getArticleBySchoolId(Integer schoolId) {
         return wxArticleMapper.getArticleBySchoolId(schoolId);
     }
+
+    /**
+     * 更新点赞数据
+     * @param articleId
+     */
+    @Override
+    public void addArticleGoodNum(Integer articleId) {
+        wxArticleMapper.addArticleGoodNum(articleId);
+    }
+
+    /**
+     * 增加评论数
+     * @param articleId
+     */
+    @Override
+    public void addArticleCommentNum(Integer articleId) {
+        wxArticleMapper.addArticleCommentNum(articleId);
+    }
+
+    /**
+     * 增加阅读量
+     * @param articleId
+     */
+    @Override
+    public void addArticleReadNum(Integer articleId) {
+        wxArticleMapper.addArticleReadNum(articleId);
+    }
+
+    /**
+     * 减少点赞数
+     * @param articleId
+     */
+    @Override
+    public void decreaseArticleGoodNum(Integer articleId) {
+        wxArticleMapper.decreaseArticleGoodNum(articleId);
+    }
+
+    /**
+     * 减少评论数
+     * @param articleId
+     */
+    @Override
+    public void decreaseArticleCommentNum(Integer articleId) {
+        wxArticleMapper.decreaseArticleCommentNum(articleId);
+    }
+
+
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxNoticeMapper">
+
+    <update id="addNoticeGoodNum">
+        update notice set good_num = good_num + 1 where notice_id = #{noticeId};
+    </update>
+
+    <update id="addNoticeReadNum">
+        update notice set read_num = read_num + 1 where notice_id = #{noticeId};
+    </update>
+
+    <update id="decreaseNoticeGoodNum">
+        update notice set good_num = good_num-1 where notice_id = #{noticeId}
+    </update>
+
+</mapper>

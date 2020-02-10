@@ -26,14 +26,9 @@
         <id column="video_id" property="videoId"></id>
         <result column="teacher_id" property="teacherId"></result>
         <result column="video_title" property="videoTitle"></result>
-        <result column="summary" property="summary"></result>
-        <result column="play_num" property="playNum"></result>
-        <result column="good_num" property="goodNum"></result>
         <result column="video_date" property="videoDate"></result>
         <result column="video_main_id" property="videoMainId"></result>
         <result column="episode_id" property="episodeId"></result>
-        <result column="comment_num" property="commentNum"></result>
-        <result column="comment_status" property="commentStatus"></result>
         <result column="video_length" property="videoLength"></result>
         <result column="video_size" property="videoSize"></result>
         <result column="public_status" property="publicStatus"></result>
@@ -86,6 +81,7 @@
 
     <select id="getVideoMainInfo" resultMap="videoMainInfoList">
         select video_main.*,
+        users.nickname,
         video.video_id,
         video.video_title,
         video.video_length,
@@ -95,8 +91,25 @@
         video.video_source
         from video_main
         left join video on video_main.video_main_id=video.video_main_id
+        left join users on video_main.teacher_id = users.user_id
         where video_main.video_main_id=#{videoMainId}
         ORDER BY  video.episode_id ASC
     </select>
+
+    <update id="addVideoGoodNum">
+        update video_main set good_num = good_num + 1 where video_main_id = #{videoId}
+    </update>
+
+    <update id="addVideoCommentNum">
+        update video_main set comment_num = comment_num + 1 where video_main_id = #{videoId}
+    </update>
+
+    <update id="addVideoPlayNum">
+        update video_main set play_num = play_num + 1 where video_main_id = #{videoId}
+    </update>
+
+    <update id="decreaseVideoCommentNum">
+        update video_main set comment_num =  comment_num - 1 where video_main_id = #{videoId}
+    </update>
 
 </mapper>

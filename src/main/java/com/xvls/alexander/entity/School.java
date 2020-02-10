@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.xvls.alexander.utils.CalculateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,4 +41,40 @@ public class School extends Model<School> implements Serializable {
     private String goodNumText;//点赞数
     @TableField(exist = false)
     private String collectionNumText;//获得收藏数
+
+
+    public void setFansNum(Integer fansNum) {
+        this.fansNum = fansNum;
+        this.fansNumText= CalculateUtil.CalculateNum(fansNum);
+    }
+
+    public void setGoodNum(Integer goodNum) {
+        this.goodNum = goodNum;
+        this.goodNumText= CalculateUtil.CalculateNum(goodNum);
+    }
+
+    public void setCollectionNum(Integer collectionNum) {
+        this.collectionNum = collectionNum;
+        this.collectionNumText= CalculateUtil.CalculateNum(collectionNum);
+    }
+
+    public School(Integer schoolId, String schoolNum, String schoolName, String password, String province, String head, Integer fansNum, Integer goodNum, Integer ranking, String introduction, String address, String background, String englishName, Integer collectionNum) {
+        this.schoolId = schoolId;
+        this.schoolNum = schoolNum;
+        this.schoolName = schoolName;
+        this.password = password;
+        this.province = province;
+        this.head = head;
+        this.fansNum = fansNum;
+        this.goodNum = goodNum;
+        this.ranking = ranking;
+        this.introduction = introduction;
+        this.address = address;
+        this.background = background;
+        this.englishName = englishName;
+        this.collectionNum = collectionNum;
+        this.fansNumText= CalculateUtil.CalculateNum(fansNum);
+        this.goodNumText= CalculateUtil.CalculateNum(goodNum);
+        this.collectionNumText= CalculateUtil.CalculateNum(collectionNum);
+    }
 }

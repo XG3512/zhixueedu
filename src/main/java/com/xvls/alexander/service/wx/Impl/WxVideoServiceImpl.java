@@ -56,5 +56,51 @@ public class WxVideoServiceImpl implements WxVideoService {
         return wxVideoMapper.getVideoMainInfo(videoMainId);
     }
 
+    /**
+     * 视频点赞数增加
+     * @param videoId
+     */
+    @Override
+    public void addVideoGoodNum(Integer videoId) {
+
+        wxVideoMapper.addVideoGoodNum(videoId);
+    }
+
+    /**
+     * 视频评论数增加
+     * @param videoId
+     */
+    @Override
+    public void addVideoCommentNum(Integer videoId) {
+        wxVideoMapper.addVideoCommentNum(videoId);
+    }
+
+    /**
+     * 视频浏览量增加
+     * @param videoId
+     */
+    @Override
+    public void addVideoPlayNum(Integer videoId) {
+        wxVideoMapper.addVideoPlayNum(videoId);
+    }
+
+    /**
+     * 视频点赞数减少
+     * @param videoId
+     */
+    @Override
+    public void decreaseVideoGoodNum(Integer videoId) {
+        wxVideoMapper.decreaseVideoGoodNum(videoId);
+    }
+
+    /**
+     * 视频评论数减少
+     * @param videoId
+     */
+    @Override
+    public void decreaseVideoCommentNum(Integer videoId) {
+        wxVideoMapper.decreaseVideoCommentNum(videoId);
+    }
+
 
 }

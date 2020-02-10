@@ -38,4 +38,34 @@ public interface WxVideoService {
      * @return
      */
     Video_main getVideoMainInfo(Integer videoMainId);
+
+    /**
+     * 视频点赞数增加
+     * @param videoId
+     */
+    void addVideoGoodNum(Integer videoId);
+
+    /**
+     * 视频评论数增加
+     * @param videoId
+     */
+    void addVideoCommentNum(Integer videoId);
+
+    /**
+     * 视频浏览量增加
+     * @param videoId
+     */
+    void addVideoPlayNum(Integer videoId);
+
+    /**
+     * 视频点赞数减少
+     * @param videoId
+     */
+    void decreaseVideoGoodNum(Integer videoId);
+
+    /**
+     * 视频评论数减少
+     * @param videoId
+     */
+    void decreaseVideoCommentNum(Integer videoId);
 }

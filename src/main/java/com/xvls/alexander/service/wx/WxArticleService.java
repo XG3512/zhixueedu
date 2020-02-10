@@ -19,4 +19,14 @@ public interface WxArticleService {
     Article getArticleById(int articleId);
 
     List<Article> getArticleBySchoolId(Integer schoolId);
+
+    void addArticleGoodNum(Integer articleId);
+
+    void addArticleCommentNum(Integer articleId);
+
+    void addArticleReadNum(Integer articleId);
+
+    void decreaseArticleGoodNum(Integer articleId);
+
+    void decreaseArticleCommentNum(Integer articleId);
 }

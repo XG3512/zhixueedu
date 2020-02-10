@@ -24,9 +24,6 @@ public class WxSchoolServiceImpl implements WxSchoolService {
     public School getSchoolInfo(Integer schoolId) {
         School school = new School();
         school = school.selectById(schoolId);
-        school.setGoodNumText(CalculateUtil.CalculateNum(school.getGoodNum()));
-        school.setCollectionNumText(CalculateUtil.CalculateNum(school.getCollectionNum()));
-        school.setFansNumText(CalculateUtil.CalculateNum(school.getFansNum()));
         return school;
     }
 }

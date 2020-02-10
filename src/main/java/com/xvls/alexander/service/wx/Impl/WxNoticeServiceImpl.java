@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// TODO: 2020/2/9 点赞、收藏数的字符化，并放入数据库中
 @Service
 public class WxNoticeServiceImpl implements WxNoticeService {
 
@@ -25,5 +26,32 @@ public class WxNoticeServiceImpl implements WxNoticeService {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("school_id",schoolId);
         return wxNoticeMapper.selectList(queryWrapper);
+    }
+
+    /**
+     * 公告点赞数增加
+     * @param noticeId
+     */
+    @Override
+    public void addNoticeGoodNum(Integer noticeId) {
+        wxNoticeMapper.addNoticeGoodNum(noticeId);
+    }
+
+    /**
+     * 通知阅读量增加
+     * @param noticeId
+     */
+    @Override
+    public void addNoticeReadNum(Integer noticeId) {
+        wxNoticeMapper.addNoticeReadNum(noticeId);
+    }
+
+    /**
+     * 通知点赞数减少
+     * @param noticeId
+     */
+    @Override
+    public void decreaseNoticeGoodNum(Integer noticeId) {
+        wxNoticeMapper.decreaseNoticeGoodNum(noticeId);
     }
 }

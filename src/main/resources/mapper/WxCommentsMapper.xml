@@ -28,6 +28,8 @@
     <resultMap id="getAllComments" type="com.xvls.alexander.entity.wx.Comments">
         <id column="comment_id" property="commentId"></id>
         <result column="user_id" property="userId"></result>
+        <result column="icon" property="icon"></result>
+        <result column="nickname" property="nickName"></result>
         <result column="belong_type" property="belongType"></result>
         <result column="belong_id" property="belongId"></result>
         <result column="vc_content" property="vcContent"></result>
@@ -45,11 +47,17 @@
 
     <!--递归查询-->
     <select id="getAllComments" resultMap="getAllComments">
-        select * from comments where parent_vc_id=0 and belong_type=#{belongType} and belong_id=#{articleId}
+        select comments.*,users.icon,users.nickname
+        from comments
+        left join users on users.user_id = comments.user_id
+        where parent_vc_id=0 and belong_type=#{belongType} and belong_id=#{articleId}
     </select>
 
     <select id="getCommentsMembers" resultMap="getAllComments">
-        select * from comments where parent_vc_id=#{comment_id}
+        select comments.*,users.icon,users.nickname
+        from comments
+        left join users on users.user_id = comments.user_id
+        where parent_vc_id=#{comment_id}
     </select>
 
 

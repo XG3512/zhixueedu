@@ -36,4 +36,34 @@ public interface WxArticleMapper extends BaseMapper<Article> {
      * @return
      */
     List<Article> getArticleBySchoolId(Integer schoolId);
+
+    /**
+     * 增加点赞
+     * @param articleId
+     */
+    void addArticleGoodNum(Integer articleId);
+
+    /**
+     * 增加评论数
+     * @param articleId
+     */
+    void addArticleCommentNum(Integer articleId);
+
+    /**
+     * 增加阅读量
+     * @param articleId
+     */
+    void addArticleReadNum(Integer articleId);
+
+    /**
+     * 减少点赞数
+     * @param articleId
+     */
+    void decreaseArticleGoodNum(Integer articleId);
+
+    /**
+     * 减少评论数
+     * @param articleId
+     */
+    void decreaseArticleCommentNum(Integer articleId);
 }

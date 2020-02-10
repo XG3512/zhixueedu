@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.awt.image.BufferedImage;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -255,6 +256,15 @@ public class TestUserMapper2 {
 
         Video_main videoMainInfo = videoService.getVideoMainInfo(1);
         System.out.println(videoMainInfo);
+    }
+
+    @Autowired
+    WxToolBarService wxToolBarService;
+    @Test
+    public void testGoodService(){
+        Good good = new Good("N",1,2,new Date());
+        wxToolBarService.addNoticeGoodNum(good);
+//        wxToolBarService.decreaseNoticeGoodNum(good);
     }
 
 }

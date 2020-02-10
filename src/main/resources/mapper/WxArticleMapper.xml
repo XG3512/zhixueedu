@@ -85,5 +85,24 @@
         select * from article where school_id=#{schoolId} ORDER BY article_time desc
     </select>
 
+    <update id="addArticleGoodNum">
+        update article set good_num = good_num+1 where article_id = #{articleId};
+    </update>
+
+    <update id="addArticleCommentNum">
+        update article set comment_num = comment_num + 1 where article_id = #{articleId};
+    </update>
+
+    <update id="addArticleReadNum">
+        update article set read_num = read_num + 1 where article_id = #{articleId};
+    </update>
+
+    <update id="decreaseArticleGoodNum">
+        update article set good_num=good_num-1 where article_id = #{articleId}
+    </update>
+
+    <update id="decreaseArticleCommentNum">
+        update article set comment_num=comment_num-1 where article_id = #{articleId}
+    </update>
 
 </mapper>

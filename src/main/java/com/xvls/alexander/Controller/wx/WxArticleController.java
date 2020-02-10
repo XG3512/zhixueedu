@@ -6,6 +6,7 @@ import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Article;
 import com.xvls.alexander.entity.wx.Comments;
 import com.xvls.alexander.service.wx.WxArticleService;
+import com.xvls.alexander.service.wx.WxCommentsService;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +31,7 @@ public class WxArticleController {
     @Autowired
     WxArticleService wxArticleService;
     @Autowired
-    WxCommentsMapper wxCommentsMapper;
+    WxCommentsService wxCommentsService;
 
     /**
      * 通过页数获取动态信息
@@ -64,13 +65,14 @@ public class WxArticleController {
      * @param articleId
      * @return
      */
+    // TODO: 2020/2/9  论部分暂时没有设置分页
     @RequestMapping("getArticleById")
     public Object getArticleById(@RequestParam("articleId") int articleId){
         if(articleId==0){
             return WeChatResponseUtil.badArgumentValue();
         }
         Article article = wxArticleService.getArticleById(articleId);
-        List<Comments> comments = wxCommentsMapper.getAllComments("A", articleId);
+        List<Comments> comments = wxCommentsService.getAllComments("A", articleId);
         Map<Object,Object> result = Maps.newHashMap();
         result.put("article",article);
         result.put("comments",comments);

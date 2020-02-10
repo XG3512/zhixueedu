@@ -14,5 +14,25 @@ public interface WxNoticeService {
      * @param schoolId
      * @return
      */
-    public List<Notice> getNoticeListBySchoolId(Integer schoolId);
+    List<Notice> getNoticeListBySchoolId(Integer schoolId);
+
+
+    /**********************************************************/
+    /**
+     * 公告点赞数增加
+     * @param noticeId
+     */
+    void addNoticeGoodNum(Integer noticeId);
+    /**
+     * 通知阅读量增加
+     * @param noticeId
+     */
+    void addNoticeReadNum(Integer noticeId);
+    /**
+     * 通知点赞数减少
+     * @param noticeId
+     */
+    void decreaseNoticeGoodNum(Integer noticeId);
+
+
 }
