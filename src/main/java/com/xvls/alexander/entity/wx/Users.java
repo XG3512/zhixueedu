@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.google.common.collect.Sets;
 import com.xvls.alexander.entity.Permission;
 import com.xvls.alexander.entity.Role;
+import com.xvls.alexander.utils.CalculateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,33 @@ public class Users extends Model<Users> implements Serializable {
     @TableField(exist = false)
     private Set<Permission> permissions = Sets.newHashSet();//权限列表
 
+    @TableField(exist = false)
+    private Integer fansNum;//粉丝数
+    @TableField(exist = false)
+    private Integer goodNum;//点赞数
+    @TableField(exist = false)
+    private Integer collectionNum;//收藏数
+
+    @TableField(exist = false)
+    private String fansNumText;//粉丝数文本
+    @TableField(exist = false)
+    private String goodNumText;//点赞数文本
+    @TableField(exist = false)
+    private String collectionNumText;//收藏数文本
 
 
+    public void setFansNum(Integer fansNum) {
+        this.fansNum = fansNum;
+        this.fansNumText= CalculateUtil.CalculateNum(fansNum);
+    }
+
+    public void setGoodNum(Integer goodNum) {
+        this.goodNum = goodNum;
+        this.goodNumText= CalculateUtil.CalculateNum(goodNum);
+    }
+
+    public void setCollectionNum(Integer collectionNum) {
+        this.collectionNum = collectionNum;
+        this.collectionNumText= CalculateUtil.CalculateNum(collectionNum);
+    }
 }

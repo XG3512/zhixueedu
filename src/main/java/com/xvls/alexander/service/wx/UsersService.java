@@ -16,4 +16,10 @@ public interface UsersService {
 
     void updateUsersWxUserIdByUserId(Integer userId , Integer wxUserId);
 
+    void addFansNum(Integer teacherId);
+
+    /**
+     * 减少粉丝数
+     */
+    void decreaseFansNum(Integer teacherId);
 }

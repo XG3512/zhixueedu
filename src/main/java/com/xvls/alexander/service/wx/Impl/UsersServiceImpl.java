@@ -72,5 +72,21 @@ public class UsersServiceImpl implements UsersService {
         usersMapper.updateUsersWxUserIdByUserId(userId,wxUserId);
     }
 
+    /**
+     * 增加粉丝数
+     */
+    @Override
+    public void addFansNum(Integer teacherId) {
+        usersMapper.addFansNum(teacherId);
+    }
+
+    /**
+     * 减少粉丝数
+     */
+    @Override
+    public void decreaseFansNum(Integer teacherId) {
+        usersMapper.decreaseFansNum(teacherId);
+    }
+
 
 }

@@ -22,9 +22,13 @@ public class Video_main extends Model<Video_main> {
     private Integer teacherId;//教师ID
     private String videoMainTitle;//主页标题
     private String summary;//简介
+
     private Integer playNum;//播放量
     private Integer goodNum;//点赞数
     private Integer collectionNum;//收藏数
+    @TableField(exist = false)
+    private Integer teacherFansNum;//教师粉丝数
+
     private Date videoDate;//日期
     private Integer commentNum;//评论数
     private Boolean commentStatus;//评论状态
@@ -42,10 +46,11 @@ public class Video_main extends Model<Video_main> {
     private String collectionNumText;//收藏数文本
     @TableField(exist = false)
     private String commentNumText;//评论数文本
+    @TableField(exist = false)
+    private String teacherFansNumText;//教师粉丝数文本
 
     @TableField(exist = false)
     private String userName;//教师名称
-
     @TableField(exist = false)
     private String icon;//教师头像
 
@@ -100,5 +105,10 @@ public class Video_main extends Model<Video_main> {
     public void setCommentNum(Integer commentNum) {
         this.commentNum = commentNum;
         this.commentNumText=CalculateUtil.CalculateNum(commentNum);
+    }
+
+    public void setTeacherFansNum(Integer teacherFansNum) {
+        this.teacherFansNum = teacherFansNum;
+        this.teacherFansNumText = CalculateUtil.CalculateNum(teacherFansNum);
     }
 }

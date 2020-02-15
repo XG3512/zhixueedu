@@ -2,18 +2,13 @@ package com.xvls.alexander.Controller.wx;
 
 import com.google.common.collect.Maps;
 import com.xvls.alexander.entity.School;
-import com.xvls.alexander.entity.wx.Article;
-import com.xvls.alexander.entity.wx.Notice;
-import com.xvls.alexander.entity.wx.SchoolList;
-import com.xvls.alexander.entity.wx.Video_main;
+import com.xvls.alexander.entity.wx.*;
 import com.xvls.alexander.service.wx.WxArticleService;
 import com.xvls.alexander.service.wx.WxNoticeService;
 import com.xvls.alexander.service.wx.WxSchoolService;
 import com.xvls.alexander.service.wx.WxVideoService;
-import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,5 +71,17 @@ public class WxSchoolController {
     public Object getSchoolList(){
         List<SchoolList> schoolList = wxSchoolService.getSchoolList();
         return WeChatResponseUtil.ok(schoolList);
+    }
+
+    /**
+     * 获得学校列表，以省份分组
+     */
+    @RequestMapping("getSchoolListByProvince")
+    public Object getSchoolListByProvince(@RequestParam("wxUserId") Integer wxUserId){
+        if(wxUserId == null){
+            return WeChatResponseUtil.badArgument();
+        }
+        List<Province> list = wxSchoolService.getSchoolListByProvince(wxUserId);
+        return WeChatResponseUtil.ok(list);
     }
 }

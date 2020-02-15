@@ -5,12 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.xvls.alexander.entity.School;
 import com.xvls.alexander.utils.CalculateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +31,8 @@ public class Notice extends Model<Notice> {
     private Integer goodNum;//点赞数
     private Boolean commentStatus;//评论状态
     private Integer commentNum;//评论数
+    private String classification;//信息类别
+    private String infoFrom;//信息来源
 
     @TableField(exist = false)
     private String readNumText;//阅读量
@@ -36,6 +40,14 @@ public class Notice extends Model<Notice> {
     private String goodNumText;//点赞数
     @TableField(exist = false)
     private String commentNumText;//评论数
+
+    @TableField(exist = false)
+    List<NoticeFile> noticeFileList;//公告的文件列表
+
+    @TableField(exist = false)
+    private String schoolName;//学校名称
+    @TableField(exist = false)
+    private String head;//学校头像
 
     public Notice(Integer noticeId, Integer schoolId, String title, String content, String noticeText, Integer readNum, Date noticeTime, Integer goodNum, Boolean commentStatus, Integer commentNum) {
         this.noticeId = noticeId;

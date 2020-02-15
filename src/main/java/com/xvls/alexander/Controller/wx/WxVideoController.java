@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wx/video")
-// TODO: 2020/2/13 视频的点赞、收藏信息的展示
 public class WxVideoController {
 
     @Autowired
@@ -23,6 +22,7 @@ public class WxVideoController {
      * 获得视频列表信息
      * @return
      */
+    // TODO: 2020/2/15 视频的分页功能 视频的分类功能
     @RequestMapping("getPublicVideoList")
     public Object getPublicVideoList(@RequestParam("wxUserId") Integer wxUserId){
         if(wxUserId==null){

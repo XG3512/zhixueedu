@@ -19,4 +19,14 @@ public interface UsersMapper extends BaseMapper<Users> {
      * @param userId
      */
     void updateUsersWxUserIdByUserId(Integer userId , Integer wxUserId);
+
+    /**
+     * 增加粉丝数
+     */
+    void addFansNum(Integer teacherId);
+
+    /**
+     * 减少粉丝数
+     */
+    void decreaseFansNum(Integer teacherId);
 }

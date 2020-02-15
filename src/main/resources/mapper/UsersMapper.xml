@@ -66,4 +66,12 @@
         update users set wx_user_id = #{wxUserId} where user_id = #{userId}
     </update>
 
+    <update id="addFansNum">
+        update users set fans_num = fans_num + 1 where user_id = #{teacherId}
+    </update>
+
+    <update id="decreaseFansNum">
+        update users set fans_num = fans_num - 1 where user_id = #{teacherId}
+    </update>
+
 </mapper>

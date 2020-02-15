@@ -4,6 +4,76 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xvls.alexander.dao.WxNoticeMapper">
 
+    <resultMap id="mainPageNoticeList" type="com.xvls.alexander.entity.wx.Notice">
+        <id column="notice_id" property="noticeId"></id>
+        <result column="school_id" property="schoolId"></result>
+        <result column="title" property="title"></result>
+        <result column="notice_time" property="noticeTime"></result>
+        <result column="classification" property="classification"></result>
+        <result column="info_from" property="infoFrom"></result>
+    </resultMap>
+
+    <resultMap id="noticeInfo" type="com.xvls.alexander.entity.wx.Notice">
+        <id column="notice_id" property="noticeId"></id>
+        <result column="school_id" property="schoolId"></result>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="notice_text" property="noticeText"></result>
+        <result column="read_num" property="readNum"></result>
+        <result column="notice_time" property="noticeTime"></result>
+        <result column="classification" property="classification"></result>
+        <result column="info_from" property="infoFrom"></result>
+        <result column="school_name" property="schoolName"></result>
+        <result column="head" property="head"></result>
+        <collection property="noticeFileList" ofType="com.xvls.alexander.entity.wx.NoticeFile">
+            <result column="file_url" property="fileUrl"></result>
+            <result column="name" property="name"></result>
+            <result column="file_type" property="fileType"></result>
+            <result column="file_size" property="fileSize"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getNoticeListByClassificationPage" resultMap="mainPageNoticeList">
+        select notice.notice_id,
+        notice.school_id,
+        notice.title,
+        notice.notice_time,
+        notice.classification,
+        notice.info_from
+        from notice
+        where classification=#{classification}
+        ORDER by notice_time desc
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+
+    <select id="getNoticeById" resultMap="noticeInfo">
+        select notice.*,
+        school.school_name,
+        school.head,
+        file_download.file_url,
+        file_download.name,
+        file_download.file_type,
+        file_download.file_size
+        from notice
+        left join file_belong on file_belong.belong_type='N' and file_belong.belong_id=notice.notice_id
+        left join file_download on file_download.file_hash = file_belong.file_hash and file_download.file_type NOT IN ('jpg','jpeg','jpe','png','pns')
+        left join school on notice.school_id = school.school_id
+        where notice.notice_id=#{noticeId}
+        ORDER BY file_download.file_date ASC
+    </select>
+
+    <select id="getLatestNoticeByPage" resultMap="mainPageNoticeList">
+        select notice.notice_id,
+        notice.school_id,
+        notice.title,
+        notice.notice_time,
+        notice.classification,
+        notice.info_from
+        from notice
+        ORDER by notice_time desc
+        limit #{pageNum},#{pageSize}
+    </select>
+
     <update id="addNoticeGoodNum">
         update notice set good_num = good_num + 1 where notice_id = #{noticeId};
     </update>

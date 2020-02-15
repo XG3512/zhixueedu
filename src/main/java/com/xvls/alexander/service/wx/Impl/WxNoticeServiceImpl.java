@@ -2,6 +2,7 @@ package com.xvls.alexander.service.wx.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.WxNoticeMapper;
+import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Notice;
 import com.xvls.alexander.service.wx.WxNoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,41 @@ public class WxNoticeServiceImpl implements WxNoticeService {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("school_id",schoolId);
         return wxNoticeMapper.selectList(queryWrapper);
+    }
+
+    /**
+     * 通过 类别 和 PageInfo 获得通知列表
+     * @param classification
+     * @return
+     */
+    @Override
+    public List<Notice> getNoticeListByClassificationPage(String classification, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum-1)*pageSize;
+        return wxNoticeMapper.getNoticeListByClassificationPage(classification,new PageInfo(pageNum,pageSize));
+    }
+
+    /**
+     * 通过 noticeId 获取公告详情信息
+     * @param noticeId
+     * @return
+     */
+    @Override
+    public Notice getNoticeById(Integer noticeId) {
+        return wxNoticeMapper.getNoticeById(noticeId);
+    }
+
+    /**
+     * 通过分页，获得最新公告信息
+     * @return
+     */
+    @Override
+    public List<Notice> getLatestNoticeByPage(PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum-1)*pageSize;
+        return wxNoticeMapper.getLatestNoticeByPage(new PageInfo(pageNum,pageSize));
     }
 
     /**

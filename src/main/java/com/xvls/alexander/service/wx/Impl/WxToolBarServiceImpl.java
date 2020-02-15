@@ -7,10 +7,7 @@ import com.xvls.alexander.dao.WxGoodMapper;
 import com.xvls.alexander.entity.wx.Follow_school;
 import com.xvls.alexander.entity.wx.Follow_teacher;
 import com.xvls.alexander.entity.wx.Good;
-import com.xvls.alexander.service.wx.WxArticleService;
-import com.xvls.alexander.service.wx.WxNoticeService;
-import com.xvls.alexander.service.wx.WxToolBarService;
-import com.xvls.alexander.service.wx.WxVideoService;
+import com.xvls.alexander.service.wx.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +25,8 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     WxFollow_schoolMapper wxFollow_schoolMapper;
     @Autowired
     WxFollow_teacherMapper wxFollow_teacherMapper;
+    @Autowired
+    UsersService usersService;
 
     /**
      * 对动态进行点赞 , 在前端进行判断是否已经点赞
@@ -213,10 +212,11 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     @Override
     public void addFollowTeacher(Follow_teacher follow_teacher) {
         wxFollow_teacherMapper.insert(follow_teacher);
+        usersService.addFansNum(follow_teacher.getTeacherId());
     }
 
     /**
-     * 取消关注
+     * 取消教师的关注
      * @param follow_teacher
      */
     @Override
@@ -225,6 +225,7 @@ public class WxToolBarServiceImpl implements WxToolBarService {
         queryWrapper.eq("wx_user_id",follow_teacher.getWxUserId())
                 .eq("teacher_id",follow_teacher.getTeacherId());
         wxFollow_teacherMapper.delete(queryWrapper);
+        usersService.decreaseFansNum(follow_teacher.getTeacherId());
     }
 
 }

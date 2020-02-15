@@ -9,24 +9,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.util.List;
 
 /**
- * 学校列表
+ * 省份
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("school")
-public class SchoolList extends Model<SchoolList> {
+@TableName("province")
+public class Province extends Model<Province> {
 
-    @TableId(type = IdType.AUTO)//在这里设置id的自增长，否则id将不会自增长且为随机数
-    private Integer schoolId;
-    private String schoolName;//学校名称
-    private String head;
-    private String province;//省份
-    private String introduction;
+    @TableId(type = IdType.AUTO)
+    private Integer provinceId;
+    private String provinceName;
 
     @TableField(exist = false)
-    private Date followSchoolDate;//关注时间
+    private List<SchoolList> schoolLists;
 }

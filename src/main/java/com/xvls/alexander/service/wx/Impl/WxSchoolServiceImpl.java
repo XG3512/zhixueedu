@@ -1,10 +1,11 @@
 package com.xvls.alexander.service.wx.Impl;
 
+import com.xvls.alexander.dao.WxProvinceMapper;
 import com.xvls.alexander.dao.WxSchoolMapper;
 import com.xvls.alexander.entity.School;
+import com.xvls.alexander.entity.wx.Province;
 import com.xvls.alexander.entity.wx.SchoolList;
 import com.xvls.alexander.service.wx.WxSchoolService;
-import com.xvls.alexander.utils.CalculateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,8 @@ public class WxSchoolServiceImpl implements WxSchoolService {
 
     @Autowired
     WxSchoolMapper wxSchoolMapper;
+    @Autowired
+    WxProvinceMapper wxProvinceMapper;
 
     /**
      * 根据schoolId，获取学校信息
@@ -36,5 +39,10 @@ public class WxSchoolServiceImpl implements WxSchoolService {
     @Override
     public List<SchoolList> getSchoolList() {
         return wxSchoolMapper.getSchoolList();
+    }
+
+    @Override
+    public List<Province> getSchoolListByProvince(Integer wxUserId) {
+        return wxProvinceMapper.getSchoolListByProvince(wxUserId);
     }
 }

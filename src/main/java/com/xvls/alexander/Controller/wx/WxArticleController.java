@@ -52,10 +52,6 @@ public class WxArticleController {
         if(pageInfo==null || wxUserId==null){
             return WeChatResponseUtil.fail();
         }
-        int pageNum = pageInfo.getPageNum();
-        int pageSize = pageInfo.getPageSize();
-
-        pageInfo.setPageNum((pageNum-1)*pageSize);
         List<Article> articles = wxArticleService.getArticleByPage(pageInfo,wxUserId);
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("articleInfo",articles);

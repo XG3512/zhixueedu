@@ -48,6 +48,7 @@
         <result column="play_num" property="playNum"></result>
         <result column="good_num" property="goodNum"></result>
         <result column="collection_num" property="collectionNum"></result>
+        <result column="fans_num" property="teacherFansNum"></result>
         <result column="video_date" property="videoDate"></result>
         <result column="comment_num" property="commentNum"></result>
         <result column="comment_status" property="commentStatus"></result>
@@ -127,6 +128,7 @@
     <select id="getVideoMainInfo" resultMap="videoMainInfo">
         select video_main.*,
         users.user_name,
+        users.fans_num,
         users.icon,
         video.video_id,
         video.video_title,

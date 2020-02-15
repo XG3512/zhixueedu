@@ -21,6 +21,9 @@ public class WxArticleServiceImpl implements WxArticleService {
 
     @Override
     public List<Article> getArticleByPage(PageInfo pageInfo,Integer wxUserId) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageInfo.setPageNum((pageNum-1)*pageSize);
         return wxArticleMapper.getArticleByPage(pageInfo,wxUserId);
     }
 

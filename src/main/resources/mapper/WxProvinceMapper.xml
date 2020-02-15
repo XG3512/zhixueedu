@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxProvinceMapper">
+
+    <resultMap id="provinceSchoolList" type="com.xvls.alexander.entity.wx.Province">
+        <id column="province_id" property="provinceId"></id>
+        <result column="province_name" property="provinceName"></result>
+
+        <collection property="schoolLists" ofType="com.xvls.alexander.entity.wx.SchoolList">
+            <id column="school_id" property="schoolId"></id>
+            <result column="school_name" property="schoolName"></result>
+            <result column="head" property="head"></result>
+            <result column="province" property="province"></result>
+            <result column="introduction" property="introduction"></result>
+            <result column="follow_school_date" property="followSchoolDate"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getSchoolListByProvince" resultMap="provinceSchoolList">
+        select province.*,
+        school.school_id,
+        school.school_name,
+        school.head,
+        school.province,
+        school.introduction,
+        follow_school.follow_school_date
+        from province
+        left join school on province.province_name = school.province and school.school_type=0
+        left join follow_school on follow_school.school_id=school.school_id and follow_school.wx_user_id = #{wxUserId}
+        ORDER by province.province_id asc ,school.school_name asc
+    </select>
+
+</mapper>
