@@ -13,7 +13,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -23,12 +22,11 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WxUserInfo extends Model<WxUserInfo> implements Serializable {
+public class Users extends Model<Users> implements Serializable {
 
     @TableId(type = IdType.AUTO)
-    private int userId;
+    private Integer userId;
 
-    private String nickname;
     private String userNum;
     private String password;
     private Integer schoolId;
@@ -44,13 +42,7 @@ public class WxUserInfo extends Model<WxUserInfo> implements Serializable {
     private String mail;
     private String address;
     private String salt;
-    private String openid;
-    private String sessionKey;
-    private String Icon;
-    private String city;
-    private String country;
-    private String province;
-    private Integer wxstatus;
+    private Integer wxUserId;
 
     @TableField(exist = false)//该字段在数据库表中不存在
     private Set<Role> roleList = Sets.newHashSet();//角色列表

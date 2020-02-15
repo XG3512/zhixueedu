@@ -19,7 +19,11 @@
         <result column="public_status" property="publicStatus"></result>
         <result column="verify_status" property="verifyStatus"></result>
         <result column="main_page" property="mainPage"></result>
-        <result column="nickname" property="nickName"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="heat_of_video" property="heatOfVideo"></result>
+
+        <result column="good_time" property="goodTime"></result>
+        <result column="collection_date" property="collectionDate"></result>
     </resultMap>
 
     <resultMap id="videoList" type="com.xvls.alexander.entity.wx.Video">
@@ -36,7 +40,7 @@
         <result column="video_source" property="videoSource"></result>
     </resultMap>
 
-    <resultMap id="videoMainInfoList" type="com.xvls.alexander.entity.wx.Video_main">
+    <resultMap id="videoMainInfo" type="com.xvls.alexander.entity.wx.Video_main">
         <id column="video_main_id" property="videoMainId"></id>
         <result column="teacher_id" property="teacherId"></result>
         <result column="video_main_title" property="videoMainTitle"></result>
@@ -51,7 +55,13 @@
         <result column="public_status" property="publicStatus"></result>
         <result column="verify_status" property="verifyStatus"></result>
         <result column="main_page" property="mainPage"></result>
-        <result column="nickname" property="nickName"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="icon" property="icon"></result>
+        <result column="heat_of_video" property="heatOfVideo"></result>
+
+        <result column="good_time" property="goodTime"></result>
+        <result column="collection_date" property="collectionDate"></result>
+        <result column="follow_teacher_date" property="followTeacherDate"></result>
         <collection property="video_episodeList" ofType="com.xvls.alexander.entity.wx.Video_episode">
             <id column="video_id" property="videoId"></id>
             <result column="video_title" property="videoTitle"></result>
@@ -63,15 +73,50 @@
         </collection>
     </resultMap>
 
+    <resultMap id="homePageVideoList" type="com.xvls.alexander.entity.wx.Video_main">
+        <id column="video_main_id" property="videoMainId"></id>
+        <result column="teacher_id" property="teacherId"></result>
+        <result column="video_main_title" property="videoMainTitle"></result>
+        <result column="summary" property="summary"></result>
+        <result column="play_num" property="playNum"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="collection_num" property="collectionNum"></result>
+        <result column="video_date" property="videoDate"></result>
+        <result column="comment_num" property="commentNum"></result>
+        <result column="comment_status" property="commentStatus"></result>
+        <result column="video_length" property="videoLength"></result>
+        <result column="main_page" property="mainPage"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="heat_of_video" property="heatOfVideo"></result>
+
+        <result column="good_time" property="goodTime"></result>
+        <result column="collection_date" property="collectionDate"></result>
+    </resultMap>
+
 
     <select id="getPublicVideoList" resultMap="videoMainList">
-        select video_main.*,users.nickname from video_main,users
-        where video_main.teacher_id=users.user_id and video_main.public_status='public' ORDER BY video_main.video_date DESC
+        select video_main.*,
+        users.user_name,
+        good.good_time,
+        collection.collection_date
+        from video_main
+        left join users on video_main.teacher_id=users.user_id
+        left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
+        left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
+        where video_main.public_status='public'
+        ORDER BY video_main.video_date DESC
     </select>
 
     <select id="getPublicVideoListBySchoolId" resultMap="videoMainList">
-        select video_main.*,users.nickname from video_main,users
-        where video_main.teacher_id=users.user_id and video_main.public_status='public' and video_main.school_id=#{schoolId}
+        select video_main.*,
+        users.user_name,
+        good.good_time,
+        collection.collection_date
+        from video_main
+        left join users on video_main.teacher_id = users.user_id
+        left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
+        left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
+        where video_main.public_status='public' and video_main.school_id=#{schoolId}
         ORDER BY  video_main.video_date DESC
     </select>
 
@@ -79,21 +124,38 @@
         select * from video where video_main_id=#{videoMainId} and episode_id=#{episodeId}
     </select>
 
-    <select id="getVideoMainInfo" resultMap="videoMainInfoList">
+    <select id="getVideoMainInfo" resultMap="videoMainInfo">
         select video_main.*,
-        users.nickname,
+        users.user_name,
+        users.icon,
         video.video_id,
         video.video_title,
         video.video_length,
         video.video_size,
         video.video_date,
         video.episode_id,
-        video.video_source
+        video.video_source,
+        good.good_time,
+        collection.collection_date,
+        follow_teacher.follow_teacher_date
         from video_main
         left join video on video_main.video_main_id=video.video_main_id
         left join users on video_main.teacher_id = users.user_id
+        left join follow_teacher on follow_teacher.wx_user_id = #{wxUserId} and follow_teacher.teacher_id = video_main.teacher_id
+        left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
+        left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
         where video_main.video_main_id=#{videoMainId}
-        ORDER BY  video.episode_id ASC
+        ORDER BY video.episode_id ASC
+    </select>
+
+    <select id="getHomePageVideoList" resultMap="homePageVideoList">
+        select video_main.*,
+        users.user_name
+        from video_main
+        left join users on video_main.teacher_id = users.user_id
+        where video_main.public_status='public'
+        ORDER BY  video_main.heat_of_video DESC
+        limit #{pageNum},#{pageSize}
     </select>
 
     <update id="addVideoGoodNum">
@@ -110,6 +172,18 @@
 
     <update id="decreaseVideoCommentNum">
         update video_main set comment_num =  comment_num - 1 where video_main_id = #{videoId}
+    </update>
+
+    <update id="addVideoCollectionNum">
+        update video_main set collection_num = collection_num + 1 where video_main_id = #{videoId}
+    </update>
+
+    <update id="decreaseVideoCollectionNum">
+        update video_main set collection_num =  collection_num - 1 where video_main_id = #{videoId}
+    </update>
+
+    <update id="updateVideoHeatOfVideo">
+        update video_main set heat_of_video = #{heatOfVideo} where video_main_id = #{videoMainId}
     </update>
 
 </mapper>

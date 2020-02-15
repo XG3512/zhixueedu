@@ -28,10 +28,10 @@ public class QiniuServiceImpl implements QiniuService {
      * @return
      */
     @Override
-    public Map<Object, Object> upload(MultipartFile file, File_belong file_belong) throws IOException, NoSuchAlgorithmException {
+    public Map<Object, Object> upload(MultipartFile file, String islongimage , File_belong file_belong) throws IOException, NoSuchAlgorithmException {
         Map map = Maps.newHashMap();
         File_download file_download = null;
-        file_download = qiniuFileUtil.upload(file);
+        file_download = qiniuFileUtil.upload(file,islongimage);
         map.put("url",file_download.getFileUrl());
         if(file_belong.getName()==null){
             file_belong.setName(file_download.getName());

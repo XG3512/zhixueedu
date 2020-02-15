@@ -16,6 +16,7 @@ import javax.sql.rowset.CachedRowSet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -34,8 +35,17 @@ public class Article extends Model<Article> implements Serializable {
     private Integer goodNum;
     private boolean commentStatus;//评论状态
     private Integer commentNum;//评论数
+    private Integer collectionNum;//收藏数
 
     private School school;//学校信息
+
+    @TableField(exist = false)
+    private Date goodTime;//点赞时间
+    @TableField(exist = false)
+    private Date collectionDate;//收藏时间
+
+    @TableField(exist = false)
+    private List<ArticleImage> articleimageList;//动态图片列表
 
     @TableField(exist = false)
     private String readNumText;//阅读量文本
@@ -43,6 +53,8 @@ public class Article extends Model<Article> implements Serializable {
     private String goodNumText;//点赞文本
     @TableField(exist = false)
     private String commentNumText;//评论数文本
+    @TableField(exist = false)
+    private String collectionNumText;//收藏数文本
 
     public void setReadNum(Integer readNum) {
         this.readNum = readNum;
@@ -57,6 +69,11 @@ public class Article extends Model<Article> implements Serializable {
     public void setCommentNum(Integer commentNum) {
         this.commentNum = commentNum;
         this.commentNumText = CalculateUtil.CalculateNum(commentNum);
+    }
+
+    public void setCollectionNum(Integer collectionNum) {
+        this.collectionNum = collectionNum;
+        this.collectionNumText = CalculateUtil.CalculateNum(collectionNum);
     }
 
     public Article(Integer articleId, Integer schoolId, String title, String content, String articleText, Integer readNum, Date articleTime, Integer goodNum, boolean commentStatus, Integer commentNum, School school) {
@@ -74,5 +91,6 @@ public class Article extends Model<Article> implements Serializable {
         this.readNumText = CalculateUtil.CalculateNum(readNum);
         this.goodNumText = CalculateUtil.CalculateNum(goodNum);
         this.commentNumText = CalculateUtil.CalculateNum(commentNum);
+        this.collectionNumText = CalculateUtil.CalculateNum(collectionNum);
     }
 }

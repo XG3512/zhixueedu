@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxSchoolMapper">
+
+    <resultMap id="school" type="com.xvls.alexander.entity.School">
+        <id column="school_id" property="schoolId"></id>
+        <result column="school_num" property="schoolNum"></result>
+        <result column="school_name" property="schoolName"></result>
+        <result column="province" property="province"></result>
+        <result column="head" property="head"></result>
+        <result column="fans_num" property="fansNum"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="ranking" property="ranking"></result>
+        <result column="introduction" property="introduction"></result>
+        <result column="address" property="address"></result>
+        <result column="background" property="background"></result>
+        <result column="english_name" property="englishName"></result>
+        <result column="collection_num" property="collectionNum"></result>
+        <result column="follow_school_date" property="followSchoolDate"></result>
+    </resultMap>
+
+    <resultMap id="schoolList" type="com.xvls.alexander.entity.wx.SchoolList">
+        <id column="school_id" property="schoolId"></id>
+        <result column="school_name" property="schoolName"></result>
+        <result column="province" property="province"></result>
+        <result column="introduction" property="introduction"></result>
+    </resultMap>
+
+    <select id="getSchoolInfo" resultMap="school">
+        select school.*,
+        follow_school.follow_school_date
+        from school
+        left join follow_school on follow_school.school_id=school.school_id and follow_school.wx_user_id = #{wxUserId}
+        where school.school_id = #{schoolId}
+    </select>
+
+    <select id="getSchoolList" resultMap="schoolList">
+        select school.school_id,
+        school_name,
+        province,
+        introduction
+        from school
+        ORDER BY school.province asc
+    </select>
+</mapper>

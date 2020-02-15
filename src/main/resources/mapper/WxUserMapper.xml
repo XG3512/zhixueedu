@@ -4,76 +4,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xvls.alexander.dao.WxUserMapper">
 
-    <resultMap id="userRole" type="com.xvls.alexander.entity.wx.WxUserInfo">
-        <id column="user_id" property="userId"></id>
+    <resultMap id="userRole" type="com.xvls.alexander.entity.wx.WxUser">
+        <id column="wx_user_id" property="wx_user_id"></id>
         <result column="nickname" property="nickname"></result>
-        <result column="user_num" property="userNum"></result>
-        <result column="password" property="password"></result>
-        <result column="school_id" property="schoolId"></result>
-        <result column="department_id" property="departmentId"></result>
-        <result column="major_id" property="majorId"></result>
-        <result column="class_id" property="classId"></result>
-        <result column="user_name" property="userName"></result>
-        <result column="sex" property="sex"></result>
-        <result column="nation" property="nation"></result>
-        <result column="grade" property="grade"></result>
-        <result column="id_card" property="idCard"></result>
-        <result column="phone" property="phone"></result>
-        <result column="mail" property="mail"></result>
-        <result column="address" property="address"></result>
-        <result column="salt" property="salt"></result>
         <result column="openid" property="openid"></result>
-        <result column="Icon" property="Icon"></result>
+        <result column="session_key" property="session_key"></result>
+        <result column="avatar_url" property="avatarUrl"></result>
         <result column="city" property="city"></result>
         <result column="country" property="country"></result>
+        <result column="gender" property="gender"></result>
         <result column="province" property="province"></result>
-        <result column="wxStatus" property="wxstatus"></result>
-        <collection property="roleList" ofType="com.xvls.alexander.entity.Role">
-            <id column="role_id" property="roleId"></id>
-            <result column="role_name" property="roleName"></result>
-            <collection property="permissions" ofType="com.xvls.alexander.entity.Permission">
-                <id column="permission_id" property="permissionId"></id>
-                <result column="permission_name" property="permissionName"></result>
-                <result column="permission_code" property="permissionCode"></result>
-            </collection>
-        </collection>
-        <collection property="permissions" ofType="com.xvls.alexander.entity.Permission">
-            <id column="permission_id" property="permissionId"></id>
-            <result column="permission_name" property="permissionName"></result>
-            <result column="permission_code" property="permissionCode"></result>
-        </collection>
+        <result column="wxstatus" property="wxstatus"></result>
     </resultMap>
 
-    <select id="getWxStudentInfoByOpenId" parameterType="java.lang.String" resultMap="userRole">
-        select users.*,role.* from users
-        inner join user_role on users.user_id = user_role.user_id
-        inner join role on user_role.role_id = role.role_id
-        where openId=#{OpenId}
-    </select>
-
-    <select id="getWxStudentInfoByUserNum" parameterType="java.lang.String" resultMap="userRole">
-        SELECT users.*,role.*,permission.* FROM users
-        inner join user_role on users.user_id = user_role.user_id
-        inner join role on user_role.role_id = role.role_id
-        inner join role_permission on role_permission.role_id=user_role.role_id
-        inner join permission on permission.permission_id=role_permission.permission_id
-        WHERE user_num=#{user_num}
-    </select>
-
-    <select id="getUserId" resultType="java.lang.Integer">
-        select users.user_id from users
-        inner join user_role on users.user_id = user_role.user_id
-        inner join role on user_role.role_id = role.role_id
-        where users.user_num = #{userNum} and users.school_id = #{schoolId} and role.role_name = #{role}
-    </select>
-
-    <select id="getWxStudentInfoByUserId" parameterType="java.lang.Integer" resultMap="userRole">
-        SELECT users.*,role.*,permission.* FROM users
-        inner join user_role on users.user_id = user_role.user_id
-        inner join role on user_role.role_id = role.role_id
-        inner join role_permission on role_permission.role_id=user_role.role_id
-        inner join permission on permission.permission_id=role_permission.permission_id
-        WHERE users.user_id=#{userId}
-    </select>
+    <update id="updateLoginInfo">
+        update wx_user
+        set avatar_url = #{userInfo.avatarUrl},
+        city = #{userInfo.city},
+        country = #{userInfo.country},
+        gender = #{userInfo.gender},
+        nickname = #{userInfo.nickName},
+        province = #{userInfo.province},
+        wxstatus = 1
+        where wx_user_id = #{wxUserId}
+    </update>
 
 </mapper>

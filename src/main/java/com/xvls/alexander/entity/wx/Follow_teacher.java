@@ -9,15 +9,14 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 点赞信息
+ * 关注的老师
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("good")
-public class Good extends Model<Good> {
-    private String goodType;//点赞内容的类型，'A','V','N'
-    private Integer goodId;//点赞内容的Id
-    private Integer wxUserId;//用户Id
-    private Date goodTime;//点赞时间
+@TableName("follow_teacher")
+public class Follow_teacher extends Model<Follow_teacher> {
+    private Integer wxUserId;
+    private Integer teacherId;
+    private Date followTeacherDate;
 }

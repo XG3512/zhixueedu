@@ -1,19 +1,17 @@
 package com.xvls.alexander.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xvls.alexander.entity.wx.WxUserInfo;
+import com.xvls.alexander.entity.wx.UserInfo;
+import com.xvls.alexander.entity.wx.WxUser;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WxUserMapper extends BaseMapper<WxUserInfo> {
+public interface WxUserMapper extends BaseMapper<WxUser> {
 
-    WxUserInfo getWxStudentInfoByOpenId(String OpenId);
-
-    WxUserInfo getWxStudentInfoByUserNum(String user_num);//加学校！！！
-
-    //void saveWxStudentInfo(WxUserInfo wxUserInfo);
-
-    Integer getUserId(String userNum, Integer schoolId, String role);
-
-    WxUserInfo getWxStudentInfoByUserId(Integer userId);
+    /**
+     * 授权，更新微信用户信息
+     * @param wxUserId
+     * @param userInfo
+     */
+    void updateLoginInfo(Integer wxUserId, UserInfo userInfo);
 }

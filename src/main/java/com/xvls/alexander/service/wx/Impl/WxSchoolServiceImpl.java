@@ -1,10 +1,14 @@
 package com.xvls.alexander.service.wx.Impl;
 
+import com.xvls.alexander.dao.WxSchoolMapper;
 import com.xvls.alexander.entity.School;
+import com.xvls.alexander.entity.wx.SchoolList;
 import com.xvls.alexander.service.wx.WxSchoolService;
 import com.xvls.alexander.utils.CalculateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 获取学校信息
@@ -13,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class WxSchoolServiceImpl implements WxSchoolService {
 
     @Autowired
-    WxSchoolService wxSchoolService;
+    WxSchoolMapper wxSchoolMapper;
 
     /**
      * 根据schoolId，获取学校信息
@@ -21,9 +25,16 @@ public class WxSchoolServiceImpl implements WxSchoolService {
      * @return
      */
     @Override
-    public School getSchoolInfo(Integer schoolId) {
-        School school = new School();
-        school = school.selectById(schoolId);
-        return school;
+    public School getSchoolInfo(Integer schoolId,Integer wxUserId) {
+        return wxSchoolMapper.getSchoolInfo(schoolId,wxUserId);
+    }
+
+    /**
+     * 获得学校列表，通过省份降序排列
+     * @return
+     */
+    @Override
+    public List<SchoolList> getSchoolList() {
+        return wxSchoolMapper.getSchoolList();
     }
 }

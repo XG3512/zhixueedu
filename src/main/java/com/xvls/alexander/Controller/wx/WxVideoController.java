@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wx/video")
+// TODO: 2020/2/13 视频的点赞、收藏信息的展示
 public class WxVideoController {
 
     @Autowired
@@ -23,8 +24,11 @@ public class WxVideoController {
      * @return
      */
     @RequestMapping("getPublicVideoList")
-    public Object getPublicVideoList(){
-        List<Video_main> publicVideoList = wxVideoService.getPublicVideoList();
+    public Object getPublicVideoList(@RequestParam("wxUserId") Integer wxUserId){
+        if(wxUserId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        List<Video_main> publicVideoList = wxVideoService.getPublicVideoList(wxUserId);
         return WeChatResponseUtil.ok(publicVideoList);
     }
 
@@ -36,7 +40,9 @@ public class WxVideoController {
      * @return
      */
     @RequestMapping("getVideoInfoById")
-    public Object getVideoInfoById(@RequestParam("videoMainId") Integer videoMainId,@RequestParam("episodeId")Integer episodeId, HttpServletRequest httpServletRequest){
+    public Object getVideoInfoById(@RequestParam("videoMainId") Integer videoMainId,
+                                   @RequestParam("episodeId")Integer episodeId,
+                                   HttpServletRequest httpServletRequest){
         System.out.println("videoId:"+videoMainId+" episodeId:"+episodeId);
         if(videoMainId==null||episodeId==null){
             return WeChatResponseUtil.badArgumentValue();
@@ -52,11 +58,13 @@ public class WxVideoController {
      * @return
      */
     @RequestMapping("getMainPageById")
-    public Object getMainPageById(@RequestParam("videoMainId")Integer videoMainId){
-        if(videoMainId==null){
+    public Object getMainPageById(@RequestParam("videoMainId")Integer videoMainId,
+                                  @RequestParam("wxUserId") Integer wxUserId){
+        if(videoMainId==null||wxUserId==null){
             return WeChatResponseUtil.badArgumentValue();
         }
-        Video_main videoMainInfo = wxVideoService.getVideoMainInfo(videoMainId);
+        Video_main videoMainInfo = wxVideoService.getVideoMainInfo(videoMainId,wxUserId);
+        wxVideoService.updateVideoHeatOfVideo(videoMainInfo);
         /**
          * 加入推荐列表信息
          */

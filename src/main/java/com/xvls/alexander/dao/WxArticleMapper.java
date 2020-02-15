@@ -11,31 +11,32 @@ import java.util.List;
 public interface WxArticleMapper extends BaseMapper<Article> {
 
     /**
-     * 通过分页信息，获取动态信息
+     * 通过 分页信息,wxUserId 获取动态信息
      * @param pageInfo
      * @return
      */
-    List<Article> getArticleByPage(PageInfo pageInfo);
+    List<Article> getArticleByPage(PageInfo pageInfo,Integer wxUserId);
 
     /**
      * 获取所有动态
      * @return
      */
+    // TODO: 2020/2/13 可以用来改成首页的热门动态
     List<Article> getAllArticle();
 
     /**
-     * 根据article获取动态信息
+     * 根据articleId , wxUserId 获取动态信息
      * @param articleId
      * @return
      */
-    Article getArticleById(int articleId);
+    Article getArticleById(Integer articleId,Integer wxUserId);
 
     /**
      * 根据学校Id，获得学校的动态信息
      * @param schoolId
      * @return
      */
-    List<Article> getArticleBySchoolId(Integer schoolId);
+    List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId);
 
     /**
      * 增加点赞
@@ -66,4 +67,16 @@ public interface WxArticleMapper extends BaseMapper<Article> {
      * @param articleId
      */
     void decreaseArticleCommentNum(Integer articleId);
+
+    /**
+     * 增加收藏数
+     * @param articleId
+     */
+    void addArticleCollectionNum(Integer articleId);
+
+    /**
+     * 减少收藏数
+     * @param articleId
+     */
+    void decreaseArticleCollectionNum(Integer articleId);
 }

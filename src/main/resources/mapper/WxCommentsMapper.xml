@@ -27,9 +27,9 @@
 
     <resultMap id="getAllComments" type="com.xvls.alexander.entity.wx.Comments">
         <id column="comment_id" property="commentId"></id>
-        <result column="user_id" property="userId"></result>
-        <result column="icon" property="icon"></result>
-        <result column="nickname" property="nickName"></result>
+        <result column="wx_user_id" property="wxUserId"></result>
+        <result column="avatar_url" property="avatarUrl"></result>
+        <result column="nickname" property="nickname"></result>
         <result column="belong_type" property="belongType"></result>
         <result column="belong_id" property="belongId"></result>
         <result column="vc_content" property="vcContent"></result>
@@ -46,18 +46,19 @@
     </select>-->
 
     <!--递归查询-->
-    <select id="getAllComments" resultMap="getAllComments">
-        select comments.*,users.icon,users.nickname
+    <select id="getComments" resultMap="getAllComments">
+        select comments.*,wx_user.avatar_url,wx_user.nickname
         from comments
-        left join users on users.user_id = comments.user_id
-        where parent_vc_id=0 and belong_type=#{belongType} and belong_id=#{articleId}
+        left join wx_user on wx_user.wx_user_id = comments.wx_user_id
+        where (parent_vc_id = 0 or parent_vc_id is null ) and belong_type = #{belongType} and belong_id = #{articleId}
     </select>
 
     <select id="getCommentsMembers" resultMap="getAllComments">
-        select comments.*,users.icon,users.nickname
+        select comments.*,wx_user.avatar_url,wx_user.nickname
         from comments
-        left join users on users.user_id = comments.user_id
-        where parent_vc_id=#{comment_id}
+        left join wx_user on wx_user.wx_user_id = comments.wx_user_id
+        where parent_vc_id = #{comment_id}
+        order by vc_date asc
     </select>
 
 

@@ -13,10 +13,9 @@ public class UserInfo implements Serializable {
     private String avatarUrl;
     private String city;
     private String country;
-    private Byte gender;
+    private Integer gender;
     private String language;
-    private String nickName;
+    private String nickname;
     private String province;
-
 }
 

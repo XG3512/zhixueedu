@@ -1,16 +1,13 @@
 package com.xvls.alexander.service.wx;
 
-import com.xvls.alexander.entity.wx.WxUserInfo;
+import com.xvls.alexander.entity.wx.UserInfo;
+import com.xvls.alexander.entity.wx.WxUser;
 
 public interface WxUserService {
 
-    WxUserInfo getWxStudentInfoByOpenId(String OpenId);
+    WxUser getWxUserInfoByOpenId(String openId);
 
-    WxUserInfo getWxStudentInfoByUserNum(String user_num);
+    Integer insertNewWxUser(WxUser wxUser);
 
-    void saveWxStudentInfo(WxUserInfo wxUserInfo);
-
-    Integer getUserId(String userNum,Integer schoolId,String role);
-
-    WxUserInfo getWxStudentInfoByUserId(Integer userId);
+    void updateLoginInfo(Integer wxUserId, UserInfo userInfo);
 }

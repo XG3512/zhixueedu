@@ -53,7 +53,7 @@ public class QiniuFileUtil {
 	 * @throws QiniuException
 	 * @throws IOException
 	 */
-	public static File_download upload(MultipartFile file) throws IOException, NoSuchAlgorithmException {
+	public static File_download upload(MultipartFile file,String islongimage) throws IOException, NoSuchAlgorithmException {
 		File_download rescource = new File_download();
 
 		Configuration config = new Configuration(Region.region0());
@@ -90,6 +90,7 @@ public class QiniuFileUtil {
 					rescource.setFileSize(new java.text.DecimalFormat("#.##").format(file.getSize()/1024)+"kb");
 					rescource.setFileHash(hash);
 					rescource.setFileType(StringUtils.isBlank(extName)?"unknown":extName);
+					rescource.setIslongimage(Boolean.getBoolean(islongimage));
 					rescource.setFileUrl(filePath);
 					rescource.setSource("qiniu");
 					rescource.setFileDate(new Date());

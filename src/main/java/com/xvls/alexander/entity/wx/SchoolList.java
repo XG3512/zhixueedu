@@ -11,23 +11,21 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+/**
+ * 学校列表
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("video")
-public class Video extends Model<Video> {
+@TableName("school")
+public class SchoolList extends Model<SchoolList> {
 
     @TableId(type = IdType.AUTO)//在这里设置id的自增长，否则id将不会自增长且为随机数
-    private Integer videoId;//视频id
-    private Integer teacherId;//教师Id
-    private String videoTitle;//简介
-    private Date videoDate;//日期
-    private Integer videoMainId;//主页ID
-    private Integer episodeId;//集数
-    private String videoLength;//视频长度
-    private String videoSize;//视频大小
-    private String publicStatus;//播放等级
-    private String verifyStatus;//审核状态
-    private String videoSource;//视频地址
+    private Integer schoolId;
+    private String schoolName;//学校名称
+    private String province;//省份
+    private String introduction;
 
+    @TableField(exist = false)
+    private Date followSchoolDate;//关注时间
 }

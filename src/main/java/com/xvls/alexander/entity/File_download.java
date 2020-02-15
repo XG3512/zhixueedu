@@ -37,5 +37,7 @@ public class File_download extends Model<File_download> implements Serializable 
     //@TableField("file_status")
     private boolean fileStatus;//文件状态
 
+    private Boolean islongimage;//是否是长图
+
     private String name;
 }

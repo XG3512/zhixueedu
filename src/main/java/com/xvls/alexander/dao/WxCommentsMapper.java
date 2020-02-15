@@ -16,5 +16,5 @@ public interface WxCommentsMapper {
      * @param articleId
      * @return
      */
-    List<Comments> getAllComments(String belongType , int articleId);
+    List<Comments> getComments(String belongType , Integer articleId);
 }

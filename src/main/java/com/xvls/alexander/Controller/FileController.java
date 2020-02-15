@@ -43,7 +43,9 @@ public class FileController {
      * @return
      */
     @PostMapping("uploadFile")
-    public RestResponse uploadFile(@RequestParam("file")MultipartFile file, HttpServletRequest httpServletRequest){
+    public RestResponse uploadFile(@RequestParam("file")MultipartFile file,
+                                   @RequestParam(name = "islongimage",required = false,defaultValue = "0") String islongimage,
+                                   HttpServletRequest httpServletRequest){
         String getParameter = httpServletRequest.getParameter("file_belong");
         //System.out.println(getParameter);
         File_belong file_belong = new Gson().fromJson(getParameter,File_belong.class);
@@ -56,7 +58,7 @@ public class FileController {
         }
         Map map = Maps.newHashMap();
         try {
-            map=qiniuService.upload(file,file_belong);
+            map=qiniuService.upload(file,islongimage,file_belong);
         } catch (Exception e) {
             e.printStackTrace();
             return RestResponse.failure(e.getMessage());
@@ -116,6 +118,7 @@ public class FileController {
      */
     @PostMapping("uploadManyFile")
     public RestResponse uploadManyFile(@RequestParam("userId") int userId,
+                                       @RequestParam(name = "islongimage",required = false,defaultValue = "0") String islongimage,
                                        //@RequestParam(value = "file_belong",required = false) File_belong file_belong,
                                        @RequestParam("files")MultipartFile[] files,
                                        HttpServletRequest httpServletRequest){
@@ -130,7 +133,7 @@ public class FileController {
         try{
             for(int i=0;i<files.length;i++){
                 file_belong.setUserId(userId);
-                lists.add(qiniuService.upload(files[i],file_belong));
+                lists.add(qiniuService.upload(files[i],islongimage,file_belong));
             }
         } catch (Exception e) {
             e.printStackTrace();

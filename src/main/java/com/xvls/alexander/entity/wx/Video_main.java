@@ -32,6 +32,7 @@ public class Video_main extends Model<Video_main> {
     private String publicStatus;//播放等级
     private String verifyStatus;//审核状态
     private String mainPage;//封面
+    private Double heatOfVideo;//视频热度
 
     @TableField(exist = false)
     private String playNumText;//播放量文本
@@ -43,12 +44,22 @@ public class Video_main extends Model<Video_main> {
     private String commentNumText;//评论数文本
 
     @TableField(exist = false)
-    private String nickName;//教师名称
+    private String userName;//教师名称
+
+    @TableField(exist = false)
+    private String icon;//教师头像
+
+    @TableField(exist = false)
+    private Date goodTime;//点赞时间
+    @TableField(exist = false)
+    private Date collectionDate;//收藏时间
+    @TableField(exist = false)
+    private Date followTeacherDate;//关注教师的时间
 
     @TableField(exist = false)
     private List<Video_episode> video_episodeList;//视频集数信息
 
-    public Video_main(Integer videoMainId, Integer teacherId, String videoMainTitle, String summary, Integer playNum, Integer goodNum, Integer collectionNum, Date videoDate, Integer commentNum, Boolean commentStatus, int videoLength, String publicStatus, String verifyStatus, String mainPage,  String nickName, List<Video_episode> video_episodeList) {
+    public Video_main(Integer videoMainId, Integer teacherId, String videoMainTitle, String summary, Integer playNum, Integer goodNum, Integer collectionNum, Date videoDate, Integer commentNum, Boolean commentStatus, int videoLength, String publicStatus, String verifyStatus, String mainPage,  String userName, List<Video_episode> video_episodeList) {
         this.videoMainId = videoMainId;
         this.teacherId = teacherId;
         this.videoMainTitle = videoMainTitle;
@@ -67,7 +78,7 @@ public class Video_main extends Model<Video_main> {
         this.goodNumText = CalculateUtil.CalculateNum(goodNum);
         this.collectionNumText = CalculateUtil.CalculateNum(collectionNum);
         this.commentNumText = CalculateUtil.CalculateNum(commentNum);
-        this.nickName = nickName;
+        this.userName = userName;
         this.video_episodeList = video_episodeList;
     }
 

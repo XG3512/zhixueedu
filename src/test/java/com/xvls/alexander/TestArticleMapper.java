@@ -23,7 +23,7 @@ public class TestArticleMapper {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(0);
         pageInfo.setPageSize(3);
-        List<Article> articles = wxArticleMapper.getArticleByPage(pageInfo);
+        List<Article> articles = wxArticleMapper.getArticleByPage(pageInfo,1);
         for (Article article : articles){
             System.out.println(article);
             System.out.println(article.getSchool());

@@ -20,8 +20,8 @@ public class WxArticleServiceImpl implements WxArticleService {
     WxArticleMapper wxArticleMapper;
 
     @Override
-    public List<Article> getArticleByPage(PageInfo pageInfo) {
-        return wxArticleMapper.getArticleByPage(pageInfo);
+    public List<Article> getArticleByPage(PageInfo pageInfo,Integer wxUserId) {
+        return wxArticleMapper.getArticleByPage(pageInfo,wxUserId);
     }
 
     @Override
@@ -30,13 +30,13 @@ public class WxArticleServiceImpl implements WxArticleService {
     }
 
     @Override
-    public Article getArticleById(int articleId) {
-        return wxArticleMapper.getArticleById(articleId);
+    public Article getArticleById(Integer articleId , Integer wxUserId) {
+        return wxArticleMapper.getArticleById(articleId,wxUserId);
     }
 
     @Override
-    public List<Article> getArticleBySchoolId(Integer schoolId) {
-        return wxArticleMapper.getArticleBySchoolId(schoolId);
+    public List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId) {
+        return wxArticleMapper.getArticleBySchoolId(schoolId,wxUserId);
     }
 
     /**
@@ -82,6 +82,24 @@ public class WxArticleServiceImpl implements WxArticleService {
     @Override
     public void decreaseArticleCommentNum(Integer articleId) {
         wxArticleMapper.decreaseArticleCommentNum(articleId);
+    }
+
+    /**
+     * 添加收藏数
+     * @param articleId
+     */
+    @Override
+    public void addArticleCollectionNum(Integer articleId) {
+        wxArticleMapper.addArticleCollectionNum(articleId);
+    }
+
+    /**
+     * 减少收藏数
+     * @param articleId
+     */
+    @Override
+    public void decreaseArticleCollectionNum(Integer articleId){
+        wxArticleMapper.decreaseArticleCollectionNum(articleId);
     }
 
 

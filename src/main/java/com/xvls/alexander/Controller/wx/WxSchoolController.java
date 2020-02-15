@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.xvls.alexander.entity.School;
 import com.xvls.alexander.entity.wx.Article;
 import com.xvls.alexander.entity.wx.Notice;
+import com.xvls.alexander.entity.wx.SchoolList;
 import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.wx.WxArticleService;
 import com.xvls.alexander.service.wx.WxNoticeService;
@@ -44,24 +45,36 @@ public class WxSchoolController {
      * @return
      */
     @RequestMapping("getSchoolMainPage")
-    public Object getSchoolMainPage(@RequestParam Integer schoolId , HttpServletRequest httpServletRequest){
+    public Object getSchoolMainPage(@RequestParam("schoolId") Integer schoolId,
+                                    @RequestParam("wxUserId") Integer wxUserId ,
+                                    HttpServletRequest httpServletRequest){
         System.out.println(schoolId);
-        if(schoolId==null){
+        if(schoolId==null || wxUserId == null){
             return WeChatResponseUtil.badArgumentValue();
         }
         Map map = Maps.newHashMap();
-        School schoolInfo = wxSchoolService.getSchoolInfo(schoolId);
+        School schoolInfo = wxSchoolService.getSchoolInfo(schoolId,wxUserId);
         map.put("schoolInfo",schoolInfo);
         //System.out.println(schoolInfo);
-        List<Article> articleList = wxArticleService.getArticleBySchoolId(schoolId);
+        List<Article> articleList = wxArticleService.getArticleBySchoolId(schoolId,wxUserId);
         map.put("articleList",articleList);
         //System.out.println(articleList);
         List<Notice> noticeList = wxNoticeService.getNoticeListBySchoolId(schoolId);
         map.put("noticeList",noticeList);
         //System.out.println(articleList);
-        List<Video_main> video_mainList = wxVideoService.getPublicVideoListBySchoolId(schoolId);
+        List<Video_main> video_mainList = wxVideoService.getPublicVideoListBySchoolId(schoolId,wxUserId);
         map.put("video_mainList",video_mainList);
         //System.out.println(video_mainList);
         return WeChatResponseUtil.ok(map);
+    }
+
+    /**
+     * 获得学校列表
+     * @return
+     */
+    @RequestMapping("getSchoolList")
+    public Object getSchoolList(){
+        List<SchoolList> schoolList = wxSchoolService.getSchoolList();
+        return WeChatResponseUtil.ok(schoolList);
     }
 }

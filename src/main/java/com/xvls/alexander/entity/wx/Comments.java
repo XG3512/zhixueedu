@@ -17,9 +17,9 @@ import java.util.List;
 public class Comments implements Serializable {
 
     private Integer commentId;//评论Id
-    private Integer userId;//用户ID
-    private String icon;//用户头像
-    private String nickName;//用户名称
+    private Integer wxUserId;//用户ID
+    private String avatarUrl;//用户头像
+    private String nickname;//用户名称
     private String belongType;//所属类型
     private Integer belongId;//所属id
     private String vcContent;//评论内容

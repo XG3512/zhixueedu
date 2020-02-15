@@ -12,7 +12,7 @@ public interface WxCommentsService {
      * @param articleId
      * @return
      */
-    List<Comments> getAllComments(String belongType , int articleId);
+    List<Comments> getComments(String belongType , Integer articleId);
 
     /**
      * 增加评论信息

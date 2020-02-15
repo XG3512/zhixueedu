@@ -3,11 +3,9 @@ package com.xvls.alexander.config;
 import com.google.common.collect.Sets;
 import com.xvls.alexander.entity.Permission;
 import com.xvls.alexander.entity.Role;
-import com.xvls.alexander.entity.User;
-import com.xvls.alexander.entity.wx.WxUserInfo;
-import com.xvls.alexander.service.UserService;
+import com.xvls.alexander.entity.wx.Users;
 import com.xvls.alexander.service.impl.UserServiceImpl;
-import com.xvls.alexander.service.wx.WxUserService;
+import com.xvls.alexander.service.wx.UsersService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -19,8 +17,6 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 //自定义的UserRealm
@@ -29,7 +25,7 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired
     UserServiceImpl userService;
     @Autowired
-    WxUserService wxUserService;
+    UsersService usersService;
 
     /*授权*/
     @Override
@@ -40,7 +36,7 @@ public class UserRealm extends AuthorizingRealm {
 
         //拿到当前登录的这个对象
         Subject subject = SecurityUtils.getSubject();
-        WxUserInfo currentUser = (WxUserInfo) subject.getPrincipal();//拿到user对象
+        Users currentUser = (Users) subject.getPrincipal();//拿到user对象
 
         /************ 从数据库中添加权限 *************/
         Set<Role> roles = currentUser.getRoleList();
@@ -79,7 +75,7 @@ public class UserRealm extends AuthorizingRealm {
 
         UsernamePasswordToken userToken = (UsernamePasswordToken) token ;
         /*******连接真实数据库**********/
-        WxUserInfo user = wxUserService.getWxStudentInfoByUserId(Integer.valueOf(userToken.getUsername()));
+        Users user = usersService.getWxStudentInfoByUserId(Integer.valueOf(userToken.getUsername()));
 
         if(user==null){//没有这个人
             return null;//UnknownAccountException

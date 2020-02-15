@@ -24,10 +24,11 @@ public class WxCommentsServiceImpl implements WxCommentsService {
      * @return
      */
     @Override
-    public List<Comments> getAllComments(String belongType , int articleId) {
-        return wxCommentsMapper.getAllComments(belongType,articleId);
+    public List<Comments> getComments(String belongType , Integer articleId) {
+        return wxCommentsMapper.getComments(belongType,articleId);
     }
 
+    // TODO: 2020/2/12 增加评论信息
     /**
      * 增加评论信息
      * @param comments
@@ -37,6 +38,7 @@ public class WxCommentsServiceImpl implements WxCommentsService {
 
     }
 
+    // TODO: 2020/2/12 删除评论信息
     /**
      * 删除评论信息
      * @param comments

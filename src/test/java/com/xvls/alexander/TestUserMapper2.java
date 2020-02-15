@@ -4,14 +4,10 @@ import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.*;
-import com.xvls.alexander.entity.File_belong;
-import com.xvls.alexander.entity.File_download;
-import com.xvls.alexander.entity.School;
-import com.xvls.alexander.entity.User;
+import com.xvls.alexander.entity.*;
 import com.xvls.alexander.entity.wx.*;
 import com.xvls.alexander.service.impl.UserServiceImpl;
 import com.xvls.alexander.service.wx.*;
-import com.xvls.alexander.utils.CalculateUtil;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,9 +26,9 @@ public class TestUserMapper2 {
     @Autowired
     UserServiceImpl userService;
     @Autowired
-    WxUserService wxUserService;
+    UsersService usersService;
     @Autowired
-    WxUserMapper wxUserMapper;
+    UsersMapper usersMapper;
 
     @Test
     public void testSelectById(){
@@ -52,8 +48,8 @@ public class TestUserMapper2 {
 
     @Test
     public void getWxStudentInfoByUserNum(){
-        WxUserInfo wxUserInfo = wxUserService.getWxStudentInfoByUserNum("2017414540");
-        System.out.println(wxUserInfo);
+        Users users = usersService.getWxStudentInfoByUserNum("2017414540");
+        System.out.println(users);
     }
 
     /**
@@ -61,42 +57,35 @@ public class TestUserMapper2 {
      */
     @Test
     public void saveWxStudentInfo(){
-        WxUserInfo wxUserInfo = new WxUserInfo();
-        wxUserInfo.setNickname("Glitter");
-        wxUserInfo.setUserNum("1102837040");
+        Users users = new Users();
+        users.setUserNum("1102837040");
         /*ArrayList<Role> arrayList = new ArrayList<Role>();
         arrayList.add(new Role(10,"测试"));
         wxUserInfo.setRoleList(arrayList);*/
-        wxUserInfo.insert();
+        users.insert();
     }
 
     @Test
     public void getWxUserInfoByUser_num_MP(){
-        WxUserInfo wxUserInfo = new WxUserInfo();
+        Users users = new Users();
 
-        QueryWrapper<WxUserInfo> WxUserInfoQueryWrapper = new QueryWrapper<>();
+        QueryWrapper<Users> WxUserInfoQueryWrapper = new QueryWrapper<>();
         WxUserInfoQueryWrapper.eq("nickname", "Glitter");
-        List<WxUserInfo> wxUserInfos = wxUserInfo.selectList(WxUserInfoQueryWrapper);
+        List<Users> userList = users.selectList(WxUserInfoQueryWrapper);
 
-        for(WxUserInfo wxUserInfo1:wxUserInfos){
-            System.out.println(wxUserInfo1);
+        for(Users users1 : userList){
+            System.out.println(users1);
         }
     }
 
     @Test
     public void selectAllWxUserInfo(){
-        WxUserInfo wxUserInfo = new WxUserInfo();
-        wxUserInfo.setUserId(2);
+        Users users = new Users();
+        users.setUserId(2);
 
-        WxUserInfo wxUserInfo2 = wxUserInfo.selectById();
+        Users users2 = users.selectById();
 
-        System.out.println(wxUserInfo2);
-    }
-
-    @Test
-    public void getWxUserInfoByOpenid(){
-        WxUserInfo wxStudentInfoByOpenId = wxUserMapper.getWxStudentInfoByOpenId("123456");
-        System.out.println(wxStudentInfoByOpenId);
+        System.out.println(users2);
     }
 
     /**
@@ -105,22 +94,26 @@ public class TestUserMapper2 {
     @Test
     public void updateWxUserInfoByUser_num(){
 
-        WxUserInfo wxUserInfo = wxUserService.getWxStudentInfoByUserNum("2017414540");
+        Users users = usersService.getWxStudentInfoByUserNum("2017416481");
 
-        String password = wxUserInfo.getPassword();
+        if(users==null){
+            System.out.println(users);
+            return;
+        }
+        String password = users.getPassword();
 
         String salt = UUID.randomUUID().toString();
         salt = salt.replaceAll("-","");
-        wxUserInfo.setSalt(salt);
+        users.setSalt(salt);
         System.out.println("salt:"+salt);
 
         //加密：MD5
-        Md5Hash md5Hash = new Md5Hash(password,wxUserInfo.getSalt(),6);
+        Md5Hash md5Hash = new Md5Hash(password, users.getSalt(),6);
         System.out.println("md5Hash.toHex() :"+md5Hash.toHex());
-        wxUserInfo.setPassword(md5Hash.toHex());//注意一致
+        users.setPassword(md5Hash.toHex());//注意一致
 
         //更新用户信息
-        wxUserService.saveWxStudentInfo(wxUserInfo);
+        usersService.saveWxStudentInfo(users);
     }
 
     @Test
@@ -197,9 +190,11 @@ public class TestUserMapper2 {
 
     @Autowired
     WxCommentsMapper wxCommentsMapper;
+    @Autowired
+    WxCommentsService wxCommentsService;
     @Test
     public void testWxCommentsMapper(){
-        List<Comments> comments = wxCommentsMapper.getAllComments("A", 1);
+        List<Comments> comments = wxCommentsService.getComments("A", 1);
         for(Comments comment : comments){
             System.out.println(comment);
         }
@@ -209,7 +204,7 @@ public class TestUserMapper2 {
     WxArticleService wxArticleService;
     @Test
     public void testgetArticleById(){
-        Article article = wxArticleService.getArticleById(1);
+        Article article = wxArticleService.getArticleById(2,1);
         System.out.println(article);
     }
 
@@ -217,9 +212,17 @@ public class TestUserMapper2 {
     WxVideoMapper wxVideoMapper;
     @Test
     public void testgetPublicArticleList(){
-        List<Video_main> publicVideoList = wxVideoMapper.getPublicVideoList();
+        /*List<Video_main> publicVideoList = wxVideoMapper.getPublicVideoList();
         for(Video_main video_main : publicVideoList){
             System.out.println(video_main);
+        }*/
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(1);
+        pageInfo.setPageSize(3);
+        List<Article> articleByPage = wxArticleService.getArticleByPage(pageInfo,1);
+        for(Article article : articleByPage){
+            System.out.println(article);
+            System.out.println();
         }
     }
 
@@ -229,9 +232,9 @@ public class TestUserMapper2 {
     WxNoticeService wxNoticeService;
     @Test
     public void testGetSchoolMainPage(){
-        School schoolInfo = wxSchoolService.getSchoolInfo(1);
+        School schoolInfo = wxSchoolService.getSchoolInfo(1,1);
         System.out.println(schoolInfo);
-        List<Article> articleList = wxArticleService.getArticleBySchoolId(1);
+        List<Article> articleList = wxArticleService.getArticleBySchoolId(1,1);
         for(Article article : articleList){
             System.out.println(article);
         }
@@ -241,7 +244,7 @@ public class TestUserMapper2 {
             System.out.println(notice);
         }
 
-        List<Video_main> video_mainList = wxVideoMapper.getPublicVideoListBySchoolId(1);
+        List<Video_main> video_mainList = wxVideoMapper.getPublicVideoListBySchoolId(1,1);
         for(Video_main video_main :video_mainList){
             System.out.println(video_main);
         }
@@ -251,11 +254,12 @@ public class TestUserMapper2 {
     WxVideoService videoService;
     @Test
     public void testGetVideoInfoById(){
-        Video videoInfoById = videoService.getVideoInfoById(1, 1);
-        System.out.println(videoInfoById);
+        /*Video videoInfoById = videoService.getVideoInfoById(1, 1);
+        System.out.println(videoInfoById);*/
 
-        Video_main videoMainInfo = videoService.getVideoMainInfo(1);
+        Video_main videoMainInfo = videoService.getVideoMainInfo(4,1);
         System.out.println(videoMainInfo);
+        videoService.updateVideoHeatOfVideo(videoMainInfo);
     }
 
     @Autowired
@@ -269,8 +273,68 @@ public class TestUserMapper2 {
 
     @Test
     public void testGetUserId(){
-        Integer userId = wxUserMapper.getUserId("2017414540", 1, "学生");
+        Integer userId = usersMapper.getUserId("2017414540", 1, "学生");
         System.out.println(userId);
+    }
+
+    @Test
+    public void testGetSchoolList(){
+        List<SchoolList> schoolList = wxSchoolService.getSchoolList();
+        System.out.println(schoolList);
+    }
+
+    @Test
+    public void testReturnAutoId(){
+        Users users = new Users();
+        int insert = usersMapper.insert(users);
+        System.out.println(insert);//1
+        System.out.println(users.getUserId());//16
+    }
+
+    @Autowired
+    WxUserService wxUserService;
+
+    @Test
+    public void testUpdateLoginInfo(){
+        UserInfo userInfo = new UserInfo();
+        userInfo.setNickname("Glitter");
+        wxUserService.updateLoginInfo(1,userInfo);
+    }
+
+    @Autowired
+    WxV_historyService wxV_historyService;
+    @Test
+    public void testAddV_history(){
+        V_history v_history = new V_history();
+        v_history.setVHistoryId(1);
+        v_history.setWxUserId(1);
+        v_history.setEpisodeId(1);
+        v_history.setWatchDate(new Date());
+        v_history.setWatchTo(0);
+        wxV_historyService.addV_history(v_history);
+    }
+
+    @Autowired
+    CollectionService collectionService;
+    @Test
+    public void testAddCollection(){
+        WxCollection wxCollection = new WxCollection();
+        wxCollection.setCollectionDate(new Date());
+        wxCollection.setCollectionId(1);
+        wxCollection.setCollectionType("A");
+        wxCollection.setGroupId(1);
+        wxCollection.setWxUserId(1);
+        collectionService.addCollection(wxCollection);
+    }
+
+    @Autowired
+    WxHomeRotationService wxHomeRotationService;
+    @Test
+    public void testWxHomeRotation(){
+        List<WxHomeRotation> wxHomeRotationList = wxHomeRotationService.getAllHomeRotation();
+        for(WxHomeRotation wxHomeRotation : wxHomeRotationList){
+            System.out.println(wxHomeRotation);
+        }
     }
 
 }

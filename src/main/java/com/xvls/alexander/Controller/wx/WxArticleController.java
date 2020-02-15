@@ -7,6 +7,7 @@ import com.xvls.alexander.entity.wx.Article;
 import com.xvls.alexander.entity.wx.Comments;
 import com.xvls.alexander.service.wx.WxArticleService;
 import com.xvls.alexander.service.wx.WxCommentsService;
+import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,17 +39,27 @@ public class WxArticleController {
      * @return
      */
     @RequestMapping("getArticleByPage")
-    public Object getArticleByPage(@RequestBody PageInfo pageInfo, HttpServletRequest request){
-        int pageNum = pageInfo.getPageNum();
-        int pageSize = pageInfo.getPageSize();
-        if(pageInfo==null){
+    public Object getArticleByPage(@RequestBody String body, HttpServletRequest request){
+        PageInfo pageInfo = null;
+        Integer wxUserId = null;
+        try {
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo", PageInfo.class);
+            wxUserId = JacksonUtil.parseInteger(body,"wxUserId");
+        } catch (Exception e) {
+            e.printStackTrace();
+            WeChatResponseUtil.badArgument();
+        }
+        if(pageInfo==null || wxUserId==null){
             return WeChatResponseUtil.fail();
         }
+        int pageNum = pageInfo.getPageNum();
+        int pageSize = pageInfo.getPageSize();
+
         pageInfo.setPageNum((pageNum-1)*pageSize);
-        List<Article> articles = wxArticleService.getArticleByPage(pageInfo);
+        List<Article> articles = wxArticleService.getArticleByPage(pageInfo,wxUserId);
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("articleInfo",articles);
-        return WeChatResponseUtil.ok(result).toString();
+        return WeChatResponseUtil.ok(result);
     }
 
     @RequestMapping("list")
@@ -65,14 +76,14 @@ public class WxArticleController {
      * @param articleId
      * @return
      */
-    // TODO: 2020/2/9  论部分暂时没有设置分页
+    // TODO: 2020/2/9  该部分暂时没有设置评论功能的分页
     @RequestMapping("getArticleById")
-    public Object getArticleById(@RequestParam("articleId") int articleId){
-        if(articleId==0){
+    public Object getArticleById(@RequestParam("articleId") Integer articleId,@RequestParam("wxUserId") Integer wxUserId){
+        if(articleId == null || wxUserId == null){
             return WeChatResponseUtil.badArgumentValue();
         }
-        Article article = wxArticleService.getArticleById(articleId);
-        List<Comments> comments = wxCommentsService.getAllComments("A", articleId);
+        Article article = wxArticleService.getArticleById(articleId,wxUserId);
+        List<Comments> comments = wxCommentsService.getComments("A", articleId);
         Map<Object,Object> result = Maps.newHashMap();
         result.put("article",article);
         result.put("comments",comments);

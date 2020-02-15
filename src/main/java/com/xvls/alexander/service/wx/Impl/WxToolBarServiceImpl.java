@@ -1,7 +1,11 @@
 package com.xvls.alexander.service.wx.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xvls.alexander.dao.WxFollow_schoolMapper;
+import com.xvls.alexander.dao.WxFollow_teacherMapper;
 import com.xvls.alexander.dao.WxGoodMapper;
+import com.xvls.alexander.entity.wx.Follow_school;
+import com.xvls.alexander.entity.wx.Follow_teacher;
 import com.xvls.alexander.entity.wx.Good;
 import com.xvls.alexander.service.wx.WxArticleService;
 import com.xvls.alexander.service.wx.WxNoticeService;
@@ -20,6 +24,10 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     WxVideoService wxVideoService;
     @Autowired
     WxNoticeService wxNoticeService;
+    @Autowired
+    WxFollow_schoolMapper wxFollow_schoolMapper;
+    @Autowired
+    WxFollow_teacherMapper wxFollow_teacherMapper;
 
     /**
      * 对动态进行点赞 , 在前端进行判断是否已经点赞
@@ -144,13 +152,79 @@ public class WxToolBarServiceImpl implements WxToolBarService {
         wxNoticeService.addNoticeReadNum(id);
     }
 
+    /**
+     * 动态收藏数增加
+     * @param id
+     */
+    @Override
+    public void addArticleCollectionNum(Integer id) {
+        wxArticleService.addArticleCollectionNum(id);
+    }
+
+    @Override
+    public void decreaseArticleCollectionNum(Integer id) {
+        wxArticleService.decreaseArticleCollectionNum(id);
+    }
+
+    @Override
+    public void addVideoCollectionNum(Integer id) {
+        wxVideoService.addVideoCollectionNum(id);
+    }
+
+    @Override
+    public void decreaseVideoCollectionNum(Integer id) {
+        wxVideoService.decreaseVideoCollectionNum(id);
+    }
+
     @Override
     public boolean deleteGood(Good good) {
         QueryWrapper<Good> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("good_type",good.getGoodType())
                 .eq("good_id",good.getGoodId())
-                .eq("user_id",good.getUserId());
+                .eq("wx_user_id",good.getWxUserId());
         return good.delete(queryWrapper);
+    }
+
+    /**
+     * 关注学校
+     * @param follow_school
+     */
+    @Override
+    public void addFollowSchool(Follow_school follow_school) {
+        wxFollow_schoolMapper.insert(follow_school);
+    }
+
+    /**
+     * 取消关注
+     * @param follow_school
+     */
+    @Override
+    public void cancelFollowSchool(Follow_school follow_school) {
+        QueryWrapper<Follow_school> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("wx_user_id",follow_school.getWxUserId())
+                .eq("school_id",follow_school.getSchoolId());
+        wxFollow_schoolMapper.delete(queryWrapper);
+    }
+
+    /**
+     * 关注老师
+     * @param follow_teacher
+     */
+    @Override
+    public void addFollowTeacher(Follow_teacher follow_teacher) {
+        wxFollow_teacherMapper.insert(follow_teacher);
+    }
+
+    /**
+     * 取消关注
+     * @param follow_teacher
+     */
+    @Override
+    public void cancelFollowTeacher(Follow_teacher follow_teacher) {
+        QueryWrapper<Follow_teacher> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("wx_user_id",follow_teacher.getWxUserId())
+                .eq("teacher_id",follow_teacher.getTeacherId());
+        wxFollow_teacherMapper.delete(queryWrapper);
     }
 
 }

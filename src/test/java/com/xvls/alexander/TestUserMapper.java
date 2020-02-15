@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AlexanderApplication.class)
@@ -156,6 +153,12 @@ public class TestUserMapper {
         for (User user: users) {
             System.out.println(user);
         }
+    }
+
+    @Test
+    public void testTime(){
+        Date date = new Date();
+        System.out.println(date.getTime()/3600000);
     }
 
 }

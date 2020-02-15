@@ -12,13 +12,13 @@ import java.util.List;
 @Service
 public interface WxArticleService {
 
-    List<Article> getArticleByPage(PageInfo pageInfo);
+    List<Article> getArticleByPage(PageInfo pageInfo,Integer wxUserId);
 
     List<Article> getAllArticle();
 
-    Article getArticleById(int articleId);
+    Article getArticleById(Integer articleId , Integer wxUserId);
 
-    List<Article> getArticleBySchoolId(Integer schoolId);
+    List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId);
 
     void addArticleGoodNum(Integer articleId);
 
@@ -29,4 +29,8 @@ public interface WxArticleService {
     void decreaseArticleGoodNum(Integer articleId);
 
     void decreaseArticleCommentNum(Integer articleId);
+
+    void addArticleCollectionNum(Integer articleId);
+
+    void decreaseArticleCollectionNum(Integer articleId);
 }

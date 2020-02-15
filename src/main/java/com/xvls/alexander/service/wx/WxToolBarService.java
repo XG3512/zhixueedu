@@ -1,5 +1,7 @@
 package com.xvls.alexander.service.wx;
 
+import com.xvls.alexander.entity.wx.Follow_school;
+import com.xvls.alexander.entity.wx.Follow_teacher;
 import com.xvls.alexander.entity.wx.Good;
 
 /**
@@ -25,6 +27,18 @@ public interface WxToolBarService {
     void addVideoPlayNum(Integer id);
     void addNoticeReadNum(Integer id);
 
+    /*收藏*/
+    void addArticleCollectionNum(Integer id);
+    void decreaseArticleCollectionNum(Integer id);
+    void addVideoCollectionNum(Integer id);
+    void decreaseVideoCollectionNum(Integer id);
 
     boolean deleteGood(Good good);
+
+    /*关注*/
+    void addFollowSchool(Follow_school follow_school);
+    void cancelFollowSchool(Follow_school follow_school);
+    void addFollowTeacher(Follow_teacher follow_teacher);
+    void cancelFollowTeacher(Follow_teacher follow_teacher);
+
 }

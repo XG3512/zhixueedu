@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -41,6 +42,9 @@ public class School extends Model<School> implements Serializable {
     private String goodNumText;//点赞数
     @TableField(exist = false)
     private String collectionNumText;//获得收藏数
+
+    @TableField(exist = false)
+    private Date followSchoolDate;//关注学校的时间
 
 
     public void setFansNum(Integer fansNum) {

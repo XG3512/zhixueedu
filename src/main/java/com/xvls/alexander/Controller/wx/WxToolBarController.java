@@ -1,7 +1,7 @@
 package com.xvls.alexander.Controller.wx;
 
-import com.xvls.alexander.entity.wx.Good;
-import com.xvls.alexander.entity.wx.V_history;
+import com.xvls.alexander.entity.wx.*;
+import com.xvls.alexander.service.wx.CollectionService;
 import com.xvls.alexander.service.wx.WxToolBarService;
 import com.xvls.alexander.service.wx.WxV_historyService;
 import com.xvls.alexander.utils.JacksonUtil;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * 点赞、评论、浏览、收藏信息的更新
@@ -22,6 +23,8 @@ public class WxToolBarController {
     WxToolBarService wxToolBarService;
     @Autowired
     WxV_historyService wxV_historyService;
+    @Autowired
+    CollectionService collectionService;
 
     /**
      * 点赞增加
@@ -31,7 +34,7 @@ public class WxToolBarController {
      */
     @RequestMapping("good/add")
     public Object addGood(@RequestBody Good good, HttpServletRequest httpServletRequest){
-        if(good==null||good.getUserId()==null||good.getGoodId()==null||good.getGoodType()==null){
+        if(good==null||good.getWxUserId()==null||good.getGoodId()==null||good.getGoodType()==null){
             return WeChatResponseUtil.badArgumentValue();
         }
         /*判断点赞类型*/
@@ -61,7 +64,7 @@ public class WxToolBarController {
      */
     @RequestMapping("good/decrease")
     public Object decreaseGood(@RequestBody Good good,HttpServletRequest httpServletRequest){
-        if(good==null||good.getUserId()==null||good.getGoodId()==null||good.getGoodType()==null){
+        if(good==null||good.getWxUserId()==null||good.getGoodId()==null||good.getGoodType()==null){
             return WeChatResponseUtil.badArgumentValue();
         }
         /*判断点赞类型*/
@@ -100,11 +103,11 @@ public class WxToolBarController {
             if(type.equals("A")){//article
                 wxToolBarService.addArticleReadNum(id);
             }else if(type.equals("V")){//video
-                // TODO: 2020/2/9 向观看历史中添加记录
+                //向观看历史中添加记录
                 V_history v_history = JacksonUtil.parseObject(httpServletRequest.getParameter("v_history"),V_history.class);
                 v_history.setVHistoryId(id);
                 System.out.println(v_history);
-                if(v_history==null||v_history.getEpisodeId()==null||v_history.getUserId()==null||v_history.getVHistoryId()==null||v_history.getWatchTo()==null||v_history.getWatchDate()==null){
+                if(v_history==null||v_history.getEpisodeId()==null||v_history.getWxUserId()==null||v_history.getVHistoryId()==null||v_history.getWatchTo()==null||v_history.getWatchDate()==null){
                     return WeChatResponseUtil.badArgumentValue();
                 }
                 wxV_historyService.addV_history(v_history);
@@ -123,5 +126,182 @@ public class WxToolBarController {
         return WeChatResponseUtil.ok();
     }
 
+    /**
+     * 添加收藏功能
+     * @return
+     */
+    @RequestMapping("collection/add")
+    public Object addCollection(@RequestParam("collectionType") String collectionType,
+                                @RequestParam("collectionId") Integer collectionId,
+                                @RequestParam("wxUserId") Integer wxUserId,
+                                @RequestParam(value = "groupId",required = false) Integer groupId,
+                                HttpServletRequest httpServletRequest){
+        if(collectionType==null||collectionId==null||wxUserId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        if(groupId==null){
+            groupId=1;
+        }
+        WxCollection wxCollection = new WxCollection();
+        wxCollection.setCollectionType(collectionType);
+        wxCollection.setCollectionId(collectionId);
+        wxCollection.setWxUserId(wxUserId);
+        wxCollection.setGroupId(groupId);
+        wxCollection.setCollectionDate(new Date());
+        try{
+            if(collectionType.equals("A")){//动态
+                wxToolBarService.addArticleCollectionNum(collectionId);
+                //向收藏记录中添加数据
+                collectionService.addCollection(wxCollection);
+            }else if(collectionType.equals("V")){//视频
+                wxToolBarService.addVideoCollectionNum(collectionId);
+                //添加记录
+                collectionService.addCollection(wxCollection);
+            }else if(collectionType.equals("N")){//公告
+                return WeChatResponseUtil.fail(403,"未开发此功能");
+            }else{
+                return WeChatResponseUtil.badArgumentValue();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return WeChatResponseUtil.ok();
+    }
+
+
+    /**
+     * 添加收藏功能
+     * @return
+     */
+    @RequestMapping("collection/decrease")
+    public Object decreaseCollection(@RequestParam("collectionType") String collectionType,
+                                @RequestParam("collectionId") Integer collectionId,
+                                @RequestParam("wxUserId") Integer wxUserId,
+                                HttpServletRequest httpServletRequest){
+        if(collectionType==null||collectionId==null||wxUserId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        WxCollection wxCollection = new WxCollection();
+        wxCollection.setCollectionType(collectionType);
+        wxCollection.setCollectionId(collectionId);
+        wxCollection.setWxUserId(wxUserId);
+        wxCollection.setCollectionDate(new Date());
+        try{
+            if(collectionType.equals("A")){//动态
+                wxToolBarService.decreaseArticleCollectionNum(collectionId);
+                //删除收藏记录
+                collectionService.deleteCollection(collectionType,collectionId,wxUserId);
+            }else if(collectionType.equals("V")){//视频
+                wxToolBarService.decreaseVideoCollectionNum(collectionId);
+                //删除收藏记录
+                collectionService.deleteCollection(collectionType,collectionId,wxUserId);
+            }else if(collectionType.equals("N")){//公告
+                return WeChatResponseUtil.fail(403,"未开发此功能");
+            }else{
+                return WeChatResponseUtil.badArgumentValue();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return WeChatResponseUtil.ok();
+    }
+
+    // TODO: 2020/2/14 关注
+
+    /**
+     * 关注学校
+     * @param wxUserId
+     * @param schoolId
+     * @return
+     */
+    @RequestMapping("addFollowSchool")
+    public Object addFollowSchool(@RequestParam("wxUserId")Integer wxUserId,@RequestParam("schoolId")Integer schoolId){
+        if(wxUserId==null||schoolId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        Follow_school follow_school = new Follow_school();
+        follow_school.setWxUserId(wxUserId);
+        follow_school.setSchoolId(schoolId);
+        follow_school.setFollowSchoolDate(new Date());
+        try {
+            wxToolBarService.addFollowSchool(follow_school);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return WeChatResponseUtil.fail(-1,"关注失败");
+        }
+        return WeChatResponseUtil.ok();
+    }
+
+    /**
+     * 取消关注学校
+     * @param wxUserId
+     * @param schoolId
+     * @return
+     */
+    @RequestMapping("cancelFollowSchool")
+    public Object cancelFollowSchool(@RequestParam("wxUserId")Integer wxUserId,@RequestParam("schoolId")Integer schoolId){
+        if(wxUserId==null||schoolId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        Follow_school follow_school = new Follow_school();
+        follow_school.setWxUserId(wxUserId);
+        follow_school.setSchoolId(schoolId);
+        try {
+            wxToolBarService.cancelFollowSchool(follow_school);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return WeChatResponseUtil.fail(-1,"取消关注失败");
+        }
+        return WeChatResponseUtil.ok();
+    }
+
+    /**
+     * 关注老师
+     * @param wxUserId
+     * @param teacherId
+     * @return
+     */
+    @RequestMapping("addFollowTeacher")
+    public Object addFollowTeacher(@RequestParam("wxUserId")Integer wxUserId,@RequestParam("teacherId")Integer teacherId){
+        if(wxUserId==null||teacherId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        Follow_teacher follow_teacher = new Follow_teacher();
+        follow_teacher.setWxUserId(wxUserId);
+        follow_teacher.setTeacherId(teacherId);
+        follow_teacher.setFollowTeacherDate(new Date());
+        try {
+            wxToolBarService.addFollowTeacher(follow_teacher);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return WeChatResponseUtil.fail(-1,"关注失败");
+        }
+        return WeChatResponseUtil.ok();
+    }
+
+    /**
+     * 取消关注教师
+     * @param wxUserId
+     * @param teacherId
+     * @return
+     */
+    @RequestMapping("cancelFollowTeacher")
+    public Object cancelFollowTeacher(@RequestParam("wxUserId")Integer wxUserId,@RequestParam("teacherId")Integer teacherId){
+        if(wxUserId==null||teacherId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        Follow_teacher follow_teacher = new Follow_teacher();
+        follow_teacher.setWxUserId(wxUserId);
+        follow_teacher.setTeacherId(teacherId);
+        try {
+            wxToolBarService.cancelFollowTeacher(follow_teacher);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return WeChatResponseUtil.fail(-1,"取消关注失败");
+        }
+        return WeChatResponseUtil.ok();
+    }
 
 }

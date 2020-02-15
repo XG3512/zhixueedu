@@ -1,6 +1,9 @@
 package com.xvls.alexander.service.wx;
 
 import com.xvls.alexander.entity.School;
+import com.xvls.alexander.entity.wx.SchoolList;
+
+import java.util.List;
 
 public interface WxSchoolService {
 
@@ -9,5 +12,7 @@ public interface WxSchoolService {
      * @param schoolId
      * @return
      */
-    School getSchoolInfo(Integer schoolId);
+    School getSchoolInfo(Integer schoolId,Integer wxUserId);
+
+    List<SchoolList> getSchoolList();
 }

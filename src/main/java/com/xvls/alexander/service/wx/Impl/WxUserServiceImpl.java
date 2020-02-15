@@ -1,7 +1,9 @@
 package com.xvls.alexander.service.wx.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.WxUserMapper;
-import com.xvls.alexander.entity.wx.WxUserInfo;
+import com.xvls.alexander.entity.wx.UserInfo;
+import com.xvls.alexander.entity.wx.WxUser;
 import com.xvls.alexander.service.wx.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,53 +12,38 @@ import org.springframework.stereotype.Service;
 public class WxUserServiceImpl implements WxUserService {
 
     @Autowired
-    private WxUserMapper wxUserMapper;
+    WxUserMapper wxUserMapper;
 
     /**
-     * 通过OpenId获取用户信息
-     * @param OpenId
+     * 通过openid获得微信用户信息
+     * @param openid
      * @return
      */
     @Override
-    public WxUserInfo getWxStudentInfoByOpenId(String OpenId) {
-        return wxUserMapper.getWxStudentInfoByOpenId(OpenId);
+    public WxUser getWxUserInfoByOpenId(String openid) {
+        QueryWrapper<WxUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("openid",openid);
+        return wxUserMapper.selectOne(queryWrapper);
     }
 
     /**
-     * 根据 学号+学校 获取用户信息
-     * @param user_num
+     * 插入新的用户数据
+     * @param wxUser
      * @return
      */
     @Override
-    public WxUserInfo getWxStudentInfoByUserNum(String user_num) {
-        return wxUserMapper.getWxStudentInfoByUserNum(user_num);
+    public Integer insertNewWxUser(WxUser wxUser) {
+        int insert = wxUserMapper.insert(wxUser);
+        return wxUser.getWxUserId();
     }
 
     /**
-     * 通过MyBatisPlus将用户保存
-     * @param wxUserInfo
+     * 授权，更新微信用户信息
+     * @param wxUserId
+     * @param userInfo
      */
     @Override
-    public void saveWxStudentInfo(WxUserInfo wxUserInfo) {
-        wxUserMapper.updateById(wxUserInfo);
+    public void updateLoginInfo(Integer wxUserId, UserInfo userInfo) {
+        wxUserMapper.updateLoginInfo(wxUserId,userInfo);
     }
-
-    /**
-     * 通过userNum,schoolId,role获取userId
-     * @param userNum
-     * @param schoolId
-     * @param role
-     * @return
-     */
-    @Override
-    public Integer getUserId(String userNum, Integer schoolId, String role) {
-        return wxUserMapper.getUserId(userNum,schoolId,role);
-    }
-
-    @Override
-    public WxUserInfo getWxStudentInfoByUserId(Integer userId) {
-        return wxUserMapper.getWxStudentInfoByUserId(userId);
-    }
-
-
 }
