@@ -61,6 +61,12 @@ public class Video_main extends Model<Video_main> {
     @TableField(exist = false)
     private Date followTeacherDate;//关注教师的时间
 
+    /**
+     * 视频标签
+     */
+    @TableField(exist = false)
+    private List<Label> labelList;//视频标签列表
+
     @TableField(exist = false)
     private List<Video_episode> video_episodeList;//视频集数信息
 

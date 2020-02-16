@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxLabel_typeMapper">
+
+    <resultMap id="label_typeList" type="com.xvls.alexander.entity.wx.Label_type">
+        <id column="label_type_id" property="labelTypeId"></id>
+        <result column="label_type_name" property="labelTypeName"></result>
+        <result column="label_type_order" property="labelTypeOrder"></result>
+        <collection property="labelList" ofType="com.xvls.alexander.entity.wx.Label">
+            <id column="label_id" property="labelId"></id>
+            <result column="label_name" property="labelName"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getAllLabelList" resultMap="label_typeList">
+        select label_type.*,
+        label.label_id,
+        label.label_name
+        from label_type
+        left join label on label.label_type_id = label_type.label_type_id
+        ORDER BY label_type.label_type_order asc ,label.label_id asc
+    </select>
+
+</mapper>

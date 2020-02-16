@@ -14,9 +14,16 @@ public interface WxV_historyService {
     void addV_history(V_history v_history);
 
     /**
+     * 更新历史记录
+     * @param v_history
+     */
+    void updateV_history(V_history v_history);
+
+    /**
      * 通过v_history_id获得历史记录
-     * @param vHistoryId
+     * @param videoMainId
+     * @param wxUserId
      * @return
      */
-    V_history getV_historyById(Integer vHistoryId);
+    V_history getV_historyById(Integer videoMainId,Integer wxUserId);
 }

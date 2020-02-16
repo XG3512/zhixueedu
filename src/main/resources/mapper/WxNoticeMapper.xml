@@ -8,6 +8,7 @@
         <id column="notice_id" property="noticeId"></id>
         <result column="school_id" property="schoolId"></result>
         <result column="title" property="title"></result>
+        <result column="read_num" property="readNum"></result>
         <result column="notice_time" property="noticeTime"></result>
         <result column="classification" property="classification"></result>
         <result column="info_from" property="infoFrom"></result>
@@ -37,6 +38,7 @@
         select notice.notice_id,
         notice.school_id,
         notice.title,
+        notice.read_num,
         notice.notice_time,
         notice.classification,
         notice.info_from
@@ -66,6 +68,7 @@
         select notice.notice_id,
         notice.school_id,
         notice.title,
+        notice.read_num,
         notice.notice_time,
         notice.classification,
         notice.info_from

@@ -72,6 +72,10 @@
             <result column="episode_id" property="episodeId"></result>
             <result column="video_source" property="videoSource"></result>
         </collection>
+        <collection property="labelList" ofType="com.xvls.alexander.entity.wx.Label">
+            <id column="label_id" property="labelId"></id>
+            <result column="label_name" property="labelName"></result>
+        </collection>
     </resultMap>
 
     <resultMap id="homePageVideoList" type="com.xvls.alexander.entity.wx.Video_main">
@@ -139,13 +143,17 @@
         video.video_source,
         good.good_time,
         collection.collection_date,
-        follow_teacher.follow_teacher_date
+        follow_teacher.follow_teacher_date,
+        label.label_id,
+        label.label_name
         from video_main
         left join video on video_main.video_main_id=video.video_main_id
         left join users on video_main.teacher_id = users.user_id
         left join follow_teacher on follow_teacher.wx_user_id = #{wxUserId} and follow_teacher.teacher_id = video_main.teacher_id
         left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
+        left join v_label on v_label.video_main_id = video_main.video_main_id
+        left join label on label.label_id = v_label.label_id
         where video_main.video_main_id=#{videoMainId}
         ORDER BY video.episode_id ASC
     </select>
@@ -158,6 +166,21 @@
         where video_main.public_status='public'
         ORDER BY  video_main.heat_of_video DESC
         limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="getPublicVideoListByLabel" resultMap="videoMainList">
+        select video_main.*,
+        users.user_name,
+        good.good_time,
+        collection.collection_date
+        from video_main
+        left join users on video_main.teacher_id=users.user_id
+        left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
+        left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
+        left join v_label on v_label.video_main_id = video_main.video_main_id
+        where video_main.public_status='public' and v_label.label_id = #{labelId}
+        ORDER BY video_main.heat_of_video DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
 
     <update id="addVideoGoodNum">

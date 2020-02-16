@@ -103,14 +103,6 @@ public class WxToolBarController {
             if(type.equals("A")){//article
                 wxToolBarService.addArticleReadNum(id);
             }else if(type.equals("V")){//video
-                //向观看历史中添加记录
-                V_history v_history = JacksonUtil.parseObject(httpServletRequest.getParameter("v_history"),V_history.class);
-                v_history.setVHistoryId(id);
-                System.out.println(v_history);
-                if(v_history==null||v_history.getEpisodeId()==null||v_history.getWxUserId()==null||v_history.getVHistoryId()==null||v_history.getWatchTo()==null||v_history.getWatchDate()==null){
-                    return WeChatResponseUtil.badArgumentValue();
-                }
-                wxV_historyService.addV_history(v_history);
                 wxToolBarService.addVideoPlayNum(id);
             }else if(type.equals("N")){//notice
                 wxToolBarService.addNoticeReadNum(id);
@@ -303,5 +295,4 @@ public class WxToolBarController {
         }
         return WeChatResponseUtil.ok();
     }
-
 }

@@ -306,7 +306,7 @@ public class TestUserMapper2 {
     @Test
     public void testAddV_history(){
         V_history v_history = new V_history();
-        v_history.setVHistoryId(1);
+        v_history.setVideoMainId(1);
         v_history.setWxUserId(1);
         v_history.setEpisodeId(1);
         v_history.setWatchDate(new Date());

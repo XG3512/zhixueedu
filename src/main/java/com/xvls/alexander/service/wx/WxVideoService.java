@@ -1,5 +1,7 @@
 package com.xvls.alexander.service.wx;
 
+import com.xvls.alexander.entity.PageInfo;
+import com.xvls.alexander.entity.wx.Label;
 import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.entity.wx.Video_main;
 
@@ -44,6 +46,17 @@ public interface WxVideoService {
      * @return
      */
     List<Video_main> getHomePageVideoList(Integer wxUserId);
+
+    /**
+     * 通过 分页,标签,wxUserId 获得视频列表
+     * @param pageInfo
+     * @param labelId
+     * @param wxUserId
+     * @return
+     */
+    List<Video_main> getPublicVideoListByLabel(PageInfo pageInfo, Integer labelId , Integer wxUserId);
+
+
 
     /**
      * 视频点赞数增加

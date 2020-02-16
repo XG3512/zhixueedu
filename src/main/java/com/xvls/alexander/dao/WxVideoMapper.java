@@ -2,6 +2,7 @@ package com.xvls.alexander.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xvls.alexander.entity.PageInfo;
+import com.xvls.alexander.entity.wx.Label;
 import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.entity.wx.Video_main;
 import org.springframework.stereotype.Repository;
@@ -52,6 +53,16 @@ public interface WxVideoMapper extends BaseMapper<Video_main> {
      * @return
      */
     List<Video_main> getHomePageVideoList(PageInfo pageInfo);
+
+    /**
+     * 通过 分页,标签,wxUserId 获得视频列表
+     * @param pageInfo
+     * @param labelId
+     * @return
+     */
+    List<Video_main> getPublicVideoListByLabel(PageInfo pageInfo, Integer labelId , Integer wxUserId);
+
+
 
     /**
      * 视频点赞数增加

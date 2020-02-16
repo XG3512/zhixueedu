@@ -9,4 +9,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface WxV_historyMapper extends BaseMapper<V_history> {
+
+    /**
+     * 更新历史记录
+     * @param v_history
+     */
+    void updateV_history(V_history v_history);
 }

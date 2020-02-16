@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxV_historyMapper">
+
+    <update id="updateV_history">
+        update v_history
+        set episode_id = #{episodeId} , watch_date=#{watchDate} , watch_to=#{watchTo}
+        where video_main_id=#{videoMainId} and wx_user_id=#{wxUserId}
+    </update>
+
+</mapper>

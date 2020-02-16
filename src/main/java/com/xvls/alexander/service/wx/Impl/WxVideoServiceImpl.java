@@ -3,6 +3,7 @@ package com.xvls.alexander.service.wx.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.WxVideoMapper;
 import com.xvls.alexander.entity.PageInfo;
+import com.xvls.alexander.entity.wx.Label;
 import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.wx.WxVideoService;
@@ -71,6 +72,20 @@ public class WxVideoServiceImpl implements WxVideoService {
         pageInfo.setPageNum((pageNum-1)*pageSize);
 
         return wxVideoMapper.getHomePageVideoList(pageInfo);
+    }
+
+    /**
+     * 通过 分页,标签,wxUserId 获得视频列表
+     * @param pageInfo
+     * @param labelId
+     * @return
+     */
+    @Override
+    public List<Video_main> getPublicVideoListByLabel(PageInfo pageInfo, Integer labelId , Integer wxUserId) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return wxVideoMapper.getPublicVideoListByLabel(new PageInfo(pageNum,pageSize),labelId,wxUserId);
     }
 
     /**
