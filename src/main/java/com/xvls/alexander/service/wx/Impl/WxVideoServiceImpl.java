@@ -175,5 +175,20 @@ public class WxVideoServiceImpl implements WxVideoService {
         wxVideoMapper.updateVideoHeatOfVideo(video_main.getVideoMainId(),result);
     }
 
+    /**
+     * 通过 wxUserId、teacherId和pageInfo 获得教师主页的视频列表
+     * @param wxUserInfo
+     * @param teacherId
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Video_main> getPublicVideoListbyTeacherId(Integer wxUserInfo, Integer teacherId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageInfo.setPageNum((pageNum-1)*pageSize);
+        return wxVideoMapper.getPublicVideoListbyTeacherId(wxUserInfo,teacherId,pageInfo);
+    }
+
 
 }

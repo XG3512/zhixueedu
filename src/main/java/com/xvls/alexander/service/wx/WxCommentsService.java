@@ -9,22 +9,21 @@ public interface WxCommentsService {
     /**
      * 获得评论信息
      * @param belongType
-     * @param articleId
+     * @param id
      * @return
      */
-    List<Comments> getComments(String belongType , Integer articleId);
+    List<Comments> getComments(String belongType , Integer id);
 
     /**
      * 增加评论信息
      * @param comments
      */
-    // TODO: 2020/2/9 addComment
-    void addComment(Comments comments);
+    Integer addComment(Comments comments);
 
     /**
      * 删除评论信息
      * @param comments
      */
-    // TODO: 2020/2/9 deleteComment
+    // TODO: 2020/2/17 删除评论功能
     void deleteComment(Comments comments);
 }

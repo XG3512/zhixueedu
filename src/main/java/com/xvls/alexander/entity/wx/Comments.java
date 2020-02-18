@@ -1,8 +1,14 @@
 package com.xvls.alexander.entity.wx;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,11 +20,15 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comments implements Serializable {
+@TableName("comments")
+public class Comments extends Model<Comments> implements Serializable {
 
+    @TableId(type = IdType.AUTO)
     private Integer commentId;//评论Id
     private Integer wxUserId;//用户ID
+    @TableField(exist = false)
     private String avatarUrl;//用户头像
+    @TableField(exist = false)
     private String nickname;//用户名称
     private String belongType;//所属类型
     private Integer belongId;//所属id
@@ -27,5 +37,6 @@ public class Comments implements Serializable {
     private Date vcDate;//评论时间
     private Integer parentVcId;//父类
 
+    @TableField(exist = false)
     private List<Comments> members;//子评论
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,32 @@ public class WxArticleController {
         Map<Object,Object> result = Maps.newHashMap();
         result.put("article",article);
         result.put("comments",comments);
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
+     * 对动态进行评论，如果没有父评论的话parentVcId设置为0
+     * @return
+     */
+    @RequestMapping("addArticleComment")
+    public Object addVideoComment(@RequestParam("wxUserId")Integer wxUserId,
+                                  @RequestParam("articleId")Integer articleId,
+                                  @RequestParam("vcContent")String vcContent,
+                                  @RequestParam("parentVcId")Integer parentVcId){
+        if(wxUserId==null || articleId==null || vcContent==null || parentVcId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        Comments comments = new Comments();
+        comments.setWxUserId(wxUserId);
+        comments.setBelongId(articleId);
+        comments.setBelongType("A");
+        comments.setVcContent(vcContent);
+        comments.setVcDate(new Date());
+        comments.setParentVcId(parentVcId);
+
+        Integer commentId = wxCommentsService.addComment(comments);
+        Map result = Maps.newHashMap();
+        result.put("commentId",commentId);
         return WeChatResponseUtil.ok(result);
     }
 }

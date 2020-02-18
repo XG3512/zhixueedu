@@ -2,6 +2,7 @@ package com.xvls.alexander.service.wx.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.UsersMapper;
+import com.xvls.alexander.entity.wx.TeacherMainPage;
 import com.xvls.alexander.entity.wx.UserInfo;
 import com.xvls.alexander.entity.wx.Users;
 import com.xvls.alexander.service.wx.UsersService;
@@ -86,6 +87,32 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public void decreaseFansNum(Integer teacherId) {
         usersMapper.decreaseFansNum(teacherId);
+    }
+
+    @Override
+    public void updateTeacherBackground(Integer teacherId, String file_url) {
+        usersMapper.updateTeacherBackground(teacherId,file_url);
+    }
+
+    /**
+     * 更新用户头像
+     * @param userId
+     * @param file_url
+     */
+    @Override
+    public void updateUserIcon(Integer userId, String file_url) {
+        usersMapper.updateUserIcon(userId,file_url);
+    }
+
+    /**
+     * 通过 wxUserId和teacherId 获得教师主页的教师信息
+     * @param wxUserId
+     * @param teacherId
+     * @return
+     */
+    @Override
+    public TeacherMainPage getTeacherMainPage(Integer wxUserId, Integer teacherId) {
+        return usersMapper.getTeacherMainPage(wxUserId,teacherId);
     }
 
 

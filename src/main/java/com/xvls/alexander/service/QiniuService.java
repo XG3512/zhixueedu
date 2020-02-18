@@ -16,27 +16,27 @@ public interface QiniuService {
      * @param file
      * @return
      */
-    public Map<Object,Object> upload(MultipartFile file,String islongimage, File_belong file_belong) throws IOException, NoSuchAlgorithmException;
+    Map<Object,Object> upload(MultipartFile file,String islongimage, File_belong file_belong) throws IOException, NoSuchAlgorithmException;
 
     /**
      * 删除已经上传的图片
      * @param imgPath
      */
-    public RestResponse deleteQiniu(String imgPath);
+    RestResponse deleteQiniu(String imgPath);
 
     /**
      * 上传网络图片
      * @param src
      * @return
      */
-    public String uploadImageSrc(String src);
+    String uploadImageSrc(String src);
 
     /**
      * 上传本地图片
      * @param src
      * @return
      */
-    public String uploadLocalImg(String src);
+    String uploadLocalImg(String src);
 
     /**
      * 上传base64位的图片
@@ -44,7 +44,26 @@ public interface QiniuService {
      * @param name
      * @return
      */
-    public RestResponse uploadBase64(String base64,String name);
+    RestResponse uploadBase64(String base64,String name);
 
+    /**
+     * 上传 学校（S）或教师（T）的背景图片
+     * @param file
+     * @param type
+     * @param id
+     * @return
+     */
+    Map<Object, Object> uploadBackgroundImg(MultipartFile file,String type,Integer id) throws IOException, NoSuchAlgorithmException;
+
+    /**
+     * 上传 学校（S）或教师（T）的头像图片
+     * @param file
+     * @param type
+     * @param id
+     * @return
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
+    Map<Object, Object> uploadIconImg(MultipartFile file,String type,Integer id) throws IOException, NoSuchAlgorithmException;
 
 }

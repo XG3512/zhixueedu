@@ -105,4 +105,13 @@ public interface WxVideoService {
      * @param video_main
      */
     void updateVideoHeatOfVideo(Video_main video_main);
+
+    /**
+     * 通过 wxUserId、teacherId和pageInfo 获得教师主页的视频列表
+     * @param wxUserInfo
+     * @param teacherId
+     * @param pageInfo
+     * @return
+     */
+    List<Video_main> getPublicVideoListbyTeacherId(Integer wxUserInfo,Integer teacherId,PageInfo pageInfo);
 }

@@ -19,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -171,8 +173,56 @@ public class FileController {
     @RequestMapping("deleteFiles")
     public RestResponse deleteFiles(@RequestParam("userId") int userId , HttpServletRequest httpServletRequest){
 
-
-
         return null;
+    }
+
+    /**
+     * 上传 学校（S）或教师（T）的背景图片
+     * @param file
+     * @param type
+     * @param id
+     * @return
+     */
+    @RequestMapping("uploadBackgroundImg")
+    public RestResponse uploadBackgroundImg(@RequestParam("file")MultipartFile file,
+                                            @RequestParam("type") String type,
+                                            @RequestParam("id") Integer id){
+        if(file==null||file.isEmpty()||type==null||id==null){
+            return RestResponse.failure("上传参数错误");
+        }
+        Map map = Maps.newHashMap();
+        try {
+            map = qiniuService.uploadBackgroundImg(file,type,id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return RestResponse.success().setData(map);
+    }
+
+    /**
+     * 上传 学校（S）或教师（T）的头像图片
+     * @param file
+     * @param type
+     * @param id
+     * @return
+     */
+    @RequestMapping("uploadIconImg")
+    public RestResponse uploadIconImg(@RequestParam("file") MultipartFile file,
+                                      @RequestParam("type") String type,
+                                      @RequestParam("id") Integer id){
+        if(file==null||file.isEmpty()||type==null||id==null){
+            return RestResponse.failure("上传参数错误");
+        }
+        Map map = Maps.newHashMap();
+        try {
+            map = qiniuService.uploadIconImg(file,type,id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return RestResponse.success().setData(map);
     }
 }

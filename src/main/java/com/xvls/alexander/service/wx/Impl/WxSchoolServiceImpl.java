@@ -45,4 +45,24 @@ public class WxSchoolServiceImpl implements WxSchoolService {
     public List<Province> getSchoolListByProvince(Integer wxUserId) {
         return wxProvinceMapper.getSchoolListByProvince(wxUserId);
     }
+
+    /**
+     * 更新学校的背景图
+     * @param schoolId
+     * @param file_url
+     */
+    @Override
+    public void updateSchoolBackground(Integer schoolId, String file_url) {
+        wxSchoolMapper.updateSchoolBackground(schoolId,file_url);
+    }
+
+    /**
+     * 更新学校头像
+     * @param schoolId
+     * @param file_url
+     */
+    @Override
+    public void updateSchoolHead(Integer schoolId, String file_url) {
+        wxSchoolMapper.updateSchoolHead(schoolId,file_url);
+    }
 }

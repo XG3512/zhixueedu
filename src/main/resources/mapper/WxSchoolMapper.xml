@@ -44,4 +44,12 @@
         from school
         ORDER BY school.province asc
     </select>
+
+    <update id="updateSchoolBackground">
+        update school set background = #{file_url} where school_id = #{schoolId}
+    </update>
+
+    <update id="updateSchoolHead">
+        update school set head = #{file_url} where school_id = #{schoolId}
+    </update>
 </mapper>

@@ -98,6 +98,18 @@
         <result column="collection_date" property="collectionDate"></result>
     </resultMap>
 
+    <resultMap id="publicTeacherMainPageVideoList" type="com.xvls.alexander.entity.wx.Video_main">
+        <id column="video_main_id" property="videoMainId"></id>
+        <result column="video_main_title" property="videoMainTitle"></result>
+        <result column="play_num" property="playNum"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="collection_num" property="collectionNum"></result>
+        <result column="video_date" property="videoDate"></result>
+        <result column="comment_num" property="commentNum"></result>
+        <result column="video_length" property="videoLength"></result>
+        <result column="main_page" property="mainPage"></result>
+    </resultMap>
+
 
     <select id="getPublicVideoList" resultMap="videoMainList">
         select video_main.*,
@@ -108,7 +120,7 @@
         left join users on video_main.teacher_id=users.user_id
         left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
-        where video_main.public_status='public'
+        where video_main.public_status='public' and video_main.verify_status='通过'
         ORDER BY video_main.video_date DESC
     </select>
 
@@ -121,7 +133,7 @@
         left join users on video_main.teacher_id = users.user_id
         left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
-        where video_main.public_status='public' and video_main.school_id=#{schoolId}
+        where video_main.public_status='public' and video_main.school_id=#{schoolId} and video_main.verify_status='通过'
         ORDER BY  video_main.video_date DESC
     </select>
 
@@ -178,7 +190,7 @@
         left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
         left join v_label on v_label.video_main_id = video_main.video_main_id
-        where video_main.public_status='public' and v_label.label_id = #{labelId}
+        where video_main.public_status='public' and v_label.label_id = #{labelId} and video_main.verify_status='通过'
         ORDER BY video_main.heat_of_video DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
@@ -211,4 +223,11 @@
         update video_main set heat_of_video = #{heatOfVideo} where video_main_id = #{videoMainId}
     </update>
 
+    <select id="getPublicVideoListbyTeacherId" resultMap="publicTeacherMainPageVideoList">
+        select video_main.*
+        from video_main
+        where video_main.public_status='public' and video_main.verify_status='通过' and teacher_id=#{teacherId}
+        ORDER BY video_main.video_date DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
 </mapper>

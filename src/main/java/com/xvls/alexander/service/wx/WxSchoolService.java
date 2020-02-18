@@ -18,4 +18,18 @@ public interface WxSchoolService {
     List<SchoolList> getSchoolList();
 
     List<Province> getSchoolListByProvince(Integer wxUserId);
+
+    /**
+     * 更新学校的背景图
+     * @param schoolId
+     * @param file_url
+     */
+    void updateSchoolBackground(Integer schoolId,String file_url);
+
+    /**
+     * 更新学校头像
+     * @param schoolId
+     * @param file_url
+     */
+    void updateSchoolHead(Integer schoolId,String file_url);
 }

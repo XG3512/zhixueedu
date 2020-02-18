@@ -5,10 +5,13 @@ import com.google.common.collect.Maps;
 import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.service.QiniuService;
+import com.xvls.alexander.service.wx.UsersService;
+import com.xvls.alexander.service.wx.WxSchoolService;
 import com.xvls.alexander.utils.QiniuFileUtil;
 import com.xvls.alexander.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,6 +23,10 @@ public class QiniuServiceImpl implements QiniuService {
 
     @Autowired
     QiniuFileUtil qiniuFileUtil;
+    @Autowired
+    WxSchoolService wxSchoolService;
+    @Autowired
+    UsersService usersService;
 
     /**
      * 普通上传图片
@@ -80,5 +87,48 @@ public class QiniuServiceImpl implements QiniuService {
     @Override
     public RestResponse uploadBase64(String base64, String name) {
         return qiniuFileUtil.uploadBase64(base64,name);
+    }
+
+    /**
+     * 上传 学校（S）或教师（T）的背景图片
+     * @param file
+     * @param type
+     * @param id
+     * @return
+     */
+    @Override
+    public Map<Object, Object> uploadBackgroundImg(MultipartFile file, String type, Integer id) throws IOException, NoSuchAlgorithmException {
+        Map map = Maps.newHashMap();
+        File_download file_download = qiniuFileUtil.upload(file,"false");
+        map.put("url",file_download.getFileUrl());
+        if(type.equals("S")){
+            wxSchoolService.updateSchoolBackground(id,file_download.getFileUrl());
+        }else if(type.equals("T")){
+            usersService.updateTeacherBackground(id,file_download.getFileUrl());
+        }
+        map.put("name",file_download.getName());
+        return map;
+    }
+
+    /**
+     * 上传 学校（S）或教师（T）的头像图片
+     * @param file
+     * @param type
+     * @param id
+     * @return
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
+    public Map<Object, Object> uploadIconImg(MultipartFile file,String type,Integer id) throws IOException, NoSuchAlgorithmException {
+        Map map = Maps.newHashMap();
+        File_download file_download = qiniuFileUtil.upload(file,"false");
+        map.put("url",file_download.getFileUrl());
+        if(type.equals("S")){
+            wxSchoolService.updateSchoolHead(id,file_download.getFileUrl());
+        }else if(type.equals("T")){
+            usersService.updateUserIcon(id,file_download.getFileUrl());
+        }
+        map.put("name",file_download.getName());
+        return map;
     }
 }

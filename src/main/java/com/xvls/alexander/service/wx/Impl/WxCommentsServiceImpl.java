@@ -18,29 +18,29 @@ public class WxCommentsServiceImpl implements WxCommentsService {
     WxCommentsMapper wxCommentsMapper;
 
     /**
-     * 通过动态id获得评论信息
+     * 通过 type和id 获得评论信息
      * @param belongType
-     * @param articleId
+     * @param id
      * @return
      */
     @Override
-    public List<Comments> getComments(String belongType , Integer articleId) {
-        return wxCommentsMapper.getComments(belongType,articleId);
+    public List<Comments> getComments(String belongType , Integer id) {
+        return wxCommentsMapper.getComments(belongType,id);
     }
 
-    // TODO: 2020/2/12 增加评论信息
     /**
      * 增加评论信息
      * @param comments
      */
     @Override
-    public void addComment(Comments comments) {
-
+    public Integer addComment(Comments comments) {
+        boolean insert = comments.insert();
+        return comments.getCommentId();
     }
 
     // TODO: 2020/2/12 删除评论信息
     /**
-     * 删除评论信息
+     * 删除评论信息，前端需要判断该用户id是否与评论中的wxUserId一致
      * @param comments
      */
     @Override

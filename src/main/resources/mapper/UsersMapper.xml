@@ -37,6 +37,19 @@
         </collection>
     </resultMap>
 
+    <resultMap id="teacherMainPage" type="com.xvls.alexander.entity.wx.TeacherMainPage">
+        <id column="user_id" property="userId"></id>
+        <result column="icon" property="icon"></result>
+        <result column="background" property="background"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="motto" property="motto"></result>
+        <result column="fans_num" property="fansNum"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="collection_num" property="collectionNum"></result>
+        <result column="school_name" property="schoolName"></result>
+        <result column="follow_teacher_date" property="followTeacherDate"></result>
+    </resultMap>
+
     <select id="getWxStudentInfoByUserNum" parameterType="java.lang.String" resultMap="userRole">
         SELECT users.*,role.*,permission.* FROM users
         left join user_role on users.user_id = user_role.user_id
@@ -74,4 +87,21 @@
         update users set fans_num = fans_num - 1 where user_id = #{teacherId}
     </update>
 
+    <update id="updateTeacherBackground">
+        update users set backgrounp = #{file_url} where user_id = #{teacherId}
+    </update>
+
+    <update id="updateUserIcon">
+        update users set icon = #{file_url} where user_id = #{userId}
+    </update>
+
+    <select id="getTeacherMainPage" resultMap="teacherMainPage">
+        select users.*,
+        school.school_name,
+        follow_teacher.follow_teacher_date
+        from users
+        left join school on school.school_id = users.school_id
+        left join follow_teacher on follow_teacher.teacher_id = users.user_id and follow_teacher.wx_user_id = #{wxUserId}
+        where users.user_id = #{teacherId}
+    </select>
 </mapper>

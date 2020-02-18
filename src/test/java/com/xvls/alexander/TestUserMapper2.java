@@ -310,7 +310,6 @@ public class TestUserMapper2 {
         v_history.setWxUserId(1);
         v_history.setEpisodeId(1);
         v_history.setWatchDate(new Date());
-        v_history.setWatchTo(0);
         wxV_historyService.addV_history(v_history);
     }
 

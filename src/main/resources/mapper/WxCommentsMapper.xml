@@ -50,7 +50,8 @@
         select comments.*,wx_user.avatar_url,wx_user.nickname
         from comments
         left join wx_user on wx_user.wx_user_id = comments.wx_user_id
-        where (parent_vc_id = 0 or parent_vc_id is null ) and belong_type = #{belongType} and belong_id = #{articleId}
+        where (parent_vc_id = 0 or parent_vc_id is null ) and belong_type = #{belongType} and belong_id = #{id}
+        order by vc_date asc
     </select>
 
     <select id="getCommentsMembers" resultMap="getAllComments">

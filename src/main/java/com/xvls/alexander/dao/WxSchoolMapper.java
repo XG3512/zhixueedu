@@ -24,4 +24,18 @@ public interface WxSchoolMapper extends BaseMapper<School> {
      * @return
      */
     List<SchoolList> getSchoolList();
+
+    /**
+     * 更新学校的背景图
+     * @param schoolId
+     * @param file_url
+     */
+    void updateSchoolBackground(Integer schoolId,String file_url);
+
+    /**
+     * 更新学校头像
+     * @param schoolId
+     * @param file_url
+     */
+    void updateSchoolHead(Integer schoolId,String file_url);
 }

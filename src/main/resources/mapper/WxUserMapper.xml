@@ -23,7 +23,7 @@
         city = #{userInfo.city},
         country = #{userInfo.country},
         gender = #{userInfo.gender},
-        nickname = #{userInfo.nickName},
+        nickname = #{userInfo.nickname},
         province = #{userInfo.province},
         wxstatus = 1
         where wx_user_id = #{wxUserId}

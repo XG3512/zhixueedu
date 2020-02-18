@@ -21,5 +21,4 @@ public class V_history extends Model<V_history> {
     private Integer episodeId;//集数
     private Integer wxUserId;//用户ID
     private Date watchDate;//观看时间
-    private Integer watchTo;//观看至
 }

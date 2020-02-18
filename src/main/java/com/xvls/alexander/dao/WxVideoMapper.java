@@ -111,4 +111,13 @@ public interface WxVideoMapper extends BaseMapper<Video_main> {
      * @param heatOfVideo
      */
     void updateVideoHeatOfVideo(Integer videoMainId , Double heatOfVideo);
+
+    /**
+     * 通过 wxUserId、teacherId和pageInfo 获得教师主页的视频列表
+     * @param wxUserInfo
+     * @param teacherId
+     * @param pageInfo
+     * @return
+     */
+    List<Video_main> getPublicVideoListbyTeacherId(Integer wxUserInfo,Integer teacherId,PageInfo pageInfo);
 }
