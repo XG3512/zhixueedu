@@ -114,4 +114,25 @@ public interface WxVideoService {
      * @return
      */
     List<Video_main> getPublicVideoListbyTeacherId(Integer wxUserInfo,Integer teacherId,PageInfo pageInfo);
+
+    /**
+     * 通过 episodeId 和 videoMainId 查找视频信息
+     * @param episodeId
+     * @param videoMainId
+     * @return
+     */
+    Video getVideoByEpisodeId_VideoMainId(Integer episodeId,Integer videoMainId);
+
+    /**
+     * 更新视频地址
+     * @param video
+     */
+    void updateVideoById(Video video);
+
+    /**
+     * 插入视频
+     * @param video
+     * @return
+     */
+    Integer insertVideo(Video video);
 }

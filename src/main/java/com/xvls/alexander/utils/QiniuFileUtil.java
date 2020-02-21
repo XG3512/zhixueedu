@@ -87,7 +87,11 @@ public class QiniuFileUtil {
 					rescource = new File_download();
 					rescource.setFileName(fileName);
 					rescource.setName(file.getOriginalFilename().substring(0,file.getOriginalFilename().lastIndexOf(".")));
-					rescource.setFileSize(new java.text.DecimalFormat("#.##").format(file.getSize()/1024)+"kb");
+					if(file.getSize()>1024*1024){
+						rescource.setFileSize(new java.text.DecimalFormat("#.##").format(file.getSize()/1024/1024)+"MB");
+					}else{
+						rescource.setFileSize(new java.text.DecimalFormat("#.##").format(file.getSize()/1024)+"KB");
+					}
 					rescource.setFileHash(hash);
 					rescource.setFileType(StringUtils.isBlank(extName)?"unknown":extName);
 					rescource.setIslongimage(Boolean.getBoolean(islongimage));
@@ -200,7 +204,11 @@ public class QiniuFileUtil {
 			filePath = path + fetchRet.key;
 			File_download rescource = new File_download();
 			rescource.setFileName(fetchRet.key);
-			rescource.setFileSize(new java.text.DecimalFormat("#.##").format(fetchRet.fsize/1024)+"kb");
+			if(fetchRet.fsize>1024*1024){
+				rescource.setFileSize(new java.text.DecimalFormat("#.##").format(fetchRet.fsize/1024/1024)+"MB");
+			}else{
+				rescource.setFileSize(new java.text.DecimalFormat("#.##").format(fetchRet.fsize/1024)+"KB");
+			}
 			rescource.setFileHash(fetchRet.hash);
 			rescource.setFileType(fetchRet.mimeType);
 			rescource.setFileUrl(filePath);
@@ -247,7 +255,11 @@ public class QiniuFileUtil {
 			filePath = path + name;
 			rescource = new File_download();
 			rescource.setFileName(name);
-			rescource.setFileSize(new java.text.DecimalFormat("#.##").format(file.length()/1024)+"kb");
+			if(file.length()>1024*1024){
+				rescource.setFileSize(new java.text.DecimalFormat("#.##").format(file.length()/1024/1024)+"MB");
+			}else{
+				rescource.setFileSize(new java.text.DecimalFormat("#.##").format(file.length()/1024)+"KB");
+			}
 			rescource.setFileHash(hash);
 			rescource.setFileType(StringUtils.isBlank(extName)?"unknown":extName);
 			rescource.setFileUrl(filePath);

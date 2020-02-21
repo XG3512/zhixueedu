@@ -2,6 +2,7 @@ package com.xvls.alexander.service;
 
 
 import com.xvls.alexander.entity.File_belong;
+import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.utils.RestResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,4 +67,11 @@ public interface QiniuService {
      */
     Map<Object, Object> uploadIconImg(MultipartFile file,String type,Integer id) throws IOException, NoSuchAlgorithmException;
 
+    /**
+     * 上传视频
+     * @param file
+     * @param video
+     * @return
+     */
+    RestResponse uploadVideo(MultipartFile file, Video video) throws IOException, NoSuchAlgorithmException;
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxExamMapper">
+
+    <resultMap id="exam" type="com.xvls.alexander.entity.wx.Exam">
+        <id column="exam_id" property="examId"></id>
+        <result column="tc_id" property="tcId"></result>
+        <result column="classroom_code" property="classroomCode"></result>
+        <result column="exam_time" property="examTime"></result>
+        <result column="user_name" property="teacherName"></result>
+        <result column="stu_num" property="stuNum"></result>
+        <result column="exam_status" property="examStatus"></result>
+    </resultMap>
+
+    <select id="getExamListById" resultMap="exam">
+        select exam.*,
+        classroom.classroom_code,
+        users.user_name
+        from exam
+        left join classroom on classroom.classroom_id = exam.classroom_id
+        left join users on users.user_id = exam.user_id
+        left join tc on tc.tc_id = exam.tc_id
+        where tc.class_id IN (select users2.class_id from users users2 where users2.user_id = #{userId})
+        ORDER BY exam.exam_time asc
+    </select>
+
+</mapper>

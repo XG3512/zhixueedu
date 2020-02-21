@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class File_belong extends Model<File_belong> implements Serializable {
 
     private Integer userId;
-    private char belongType;// V(视频) | A(文章)
+    private String belongType;// V(视频) | A(文章)
     private Integer belongId;
     private String fileHash;//文件标识
     private String name;//原名称

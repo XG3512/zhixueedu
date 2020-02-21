@@ -18,6 +18,10 @@ spring:
       force: true
       charset: UTF-8
       enabled: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
   #连接池配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver

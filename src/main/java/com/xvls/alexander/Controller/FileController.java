@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.PageInfo;
+import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.service.FileCrudService;
 import com.xvls.alexander.service.QiniuService;
 import com.xvls.alexander.utils.JacksonUtil;
@@ -224,5 +225,30 @@ public class FileController {
             e.printStackTrace();
         }
         return RestResponse.success().setData(map);
+    }
+
+    /**
+     * 上传视频
+     * @param file
+     * @return
+     */
+    @RequestMapping("uploadVideo")
+    public RestResponse uploadVideo(MultipartFile file,HttpServletRequest httpServletRequest){
+        Video video = null;
+        try {
+            video = JacksonUtil.parseObject(httpServletRequest.getParameter("video"),Video.class);
+        } catch (Exception e) {
+            return RestResponse.failure("参数错误");
+        }
+        if(video==null || file==null){
+            return RestResponse.failure("参数错误");
+        }
+        try {
+            return qiniuService.uploadVideo(file,video);
+        } catch (IOException e) {
+            return RestResponse.failure(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            return RestResponse.failure(e.getMessage());
+        }
     }
 }

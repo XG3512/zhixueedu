@@ -1,6 +1,7 @@
 package com.xvls.alexander.service.wx.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xvls.alexander.dao.VideoMapper;
 import com.xvls.alexander.dao.WxVideoMapper;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Label;
@@ -18,6 +19,8 @@ public class WxVideoServiceImpl implements WxVideoService {
 
     @Autowired
     WxVideoMapper wxVideoMapper;
+    @Autowired
+    VideoMapper videoMapper;
 
     /**
      * 获得视频列表信息
@@ -188,6 +191,39 @@ public class WxVideoServiceImpl implements WxVideoService {
         Integer pageSize = pageInfo.getPageSize();
         pageInfo.setPageNum((pageNum-1)*pageSize);
         return wxVideoMapper.getPublicVideoListbyTeacherId(wxUserInfo,teacherId,pageInfo);
+    }
+
+    /**
+     * 通过 episodeId 和 videoMainId 查找视频信息
+     * @param episodeId
+     * @param videoMainId
+     * @return
+     */
+    @Override
+    public Video getVideoByEpisodeId_VideoMainId(Integer episodeId, Integer videoMainId) {
+        return wxVideoMapper.getVideoByEpisodeId_VideoMainId(episodeId,videoMainId);
+    }
+
+    /**
+     * 更新视频地址
+     * @param video
+     */
+    @Override
+    public void updateVideoById(Video video) {
+        QueryWrapper<Video> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("video_id",video.getVideoId());
+        video.update(queryWrapper);
+    }
+
+    /**
+     * 插入视频
+     * @param video
+     * @return
+     */
+    @Override
+    public Integer insertVideo(Video video) {
+        int insert = videoMapper.insert(video);
+        return video.getVideoId();
     }
 
 

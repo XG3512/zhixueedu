@@ -110,6 +110,20 @@
         <result column="main_page" property="mainPage"></result>
     </resultMap>
 
+    <resultMap id="getVideo" type="com.xvls.alexander.entity.wx.Video">
+        <id column="video_id" property="videoId"></id>
+        <result column="teacher_id" property="teacherId"></result>
+        <result column="video_title" property="videoTitle"></result>
+        <result column="video_date" property="videoDate"></result>
+        <result column="video_main_id" property="videoMainId"></result>
+        <result column="episode_id" property="episodeId"></result>
+        <result column="video_length" property="videoLength"></result>
+        <result column="video_size" property="videoSize"></result>
+        <result column="public_status" property="publicStatus"></result>
+        <result column="verify_status" property="verifyStatus"></result>
+        <result column="video_source" property="videoSource"></result>
+    </resultMap>
+
 
     <select id="getPublicVideoList" resultMap="videoMainList">
         select video_main.*,
@@ -230,4 +244,11 @@
         ORDER BY video_main.video_date DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
+
+    <select id="getVideoByEpisodeId_VideoMainId" resultMap="getVideo">
+        select *
+        from video
+        where video_main_id = #{videoMainId} and episode_id = #{episodeId}
+    </select>
+
 </mapper>

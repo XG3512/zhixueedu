@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Maps;
 import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.File_download;
+import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.service.QiniuService;
 import com.xvls.alexander.service.wx.UsersService;
 import com.xvls.alexander.service.wx.WxSchoolService;
+import com.xvls.alexander.service.wx.WxVideoService;
 import com.xvls.alexander.utils.QiniuFileUtil;
 import com.xvls.alexander.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -27,6 +30,8 @@ public class QiniuServiceImpl implements QiniuService {
     WxSchoolService wxSchoolService;
     @Autowired
     UsersService usersService;
+    @Autowired
+    WxVideoService wxVideoService;
 
     /**
      * 普通上传图片
@@ -131,4 +136,46 @@ public class QiniuServiceImpl implements QiniuService {
         map.put("name",file_download.getName());
         return map;
     }
+
+    /**
+     * 上传单个视频
+     * @param file
+     * @param video
+     * @return
+     */
+    @Override
+    public RestResponse uploadVideo(MultipartFile file, Video video) throws IOException, NoSuchAlgorithmException {
+        File_download file_download = qiniuFileUtil.upload(file, "false");
+        if(video.getEpisodeId()==null || video.getVideoMainId()==null){
+            return RestResponse.failure("参数错误");
+        }
+        Video video_result = wxVideoService.getVideoByEpisodeId_VideoMainId(video.getEpisodeId(), video.getVideoMainId());
+        if(video_result != null){
+            /*更新视频播放地址*/
+            video_result.setVerifyStatus("审核中");
+            video_result.setVideoSource(file_download.getFileUrl());
+            video_result.setVideoSize(file_download.getFileSize());
+            video_result.setVideoDate(new Date());
+            wxVideoService.updateVideoById(video_result);
+        }else{
+            /*插入新的视频*/
+            if(video.getVideoTitle()==null || video.getPublicStatus()==null){
+                return RestResponse.failure("参数错误");
+            }
+            if(video.getVideoDate()==null){
+                video.setVideoDate(new Date());
+            }
+            video.setVerifyStatus("审核中");
+            video.setVideoSource(file_download.getFileUrl());
+            video.setVideoSize(file_download.getFileSize());
+
+            Integer videoId = wxVideoService.insertVideo(video);
+            Map result = Maps.newHashMap();
+            result.put("videoId",videoId);
+            return RestResponse.success().setData(result);
+        }
+        return RestResponse.success();
+    }
+
+
 }
