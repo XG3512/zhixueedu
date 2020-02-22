@@ -1,5 +1,6 @@
 package com.xvls.alexander.service.wx;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Label;
 import com.xvls.alexander.entity.wx.Video;
@@ -135,4 +136,20 @@ public interface WxVideoService {
      * @return
      */
     Integer insertVideo(Video video);
+
+    /**
+     * 通过 wxUserId , pageInfo 获得视频 点赞 列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Video_main> getVideoGoodList(Integer wxUserId, PageInfo pageInfo);
+
+    /**
+     * 通过 wxUserId , pageInfo 获得视频 收藏 列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Video_main> getVideoCollectionList(Integer wxUserId, PageInfo pageInfo);
 }

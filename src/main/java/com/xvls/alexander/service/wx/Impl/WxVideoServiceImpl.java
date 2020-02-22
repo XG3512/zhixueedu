@@ -226,5 +226,33 @@ public class WxVideoServiceImpl implements WxVideoService {
         return video.getVideoId();
     }
 
+    /**
+     * 通过 wxUserId , pageInfo 获得视频点赞列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Video_main> getVideoGoodList(Integer wxUserId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return wxVideoMapper.getVideoGoodList(wxUserId,new PageInfo(pageNum,pageSize));
+    }
+
+    /**
+     * 通过 wxUserId , pageInfo 获得视频 收藏 列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Video_main> getVideoCollectionList(Integer wxUserId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return wxVideoMapper.getVideoCollectionList(wxUserId,new PageInfo(pageNum,pageSize));
+    }
+
 
 }

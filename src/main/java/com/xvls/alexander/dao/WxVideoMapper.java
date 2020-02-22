@@ -129,4 +129,20 @@ public interface WxVideoMapper extends BaseMapper<Video_main> {
      */
     Video getVideoByEpisodeId_VideoMainId(Integer episodeId,Integer videoMainId);
 
+    /**
+     * 通过 wxUserId , pageInfo 获得视频点赞列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Video_main> getVideoGoodList(Integer wxUserId, PageInfo pageInfo);
+
+    /**
+     * 通过 wxUserId , pageInfo 获得视频 收藏 列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Video_main> getVideoCollectionList(Integer wxUserId, PageInfo pageInfo);
+
 }

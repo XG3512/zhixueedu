@@ -47,4 +47,12 @@ public interface WxNoticeMapper extends BaseMapper<Notice> {
      * @param noticeId
      */
     void decreaseNoticeGoodNum(Integer noticeId);
+
+    /**
+     * 通过 wxUserId ，pageInfo 获得通知点赞列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Notice> getNoticeGoodList(Integer wxUserId,PageInfo pageInfo);
 }

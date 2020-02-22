@@ -2,6 +2,7 @@ package com.xvls.alexander.service.wx;
 
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Notice;
+import com.xvls.alexander.entity.wx.NoticeList;
 
 import java.util.List;
 

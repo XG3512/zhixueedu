@@ -4,10 +4,42 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xvls.alexander.dao.WxV_historyMapper">
 
+    <resultMap id="v_history" type="com.xvls.alexander.entity.wx.V_history">
+        <id column="video_main_id" property="videoMainId"></id>
+        <result column="episode_id" property="episodeId"></result>
+        <result column="wx_user_id" property="wxUserId"></result>
+        <result column="watch_date" property="watchDate"></result>
+    </resultMap>
+
+    <resultMap id="v_historyList" type="com.xvls.alexander.entity.wx.WxV_history">
+        <id column="video_main_id" property="videoMainId"></id>
+        <result column="teacher_id" property="teacherId"></result>
+        <result column="video_main_title" property="videoMainTitle"></result>
+        <result column="play_num" property="playNum"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="collection_num" property="collectionNum"></result>
+        <result column="comment_num" property="commentNum"></result>
+        <result column="main_page" property="mainPage"></result>
+
+        <result column="episode_id" property="episodeId"></result>
+        <result column="watch_date" property="watchDate"></result>
+    </resultMap>
+
     <update id="updateV_history">
         update v_history
         set episode_id = #{episodeId} , watch_date=#{watchDate}
         where video_main_id=#{videoMainId} and wx_user_id=#{wxUserId}
     </update>
+
+    <select id="getV_historyByIdAndPage" resultMap="v_historyList">
+        select v_history.episode_id,
+        v_history.watch_date,
+        video_main.*
+        from v_history
+        left join video_main on video_main.video_main_id = v_history.video_main_id
+        where wx_user_id = #{wxUserId}
+        ORDER BY v_history.watch_date DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
 
 </mapper>

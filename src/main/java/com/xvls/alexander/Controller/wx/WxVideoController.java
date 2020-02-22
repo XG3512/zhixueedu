@@ -210,4 +210,31 @@ public class WxVideoController {
 
         return WeChatResponseUtil.ok(map);
     }
+
+    /**
+     * 通过 wxUserId 和 pageInfo 获得视频历史记录
+     * @param body
+     * @return
+     */
+    @RequestMapping("getV_historyByIdAndPage")
+    public Object getV_historyByIdAndPage(@RequestBody String body){
+
+        Integer wxUserId = null;
+        PageInfo pageInfo = null;
+
+        try {
+            wxUserId = JacksonUtil.parseInteger(body,"wxUserId");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+        } catch (Exception e) {
+            return WeChatResponseUtil.badArgument();
+        }
+        if(wxUserId==null || pageInfo==null){
+            return WeChatResponseUtil.badArgumentValue();
+        }
+        Map result = Maps.newHashMap();
+        List<V_history> v_historyList = wxV_historyService.getV_historyByIdAndPage(wxUserId, pageInfo);
+        result.put("v_historyList",v_historyList);
+
+        return WeChatResponseUtil.ok(result);
+    }
 }

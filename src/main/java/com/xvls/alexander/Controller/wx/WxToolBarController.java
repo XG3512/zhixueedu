@@ -1,9 +1,9 @@
 package com.xvls.alexander.Controller.wx;
 
+import com.google.common.collect.Maps;
+import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.*;
-import com.xvls.alexander.service.wx.CollectionService;
-import com.xvls.alexander.service.wx.WxToolBarService;
-import com.xvls.alexander.service.wx.WxV_historyService;
+import com.xvls.alexander.service.wx.*;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 点赞、评论、浏览、收藏信息的更新
@@ -25,6 +27,10 @@ public class WxToolBarController {
     WxV_historyService wxV_historyService;
     @Autowired
     CollectionService collectionService;
+    @Autowired
+    WxArticleService wxArticleService;
+    @Autowired
+    WxVideoService wxVideoService;
 
     /**
      * 点赞增加
@@ -200,7 +206,46 @@ public class WxToolBarController {
         return WeChatResponseUtil.ok();
     }
 
-    // TODO: 2020/2/14 关注
+    /**
+     * 通过 wxUserId,collectionType,pageInfo 获得 收藏 信息列表（ A , V ）
+     * @param body
+     * @return
+     */
+    @RequestMapping("collection/getCollectionList")
+    public Object getCollectionList(@RequestBody String body){
+
+        Integer wxUserId = null;
+        String collectionType = null;
+        PageInfo pageInfo = null;
+
+        try {
+            wxUserId = JacksonUtil.parseInteger(body,"wxUserId");
+            collectionType = JacksonUtil.parseString(body,"collectionType");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+        } catch (Exception e) {
+            return WeChatResponseUtil.badArgument();
+        }
+        if(wxUserId == null || collectionType == null || pageInfo == null){
+            return WeChatResponseUtil.badArgumentValue();
+        }
+
+        if(collectionType.equals("A")){
+            List<Article> articleCollectionList = wxArticleService.getArticleCollectionList(wxUserId, pageInfo);
+            Map result = Maps.newHashMap();
+            result.put("articleCollectionList",articleCollectionList);
+            return WeChatResponseUtil.ok(result);
+        }else if (collectionType.equals("V")){
+            List<Video_main> videoCollectionList = wxVideoService.getVideoCollectionList(wxUserId, pageInfo);
+            Map result = Maps.newHashMap();
+            result.put("videoCollectionList",videoCollectionList);
+
+            return WeChatResponseUtil.ok(result);
+        }else if (collectionType.equals("N")){
+            return WeChatResponseUtil.fail(403,"未开发此功能");
+        }else{
+            return WeChatResponseUtil.badArgumentValue();
+        }
+    }
 
     /**
      * 关注学校
@@ -294,5 +339,45 @@ public class WxToolBarController {
             return WeChatResponseUtil.fail(-1,"取消关注失败");
         }
         return WeChatResponseUtil.ok();
+    }
+
+    /**
+     * 通过 wxUserId goodType 和 pageInfo 获得点赞列表
+     * @param body
+     * @return
+     */
+    @RequestMapping("getGoodListById")
+    public Object getGoodListById(@RequestBody String body){
+
+        String goodType = null;
+        Integer wxUserId = null;
+        PageInfo pageInfo = null;
+
+        try {
+            goodType = JacksonUtil.parseString(body,"goodType");
+            wxUserId = JacksonUtil.parseInteger(body,"wxUserId");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+        } catch (Exception e) {
+            return WeChatResponseUtil.badArgument();
+        }
+        if(wxUserId == null || pageInfo == null || goodType == null){
+            return WeChatResponseUtil.badArgumentValue();
+        }
+
+        if(goodType.equals("A")){
+            List<Article> articleList = wxArticleService.getArticleGoodList(wxUserId, pageInfo);
+            Map result = Maps.newHashMap();
+            result.put("articleList",articleList);
+            return WeChatResponseUtil.ok(result);
+        }else if (goodType.equals("V")){
+            List<Video_main> videoGoodList = wxVideoService.getVideoGoodList(wxUserId, pageInfo);
+            Map result = Maps.newHashMap();
+            result.put("videoGoodList",videoGoodList);
+            return WeChatResponseUtil.ok(result);
+        }else if (goodType.equals("N")){
+            return WeChatResponseUtil.fail(403,"未开发此功能");
+        }else{
+            return WeChatResponseUtil.badArgumentValue();
+        }
     }
 }

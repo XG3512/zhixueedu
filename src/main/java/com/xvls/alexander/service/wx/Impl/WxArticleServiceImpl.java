@@ -105,5 +105,35 @@ public class WxArticleServiceImpl implements WxArticleService {
         wxArticleMapper.decreaseArticleCollectionNum(articleId);
     }
 
+    /**
+     * 通过 wxUserId 和 pageInfo 获得动态的点赞记录
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Article> getArticleGoodList(Integer wxUserId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageInfo.setPageNum((pageNum-1)*pageSize);
+
+        return wxArticleMapper.getArticleGoodList(wxUserId,pageInfo);
+    }
+
+    /**
+     * 通过 wxUserId 和 pageInfo 获得动态的收藏记录
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Article> getArticleCollectionList(Integer wxUserId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageInfo.setPageNum((pageNum-1)*pageSize);
+
+        return wxArticleMapper.getArticleCollectionList(wxUserId,pageInfo);
+    }
+
 
 }

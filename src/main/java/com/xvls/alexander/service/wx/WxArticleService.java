@@ -33,4 +33,20 @@ public interface WxArticleService {
     void addArticleCollectionNum(Integer articleId);
 
     void decreaseArticleCollectionNum(Integer articleId);
+
+    /**
+     * 通过 wxUserId 和 pageInfo 获得动态的点赞记录
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Article> getArticleGoodList(Integer wxUserId,PageInfo pageInfo);
+
+    /**
+     * 通过 wxUserId 和 pageInfo 获得动态的收藏记录
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Article> getArticleCollectionList(Integer wxUserId,PageInfo pageInfo);
 }

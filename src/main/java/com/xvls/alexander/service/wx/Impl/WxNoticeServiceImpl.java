@@ -90,4 +90,5 @@ public class WxNoticeServiceImpl implements WxNoticeService {
     public void decreaseNoticeGoodNum(Integer noticeId) {
         wxNoticeMapper.decreaseNoticeGoodNum(noticeId);
     }
+
 }

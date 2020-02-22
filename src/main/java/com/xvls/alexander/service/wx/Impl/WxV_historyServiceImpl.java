@@ -2,10 +2,13 @@ package com.xvls.alexander.service.wx.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.WxV_historyMapper;
+import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.V_history;
 import com.xvls.alexander.service.wx.WxV_historyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 观看历史
@@ -51,4 +54,20 @@ public class WxV_historyServiceImpl implements WxV_historyService {
                 .eq("wx_user_id",wxUserId);
         return wxV_historyMapper.selectOne(queryWrapper);
     }
+
+    /**
+     * 通过 wxUserId 和 pageInfo 获得视频历史记录
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<V_history> getV_historyByIdAndPage(Integer wxUserId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageInfo.setPageNum((pageNum-1)*pageSize);
+        return wxV_historyMapper.getV_historyByIdAndPage(wxUserId,pageInfo);
+    }
+
+
 }
