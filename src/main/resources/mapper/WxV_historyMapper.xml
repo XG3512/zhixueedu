@@ -14,7 +14,7 @@
     <resultMap id="v_historyList" type="com.xvls.alexander.entity.wx.WxV_history">
         <id column="video_main_id" property="videoMainId"></id>
         <result column="teacher_id" property="teacherId"></result>
-        <result column="user_name" property="teacherName"></result>
+        <result column="user_name" property="userName"></result>
         <result column="video_main_title" property="videoMainTitle"></result>
         <result column="play_num" property="playNum"></result>
         <result column="good_num" property="goodNum"></result>
