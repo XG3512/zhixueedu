@@ -84,4 +84,36 @@ public class WxSchoolController {
         List<Province> list = wxSchoolService.getSchoolListByProvince(wxUserId);
         return WeChatResponseUtil.ok(list);
     }
+
+    /**
+     * 关注部分的默认学校
+     * @return
+     */
+    @RequestMapping("getDefaultSchoolList")
+    public Object getDefaultSchoolList(){
+        List<SchoolList> defaultSchoolList = wxSchoolService.getDefaultSchoolList();
+        Map result = Maps.newHashMap();
+        result.put("defaultSchoolList",defaultSchoolList);
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
+     * 通过 wxUserId 获得关注学校列表
+     * @param wxUserId
+     * @return
+     */
+    @RequestMapping("getFollowSchoolById")
+    public Object getFollowSchoolById(@RequestParam("wxUserId") Integer wxUserId){
+
+        if(wxUserId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+        List<SchoolList> followSchoolList = wxSchoolService.getFollowSchoolListById(wxUserId);
+
+        Map result = Maps.newHashMap();
+
+        result.put("followSchoolList",followSchoolList);
+
+        return WeChatResponseUtil.ok(result);
+    }
 }

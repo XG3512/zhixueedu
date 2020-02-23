@@ -135,5 +135,19 @@ public class WxArticleServiceImpl implements WxArticleService {
         return wxArticleMapper.getArticleCollectionList(wxUserId,pageInfo);
     }
 
+    /**
+     * 通过 wxUserId ， pageInfo 获得主页动态列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Article> getHomePageArticleList(Integer wxUserId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum-1)*pageSize;
+        return wxArticleMapper.getHomePageArticleList(wxUserId,pageInfo);
+    }
+
 
 }

@@ -17,7 +17,7 @@ public interface QiniuService {
      * @param file
      * @return
      */
-    Map<Object,Object> upload(MultipartFile file,String islongimage, File_belong file_belong) throws IOException, NoSuchAlgorithmException;
+    Map<Object,Object> upload(MultipartFile file, File_belong file_belong) throws IOException, NoSuchAlgorithmException;
 
     /**
      * 删除已经上传的图片

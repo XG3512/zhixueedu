@@ -1,5 +1,6 @@
 package com.xvls.alexander.Controller.wx;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.xvls.alexander.dao.WxLabelMapper;
 import com.xvls.alexander.entity.wx.Label;
@@ -51,7 +52,10 @@ public class WxLabelController {
             return WeChatResponseUtil.badArgument();
         }
         Map map = Maps.newHashMap();
-        List<Label> labelList = wxLabelService.getLabelListByWxUserId(wxUserId);
+        List<Label> labelList = Lists.newArrayList();
+        labelList.add(new Label(0,"精选"));
+        List<Label> lists = wxLabelService.getLabelListByWxUserId(wxUserId);
+        labelList.addAll(lists);
 
         map.put("labelList",labelList);
 
@@ -94,4 +98,5 @@ public class WxLabelController {
         wxLabelService.addLabelById(wxUserId,labelId);
         return WeChatResponseUtil.ok();
     }
+
 }

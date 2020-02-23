@@ -88,6 +88,25 @@ public class WxArticleController {
     }
 
     /**
+     * 通过 wxUserId 获得主页动态列表
+     * @param wxUserId
+     * @return
+     */
+    @RequestMapping("getHomePageArticleList")
+    public Object getHomePageArticleList(@RequestParam("wxUserId") Integer wxUserId){
+        if(wxUserId == null){
+            return WeChatResponseUtil.badArgument();
+        }
+        Map result = Maps.newHashMap();
+
+        List<Article> homePageArticleList = wxArticleService.getHomePageArticleList(wxUserId, new PageInfo(1, 6));
+
+        result.put("homePageArticleList",homePageArticleList);
+
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
      * 对动态进行评论，如果没有父评论的话parentVcId设置为0
      * @return
      */

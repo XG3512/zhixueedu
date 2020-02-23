@@ -87,6 +87,25 @@
         </collection>
     </resultMap>
 
+    <resultMap id="mainPage_article_list" type="com.xvls.alexander.entity.wx.Article">
+        <id column="article_id" property="articleId"></id>
+        <result column="school_id" property="schoolId"></result>
+        <result column="title" property="title"></result>
+        <result column="article_text" property="articleText"></result>
+        <result column="read_num" property="readNum"></result>
+        <result column="article_time" property="articleTime"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="comment_status" property="commentStatus"></result>
+        <result column="comment_num" property="commentNum"></result>
+        <result column="collection_num" property="collectionNum"></result>
+        <collection property="school" ofType="com.xvls.alexander.entity.School">
+            <id column="school_id" property="schoolId"></id>
+            <result column="school_name" property="schoolName"></result>
+            <result column="head" property="head"></result>
+            <result column="follow_school_date" property="followSchoolDate"></result>
+        </collection>
+    </resultMap>
+
     <resultMap id="schoolMainPage_article_list" type="com.xvls.alexander.entity.wx.Article">
         <id column="article_id" property="articleId"></id>
         <result column="school_id" property="schoolId"></result>
@@ -225,6 +244,23 @@
         left join follow_school on follow_school.school_id=school.school_id and follow_school.wx_user_id = #{wxUserId}
         where collection.collection_type = 'A'
         ORDER BY article.article_time desc
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+
+    <select id="getHomePageArticleList" resultMap="mainPage_article_list">
+        select article.*,
+        school.school_id,
+        school.school_name,
+        school.head,
+        follow_school.follow_school_date,
+        good.good_time,
+        collection.collection_date
+        FROM article
+        LEFT JOIN school ON article.`school_id`=school.`school_id`
+        left join follow_school on follow_school.school_id=school.school_id and follow_school.wx_user_id = #{wxUserId}
+        left join good on good.good_type='A' and good.good_id = article.article_id and good.wx_user_id = #{wxUserId}
+        left join collection on collection.collection_type='A' and collection.collection_id=article.article_id and collection.wx_user_id = #{wxUserId}
+        ORDER BY article.read_num desc
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
 

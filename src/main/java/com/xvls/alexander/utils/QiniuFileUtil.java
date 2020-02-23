@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
@@ -53,14 +54,27 @@ public class QiniuFileUtil {
 	 * @throws QiniuException
 	 * @throws IOException
 	 */
-	public static File_download upload(MultipartFile file,String islongimage) throws IOException, NoSuchAlgorithmException {
+	public static File_download upload(MultipartFile file) throws IOException, NoSuchAlgorithmException {
 		File_download rescource = new File_download();
+		String islongimage = "false";
 
 		Configuration config = new Configuration(Region.region0());
 		String fileName = "", extName = "", filePath = "";
 		if (null != file && !file.isEmpty()) {
 			extName = file.getOriginalFilename().substring(
 					file.getOriginalFilename().lastIndexOf(".")+1);
+			/*判断是否为图片*/
+			if(extName.equals("jpg")||extName.equals("jpeg")||extName.equals("jpe")||extName.equals("JPG")||extName.equals("JPEG")||extName.equals("JPE")||
+					extName.equals("png")||extName.equals("pns")||extName.equals("PNG")||extName.equals("PNS")){
+				BufferedImage bufferedImage = InputImage(file);
+				if(bufferedImage!=null){
+					if(bufferedImage.getWidth()>bufferedImage.getHeight()){
+						islongimage = "true";
+					}else{
+						islongimage = "false";
+					}
+				}
+			}
 			fileName = extName + UUID.randomUUID();
 			UploadManager uploadManager = new UploadManager(config);
 			Auth auth = Auth.create(qiniuAccess, qiniuKey);
@@ -317,6 +331,23 @@ public class QiniuFileUtil {
 		} catch (QiniuException ex) {
 			System.err.println(ex.response.toString());
 		}
+	}
+
+	/**
+	 * 将MultipartFile 转换为 BufferedImage 类型
+	 * @param file
+	 * @return
+	 */
+	public static BufferedImage InputImage(MultipartFile file) {
+		BufferedImage srcImage = null;
+		try {
+			FileInputStream in = (FileInputStream) file.getInputStream();
+			srcImage = javax.imageio.ImageIO.read(in);
+		} catch (IOException e) {
+			System.out.println("读取图片文件出错！" + e.getMessage());
+			return null;
+		}
+		return srcImage;
 	}
 
 

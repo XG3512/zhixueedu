@@ -17,6 +17,8 @@ public class WxV_history {
 
     private Integer videoMainId;//主页ID
     private Integer teacherId;//教师ID
+    @TableField(exist = false)
+    private String teacherName;//教师姓名
     private String videoMainTitle;//主页标题
     private Integer playNum;//播放量
     private Integer goodNum;//点赞数

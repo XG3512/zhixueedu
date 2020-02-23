@@ -65,4 +65,23 @@ public class WxSchoolServiceImpl implements WxSchoolService {
     public void updateSchoolHead(Integer schoolId, String file_url) {
         wxSchoolMapper.updateSchoolHead(schoolId,file_url);
     }
+
+    /**
+     * 关注部分的默认学校
+     * @return
+     */
+    @Override
+    public List<SchoolList> getDefaultSchoolList() {
+        return wxSchoolMapper.getDefaultSchoolList();
+    }
+
+    /**
+     * 通过 wxUserId 获得关注学校列表
+     * @param wxUserId
+     * @return
+     */
+    @Override
+    public List<SchoolList> getFollowSchoolListById(Integer wxUserId) {
+        return wxSchoolMapper.getFollowSchoolListById(wxUserId);
+    }
 }

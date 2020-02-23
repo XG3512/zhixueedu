@@ -40,10 +40,10 @@ public class QiniuServiceImpl implements QiniuService {
      * @return
      */
     @Override
-    public Map<Object, Object> upload(MultipartFile file, String islongimage , File_belong file_belong) throws IOException, NoSuchAlgorithmException {
+    public Map<Object, Object> upload(MultipartFile file, File_belong file_belong) throws IOException, NoSuchAlgorithmException {
         Map map = Maps.newHashMap();
         File_download file_download = null;
-        file_download = qiniuFileUtil.upload(file,islongimage);
+        file_download = qiniuFileUtil.upload(file);
         map.put("url",file_download.getFileUrl());
         if(file_belong.getName()==null){
             file_belong.setName(file_download.getName());
@@ -104,7 +104,7 @@ public class QiniuServiceImpl implements QiniuService {
     @Override
     public Map<Object, Object> uploadBackgroundImg(MultipartFile file, String type, Integer id) throws IOException, NoSuchAlgorithmException {
         Map map = Maps.newHashMap();
-        File_download file_download = qiniuFileUtil.upload(file,"false");
+        File_download file_download = qiniuFileUtil.upload(file);
         map.put("url",file_download.getFileUrl());
         if(type.equals("S")){
             wxSchoolService.updateSchoolBackground(id,file_download.getFileUrl());
@@ -126,7 +126,7 @@ public class QiniuServiceImpl implements QiniuService {
      */
     public Map<Object, Object> uploadIconImg(MultipartFile file,String type,Integer id) throws IOException, NoSuchAlgorithmException {
         Map map = Maps.newHashMap();
-        File_download file_download = qiniuFileUtil.upload(file,"false");
+        File_download file_download = qiniuFileUtil.upload(file);
         map.put("url",file_download.getFileUrl());
         if(type.equals("S")){
             wxSchoolService.updateSchoolHead(id,file_download.getFileUrl());
@@ -145,7 +145,7 @@ public class QiniuServiceImpl implements QiniuService {
      */
     @Override
     public RestResponse uploadVideo(MultipartFile file, Video video) throws IOException, NoSuchAlgorithmException {
-        File_download file_download = qiniuFileUtil.upload(file, "false");
+        File_download file_download = qiniuFileUtil.upload(file);
         if(video.getEpisodeId()==null || video.getVideoMainId()==null){
             return RestResponse.failure("参数错误");
         }

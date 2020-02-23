@@ -3,6 +3,7 @@ package com.xvls.alexander.service.wx;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Article;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -49,4 +50,12 @@ public interface WxArticleService {
      * @return
      */
     List<Article> getArticleCollectionList(Integer wxUserId,PageInfo pageInfo);
+
+    /**
+     * 通过 wxUserId ， pageInfo 获得主页动态列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Article> getHomePageArticleList(Integer wxUserId,PageInfo pageInfo);
 }

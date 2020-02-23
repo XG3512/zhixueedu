@@ -5,6 +5,7 @@ import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.*;
 import com.xvls.alexander.service.wx.WxCommentsService;
 import com.xvls.alexander.service.wx.WxV_historyService;
+import com.xvls.alexander.service.wx.WxVideoRotationService;
 import com.xvls.alexander.service.wx.WxVideoService;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.WeChatResponseUtil;
@@ -29,6 +30,8 @@ public class WxVideoController {
     WxV_historyService wxV_historyService;
     @Autowired
     WxCommentsService wxCommentsService;
+    @Autowired
+    WxVideoRotationService wxVideoRotationService;
     /**
      * 获得视频列表信息
      * @return
@@ -232,9 +235,11 @@ public class WxVideoController {
             return WeChatResponseUtil.badArgumentValue();
         }
         Map result = Maps.newHashMap();
-        List<V_history> v_historyList = wxV_historyService.getV_historyByIdAndPage(wxUserId, pageInfo);
+        List<WxV_history> v_historyList = wxV_historyService.getV_historyByIdAndPage(wxUserId, pageInfo);
         result.put("v_historyList",v_historyList);
 
         return WeChatResponseUtil.ok(result);
     }
+
+
 }

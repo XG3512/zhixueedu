@@ -14,6 +14,7 @@
     <resultMap id="v_historyList" type="com.xvls.alexander.entity.wx.WxV_history">
         <id column="video_main_id" property="videoMainId"></id>
         <result column="teacher_id" property="teacherId"></result>
+        <result column="user_name" property="teacherName"></result>
         <result column="video_main_title" property="videoMainTitle"></result>
         <result column="play_num" property="playNum"></result>
         <result column="good_num" property="goodNum"></result>
@@ -34,10 +35,12 @@
     <select id="getV_historyByIdAndPage" resultMap="v_historyList">
         select v_history.episode_id,
         v_history.watch_date,
+        users.user_name,
         video_main.*
         from v_history
         left join video_main on video_main.video_main_id = v_history.video_main_id
-        where wx_user_id = #{wxUserId}
+        left join users on users.user_id = video_main.teacher_id
+        where v_history.wx_user_id = #{wxUserId}
         ORDER BY v_history.watch_date DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>

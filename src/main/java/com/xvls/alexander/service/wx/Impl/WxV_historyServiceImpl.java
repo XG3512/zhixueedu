@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.WxV_historyMapper;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.V_history;
+import com.xvls.alexander.entity.wx.WxV_history;
 import com.xvls.alexander.service.wx.WxV_historyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class WxV_historyServiceImpl implements WxV_historyService {
      * @return
      */
     @Override
-    public List<V_history> getV_historyByIdAndPage(Integer wxUserId, PageInfo pageInfo) {
+    public List<WxV_history> getV_historyByIdAndPage(Integer wxUserId, PageInfo pageInfo) {
         Integer pageNum = pageInfo.getPageNum();
         Integer pageSize = pageInfo.getPageSize();
         pageInfo.setPageNum((pageNum-1)*pageSize);

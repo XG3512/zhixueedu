@@ -24,8 +24,17 @@
     <resultMap id="schoolList" type="com.xvls.alexander.entity.wx.SchoolList">
         <id column="school_id" property="schoolId"></id>
         <result column="school_name" property="schoolName"></result>
+        <result column="head" property="head"></result>
         <result column="province" property="province"></result>
         <result column="introduction" property="introduction"></result>
+    </resultMap>
+
+    <resultMap id="schoolList2" type="com.xvls.alexander.entity.wx.SchoolList">
+        <id column="school_id" property="schoolId"></id>
+        <result column="school_name" property="schoolName"></result>
+        <result column="province" property="province"></result>
+        <result column="introduction" property="introduction"></result>
+        <result column="follow_school_date" property="followSchoolDate"></result>
     </resultMap>
 
     <select id="getSchoolInfo" resultMap="school">
@@ -39,6 +48,7 @@
     <select id="getSchoolList" resultMap="schoolList">
         select school.school_id,
         school_name,
+        head,
         province,
         introduction
         from school
@@ -52,4 +62,28 @@
     <update id="updateSchoolHead">
         update school set head = #{file_url} where school_id = #{schoolId}
     </update>
+
+    <select id="getDefaultSchoolList" resultMap="schoolList">
+        select school.school_id,
+        school_name,
+        head,
+        province,
+        introduction
+        from school
+        ORDER BY school.fans_num desc
+        limit 0,9
+    </select>
+
+    <select id="getFollowSchoolListById" resultMap="schoolList2">
+        select school.school_id,
+        school_name,
+        head,
+        province,
+        introduction,
+        follow_school.follow_school_date
+        from follow_school
+        left join school on school.school_id = follow_school.school_id
+        where follow_school.wx_user_id = #{wxUserId}
+        ORDER BY follow_school.follow_school_date desc
+    </select>
 </mapper>

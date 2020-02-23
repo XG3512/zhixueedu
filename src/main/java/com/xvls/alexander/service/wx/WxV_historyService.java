@@ -2,6 +2,7 @@ package com.xvls.alexander.service.wx;
 
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.V_history;
+import com.xvls.alexander.entity.wx.WxV_history;
 
 import java.util.List;
 
@@ -36,5 +37,5 @@ public interface WxV_historyService {
      * @param pageInfo
      * @return
      */
-    List<V_history> getV_historyByIdAndPage(Integer wxUserId, PageInfo pageInfo);
+    List<WxV_history> getV_historyByIdAndPage(Integer wxUserId, PageInfo pageInfo);
 }

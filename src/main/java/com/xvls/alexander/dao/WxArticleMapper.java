@@ -94,4 +94,12 @@ public interface WxArticleMapper extends BaseMapper<Article> {
      * @return
      */
     List<Article> getArticleCollectionList(Integer wxUserId,PageInfo pageInfo);
+
+    /**
+     * 通过 wxUserId ， pageInfo 获得主页动态列表
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Article> getHomePageArticleList(Integer wxUserId,PageInfo pageInfo);
 }

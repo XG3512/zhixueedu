@@ -38,4 +38,17 @@ public interface WxSchoolMapper extends BaseMapper<School> {
      * @param file_url
      */
     void updateSchoolHead(Integer schoolId,String file_url);
+
+    /**
+     * 关注部分的默认学校
+     * @return
+     */
+    List<SchoolList> getDefaultSchoolList();
+
+    /**
+     * 通过 wxUserId 获得关注学校列表
+     * @param wxUserId
+     * @return
+     */
+    List<SchoolList> getFollowSchoolListById(Integer wxUserId);
 }
