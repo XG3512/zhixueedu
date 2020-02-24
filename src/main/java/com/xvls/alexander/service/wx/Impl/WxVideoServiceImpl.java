@@ -92,6 +92,20 @@ public class WxVideoServiceImpl implements WxVideoService {
     }
 
     /**
+     * 通过 pageInfo , wxUserId 获得精选页面的视频列表（按照热度排序）
+     * @param pageInfo
+     * @param wxUserId
+     * @return
+     */
+    @Override
+    public List<Video_main> getMainPagePublicVideoList(PageInfo pageInfo, Integer wxUserId) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return wxVideoMapper.getMainPagePublicVideoList(new PageInfo(pageNum,pageSize),wxUserId);
+    }
+
+    /**
      * 视频点赞数增加
      * @param videoId
      */
@@ -191,6 +205,14 @@ public class WxVideoServiceImpl implements WxVideoService {
         Integer pageSize = pageInfo.getPageSize();
         pageInfo.setPageNum((pageNum-1)*pageSize);
         return wxVideoMapper.getPublicVideoListbyTeacherId(wxUserInfo,teacherId,pageInfo);
+    }
+
+    @Override
+    public List<Video_main> getSchoolVideoListByTeacherId(Integer wxUserInfo, Integer teacherId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageInfo.setPageNum((pageNum-1)*pageSize);
+        return wxVideoMapper.getSchoolVideoListByTeacherId(wxUserInfo,teacherId,pageInfo);
     }
 
     /**

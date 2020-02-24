@@ -9,12 +9,12 @@ import com.xvls.alexander.entity.wx.Good;
  */
 public interface WxToolBarService {
     /*点赞*/
-    void addArticleGoodNum(Good good);
-    void addVideoGoodNum(Good good);
-    void addNoticeGoodNum(Good good);
-    void decreaseArticleGoodNum(Good good);
-    void decreaseVideoGoodNum(Good good);
-    void decreaseNoticeGoodNum(Good good);
+    Object addArticleGoodNum(Good good);
+    Object addVideoGoodNum(Good good);
+    Object addNoticeGoodNum(Good good);
+    Object decreaseArticleGoodNum(Good good);
+    Object decreaseVideoGoodNum(Good good);
+    Object decreaseNoticeGoodNum(Good good);
 
     /*评论*/
     void addArticleCommentNum(Good good);

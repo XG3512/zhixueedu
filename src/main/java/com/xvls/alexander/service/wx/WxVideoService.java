@@ -57,6 +57,13 @@ public interface WxVideoService {
      */
     List<Video_main> getPublicVideoListByLabel(PageInfo pageInfo, Integer labelId , Integer wxUserId);
 
+    /**
+     * 通过 pageInfo , wxUserId 获得精选页面的视频列表（按照热度排序）
+     * @param pageInfo
+     * @param wxUserId
+     * @return
+     */
+    List<Video_main> getMainPagePublicVideoList(PageInfo pageInfo , Integer wxUserId);
 
 
     /**
@@ -115,6 +122,15 @@ public interface WxVideoService {
      * @return
      */
     List<Video_main> getPublicVideoListbyTeacherId(Integer wxUserInfo,Integer teacherId,PageInfo pageInfo);
+
+    /**
+     * 通过 wxUserId，teacherId和pageInfo 获得school级别以上的视频
+     * @param wxUserInfo
+     * @param teacherId
+     * @param pageInfo
+     * @return
+     */
+    List<Video_main> getSchoolVideoListByTeacherId(Integer wxUserInfo,Integer teacherId,PageInfo pageInfo);
 
     /**
      * 通过 episodeId 和 videoMainId 查找视频信息

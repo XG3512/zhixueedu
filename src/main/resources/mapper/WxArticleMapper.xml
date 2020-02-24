@@ -224,7 +224,7 @@
         LEFT JOIN school ON article.`school_id`=school.`school_id`
         left join follow_school on follow_school.school_id=school.school_id and follow_school.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='A' and collection.collection_id=article.article_id and collection.wx_user_id = #{wxUserId}
-        where good.good_type = 'A'
+        where good.good_type = 'A' and good.wx_user_id = #{wxUserId}
         ORDER BY article.article_time desc
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
@@ -242,7 +242,7 @@
         left join good ON good.good_type='A' and good.good_id = article.article_id and good.wx_user_id = #{wxUserId}
         LEFT JOIN school ON article.`school_id`=school.`school_id`
         left join follow_school on follow_school.school_id=school.school_id and follow_school.wx_user_id = #{wxUserId}
-        where collection.collection_type = 'A'
+        where collection.collection_type = 'A' and collection.wx_user_id = #{wxUserId}
         ORDER BY article.article_time desc
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>

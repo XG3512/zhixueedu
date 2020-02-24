@@ -52,10 +52,7 @@ public class WxLabelController {
             return WeChatResponseUtil.badArgument();
         }
         Map map = Maps.newHashMap();
-        List<Label> labelList = Lists.newArrayList();
-        labelList.add(new Label(0,"精选"));
-        List<Label> lists = wxLabelService.getLabelListByWxUserId(wxUserId);
-        labelList.addAll(lists);
+        List<Label> labelList = wxLabelService.getLabelListByWxUserId(wxUserId);
 
         map.put("labelList",labelList);
 

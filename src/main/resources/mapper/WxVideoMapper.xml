@@ -209,6 +209,21 @@
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
 
+    <select id="getMainPagePublicVideoList" resultMap="videoMainList">
+        select video_main.*,
+        users.user_name,
+        good.good_time,
+        collection.collection_date
+        from video_main
+        left join users on video_main.teacher_id=users.user_id
+        left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
+        left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
+        left join v_label on v_label.video_main_id = video_main.video_main_id
+        where video_main.public_status='public' and video_main.verify_status='通过'
+        ORDER BY video_main.heat_of_video DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+
     <update id="addVideoGoodNum">
         update video_main set good_num = good_num + 1 where video_main_id = #{videoId}
     </update>
@@ -245,6 +260,14 @@
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
 
+    <select id="getSchoolVideoListByTeacherId" resultMap="publicTeacherMainPageVideoList">
+        select video_main.*
+        from video_main
+        where video_main.public_status IN('public','school') and video_main.verify_status='通过' and teacher_id=#{teacherId}
+        ORDER BY video_main.video_date DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+
     <select id="getVideoByEpisodeId_VideoMainId" resultMap="getVideo">
         select *
         from video
@@ -261,7 +284,7 @@
         left join video_main on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join users on video_main.teacher_id = users.user_id
         left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
-        where video_main.public_status='public' and video_main.verify_status='通过' and good.good_type = 'V'
+        where video_main.public_status='public' and video_main.verify_status='通过' and good.good_type = 'V' and good.wx_user_id = #{wxUserId}
         ORDER BY  video_main.video_date DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
@@ -275,7 +298,7 @@
         left join video_main on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
         left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join users on video_main.teacher_id = users.user_id
-        where video_main.public_status='public' and video_main.verify_status='通过' and collection.collection_type = 'V'
+        where video_main.public_status='public' and video_main.verify_status='通过' and collection.collection_type = 'V' and collection.wx_user_id = #{wxUserId}
         ORDER BY  video_main.video_date DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>

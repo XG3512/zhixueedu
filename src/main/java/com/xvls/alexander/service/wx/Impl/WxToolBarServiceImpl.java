@@ -8,6 +8,7 @@ import com.xvls.alexander.entity.wx.Follow_school;
 import com.xvls.alexander.entity.wx.Follow_teacher;
 import com.xvls.alexander.entity.wx.Good;
 import com.xvls.alexander.service.wx.*;
+import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +34,19 @@ public class WxToolBarServiceImpl implements WxToolBarService {
      * @param good
      */
     @Override
-    public void addArticleGoodNum(Good good) {
-        good.insert();
-        wxArticleService.addArticleGoodNum(good.getGoodId());
+    public Object addArticleGoodNum(Good good) {
+        QueryWrapper<Good> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("good_type",good.getGoodType())
+                .eq("good_id",good.getGoodId())
+                .eq("wx_user_id",good.getWxUserId());
+        Integer count = good.selectCount(queryWrapper);
+        if(count>0){
+            return WeChatResponseUtil.fail(-1,"已经点过赞了~");
+        }else{
+            good.insert();
+            wxArticleService.addArticleGoodNum(good.getGoodId());
+            return WeChatResponseUtil.ok();
+        }
     }
 
     /**
@@ -43,9 +54,19 @@ public class WxToolBarServiceImpl implements WxToolBarService {
      * @param good
      */
     @Override
-    public void addVideoGoodNum(Good good) {
-        good.insert();
-        wxVideoService.addVideoGoodNum(good.getGoodId());
+    public Object addVideoGoodNum(Good good) {
+        QueryWrapper<Good> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("good_type",good.getGoodType())
+                .eq("good_id",good.getGoodId())
+                .eq("wx_user_id",good.getWxUserId());
+        Integer count = good.selectCount(queryWrapper);
+        if(count>0){
+            return WeChatResponseUtil.fail(-1,"已经点过赞了~");
+        }else{
+            good.insert();
+            wxVideoService.addVideoGoodNum(good.getGoodId());
+            return WeChatResponseUtil.ok();
+        }
     }
 
     /**
@@ -53,9 +74,19 @@ public class WxToolBarServiceImpl implements WxToolBarService {
      * @param good
      */
     @Override
-    public void addNoticeGoodNum(Good good) {
-        good.insert();
-        wxNoticeService.addNoticeGoodNum(good.getGoodId());
+    public Object addNoticeGoodNum(Good good) {
+        QueryWrapper<Good> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("good_type",good.getGoodType())
+                .eq("good_id",good.getGoodId())
+                .eq("wx_user_id",good.getWxUserId());
+        Integer count = good.selectCount(queryWrapper);
+        if(count>0){
+            return WeChatResponseUtil.fail(-1,"已经点过赞了~");
+        }else{
+            good.insert();
+            wxNoticeService.addNoticeGoodNum(good.getGoodId());
+            return WeChatResponseUtil.ok();
+        }
     }
 
     /**
@@ -63,9 +94,19 @@ public class WxToolBarServiceImpl implements WxToolBarService {
      * @param good
      */
     @Override
-    public void decreaseArticleGoodNum(Good good) {
-        wxArticleService.decreaseArticleGoodNum(good.getGoodId());
-        boolean delete = this.deleteGood(good);
+    public Object decreaseArticleGoodNum(Good good) {
+        QueryWrapper<Good> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("good_type",good.getGoodType())
+                .eq("good_id",good.getGoodId())
+                .eq("wx_user_id",good.getWxUserId());
+        Integer count = good.selectCount(queryWrapper);
+        if(count==0){
+            return WeChatResponseUtil.fail(-1,"失败~");
+        }else{
+            wxArticleService.decreaseArticleGoodNum(good.getGoodId());
+            boolean delete = this.deleteGood(good);
+            return WeChatResponseUtil.ok();
+        }
     }
 
     /**
@@ -73,9 +114,19 @@ public class WxToolBarServiceImpl implements WxToolBarService {
      * @param good
      */
     @Override
-    public void decreaseVideoGoodNum(Good good) {
-        wxVideoService.decreaseVideoGoodNum(good.getGoodId());
-        boolean delete = this.deleteGood(good);
+    public Object decreaseVideoGoodNum(Good good) {
+        QueryWrapper<Good> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("good_type",good.getGoodType())
+                .eq("good_id",good.getGoodId())
+                .eq("wx_user_id",good.getWxUserId());
+        Integer count = good.selectCount(queryWrapper);
+        if(count==0){
+            return WeChatResponseUtil.fail(-1,"失败~");
+        }else{
+            wxVideoService.decreaseVideoGoodNum(good.getGoodId());
+            boolean delete = this.deleteGood(good);
+            return WeChatResponseUtil.ok();
+        }
     }
 
     /**
@@ -83,9 +134,19 @@ public class WxToolBarServiceImpl implements WxToolBarService {
      * @param good
      */
     @Override
-    public void decreaseNoticeGoodNum(Good good) {
-        wxNoticeService.decreaseNoticeGoodNum(good.getGoodId());
-        boolean delete = this.deleteGood(good);
+    public Object decreaseNoticeGoodNum(Good good) {
+        QueryWrapper<Good> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("good_type",good.getGoodType())
+                .eq("good_id",good.getGoodId())
+                .eq("wx_user_id",good.getWxUserId());
+        Integer count = good.selectCount(queryWrapper);
+        if(count==0){
+            return WeChatResponseUtil.fail(-1,"失败~");
+        }else{
+            wxNoticeService.decreaseNoticeGoodNum(good.getGoodId());
+            boolean delete = this.deleteGood(good);
+            return WeChatResponseUtil.ok();
+        }
     }
 
     /**
@@ -191,6 +252,7 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     @Override
     public void addFollowSchool(Follow_school follow_school) {
         wxFollow_schoolMapper.insert(follow_school);
+
     }
 
     /**

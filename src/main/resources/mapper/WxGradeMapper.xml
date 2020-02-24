@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxGradeMapper">
+
+    <resultMap id="grade" type="com.xvls.alexander.entity.wx.WxGrade">
+        <id column="sc_id" property="scId"></id>
+        <result column="course_name" property="courseName"></result>
+        <result column="credit" property="credit"></result>
+        <result column="score" property="score"></result>
+        <result column="grade_point" property="gradePoint"></result>
+        <result column="semester" property="semester"></result>
+    </resultMap>
+
+    <resultMap id="all_avg_point" type="com.xvls.alexander.entity.wx.WxGradeAvgPoint">
+        <result column="semester" property="semester"></result>
+        <result column="avg_point" property="avgPoint"></result>
+    </resultMap>
+
+    <select id="getGradeByIdAndSemester" resultMap="grade">
+        SELECT sc.sc_id,
+        course.course_name,
+        course.credit,
+        sc.score,
+        (score-50)/10 grade_point,
+        tc.semester
+        FROM sc
+        LEFT JOIN tc ON sc.`tc_id`=tc.`tc_id`
+        LEFT JOIN course ON course.course_id = tc.course_id
+        WHERE semester = #{semester} and sc.user_id = #{userId};
+    </select>
+
+    <select id="getAllSemesterAvgPoint" resultMap="all_avg_point">
+        SELECT tc.`semester`,
+        SUM((sc.`score`-50)/10*course.`credit`)/SUM(course.`credit`) avg_point
+        FROM sc
+        LEFT JOIN tc ON sc.`tc_id` = tc.`tc_id`
+        LEFT JOIN course ON course.`course_id` = tc.`course_id`
+        WHERE sc.`user_id`= #{userId}
+        GROUP BY tc.`semester`
+        ORDER BY tc.`semester` ASC;
+    </select>
+
+</mapper>

@@ -140,7 +140,7 @@ public class WxVideoController {
     }
 
     /**
-     * 通过 分页,标签,wxUserId 获得视频列表
+     * 通过 分页 , 标签 , wxUserId 获得视频列表
      * @return
      */
     @RequestMapping("getPublicVideoListByLabel")
@@ -161,10 +161,19 @@ public class WxVideoController {
         } catch (Exception e) {
             return WeChatResponseUtil.fail(-1,e.getMessage());
         }
-        List<Video_main> video_mainList = wxVideoService.getPublicVideoListByLabel(pageInfo, labelId , wxUserId);
-        Map map = Maps.newHashMap();
-        map.put("video_mainList",video_mainList);
-        return WeChatResponseUtil.ok(map);
+
+        if(labelId == 0){ /*精选*/
+            List<Video_main> video_mainList = wxVideoService.getMainPagePublicVideoList(pageInfo , wxUserId);
+            Map map = Maps.newHashMap();
+            map.put("video_mainList",video_mainList);
+            return WeChatResponseUtil.ok(map);
+        }
+        else{
+            List<Video_main> video_mainList = wxVideoService.getPublicVideoListByLabel(pageInfo, labelId , wxUserId);
+            Map map = Maps.newHashMap();
+            map.put("video_mainList",video_mainList);
+            return WeChatResponseUtil.ok(map);
+        }
     }
 
     /**

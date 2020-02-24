@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxDepartmentMapper">
+
+    <resultMap id="wxDepartmentList" type="com.xvls.alexander.entity.wx.WxDepartment">
+        <id column="department_id" property="departmentId"></id>
+        <result column="department_name" property="departmentName"></result>
+        <collection property="teacherList" ofType="com.xvls.alexander.entity.wx.Teacher" column="department_id" select="getTeacherList"></collection>
+    </resultMap>
+
+    <resultMap id="teacherList" type="com.xvls.alexander.entity.wx.Teacher">
+        <id column="user_id" property="userId"></id>
+        <result column="department_id" property="departmentId"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="icon" property="icon"></result>
+    </resultMap>
+
+    <!--递归实现 院系 及 教师 列表-->
+    <select id="getDepartmentListById" resultMap="wxDepartmentList">
+        SELECT department.department_id,
+        department.department_name
+        FROM department
+        WHERE department.`school_id` IN (SELECT u2.`school_id` FROM users u2 WHERE u2.`user_id` = #{userId})
+        ORDER BY department.department_num ASC
+    </select>
+
+    <select id="getTeacherList" resultMap="teacherList">
+        select * from users
+        LEFT JOIN user_role ON user_role.`user_id` = users.`user_id`
+        LEFT JOIN role ON role.`role_id` = user_role.`role_id`
+        where users.department_id = #{department_id} and role.`role_name`='教师'
+        ORDER BY users.user_num ASC
+    </select>
+
+</mapper>

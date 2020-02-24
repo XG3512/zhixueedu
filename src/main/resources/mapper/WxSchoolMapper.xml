@@ -86,4 +86,6 @@
         where follow_school.wx_user_id = #{wxUserId}
         ORDER BY follow_school.follow_school_date desc
     </select>
+    
+    <update id=""
 </mapper>

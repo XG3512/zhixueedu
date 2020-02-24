@@ -51,4 +51,18 @@ public interface WxSchoolMapper extends BaseMapper<School> {
      * @return
      */
     List<SchoolList> getFollowSchoolListById(Integer wxUserId);
+
+    /**
+     * 添加粉丝数
+     * @param schoolId
+     */
+    // TODO: 2020/2/24 还没做，明天必须做
+    void addSchoolFansNum(Integer schoolId);
+
+    /**
+     * 减少粉丝数
+     * @param schoolId
+     */
+    // TODO: 2020/2/24 还没做，明天必须做
+    void decreaseSchoolFansNum(Integer schoolId);
 }

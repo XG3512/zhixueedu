@@ -1,6 +1,8 @@
 package com.xvls.alexander.Controller.wx;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Maps;
+import com.xvls.alexander.dao.WxCollectionMapper;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.*;
 import com.xvls.alexander.service.wx.*;
@@ -31,6 +33,8 @@ public class WxToolBarController {
     WxArticleService wxArticleService;
     @Autowired
     WxVideoService wxVideoService;
+    @Autowired
+    WxCollectionMapper wxCollectionMapper;
 
     /**
      * 点赞增加
@@ -46,11 +50,11 @@ public class WxToolBarController {
         /*判断点赞类型*/
         try {
             if(good.getGoodType().equals("A")){//article
-                wxToolBarService.addArticleGoodNum(good);
+                return wxToolBarService.addArticleGoodNum(good);
             }else if(good.getGoodType().equals("V")){//video
-                wxToolBarService.addVideoGoodNum(good);
+                return wxToolBarService.addVideoGoodNum(good);
             }else if(good.getGoodType().equals("N")){//notice
-                wxToolBarService.addNoticeGoodNum(good);
+                return wxToolBarService.addNoticeGoodNum(good);
             }else{
                 System.out.println("参数值未能匹配");
                 return WeChatResponseUtil.badArgumentValue();
@@ -59,7 +63,6 @@ public class WxToolBarController {
             e.printStackTrace();
             return WeChatResponseUtil.updatedDataFailed();
         }
-        return WeChatResponseUtil.ok();
     }
 
     /**
@@ -76,11 +79,11 @@ public class WxToolBarController {
         /*判断点赞类型*/
         try {
             if(good.getGoodType().equals("A")){//article
-                wxToolBarService.decreaseArticleGoodNum(good);
+                return wxToolBarService.decreaseArticleGoodNum(good);
             }else if(good.getGoodType().equals('V')){//video
-                wxToolBarService.decreaseVideoGoodNum(good);
+                return wxToolBarService.decreaseVideoGoodNum(good);
             }else if(good.getGoodType().equals("N")){//notice
-                wxToolBarService.decreaseNoticeGoodNum(good);
+                return wxToolBarService.decreaseNoticeGoodNum(good);
             }else{
                 System.out.println("参数值未能匹配");
                 return WeChatResponseUtil.badArgumentValue();
@@ -89,7 +92,6 @@ public class WxToolBarController {
             e.printStackTrace();
             return WeChatResponseUtil.updatedDataFailed();
         }
-        return WeChatResponseUtil.ok();
     }
 
     /**
@@ -147,7 +149,16 @@ public class WxToolBarController {
         wxCollection.setGroupId(groupId);
         wxCollection.setCollectionDate(new Date());
         try{
-            if(collectionType.equals("A")){//动态
+            QueryWrapper<WxCollection> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("collection_type",wxCollection.getCollectionType())
+                    .eq("collection_id",wxCollection.getCollectionId())
+                    .eq("wx_user_id",wxCollection.getWxUserId());
+            Integer count = wxCollection.selectCount(queryWrapper);
+            if(count>0){
+
+                return WeChatResponseUtil.fail(-1,"收藏错误~");
+
+            } else if(collectionType.equals("A")){//动态
                 wxToolBarService.addArticleCollectionNum(collectionId);
                 //向收藏记录中添加数据
                 collectionService.addCollection(wxCollection);
@@ -169,7 +180,7 @@ public class WxToolBarController {
 
 
     /**
-     * 添加收藏功能
+     * 取消收藏功能
      * @return
      */
     @RequestMapping("collection/decrease")
@@ -186,7 +197,16 @@ public class WxToolBarController {
         wxCollection.setWxUserId(wxUserId);
         wxCollection.setCollectionDate(new Date());
         try{
-            if(collectionType.equals("A")){//动态
+            QueryWrapper<WxCollection> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("collection_type",wxCollection.getCollectionType())
+                    .eq("collection_id",wxCollection.getCollectionId())
+                    .eq("wx_user_id",wxCollection.getWxUserId());
+            Integer count = wxCollection.selectCount(queryWrapper);
+            if(count==0){
+
+                return WeChatResponseUtil.fail(-1,"取消收藏错误");
+
+            } else if(collectionType.equals("A")){//动态
                 wxToolBarService.decreaseArticleCollectionNum(collectionId);
                 //删除收藏记录
                 collectionService.deleteCollection(collectionType,collectionId,wxUserId);
