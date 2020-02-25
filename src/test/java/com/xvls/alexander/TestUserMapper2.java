@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.*;
 import com.xvls.alexander.entity.*;
 import com.xvls.alexander.entity.wx.*;
+import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.impl.UserServiceImpl;
 import com.xvls.alexander.service.wx.*;
 import org.apache.shiro.crypto.hash.Md5Hash;

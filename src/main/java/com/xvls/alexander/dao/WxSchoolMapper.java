@@ -56,13 +56,17 @@ public interface WxSchoolMapper extends BaseMapper<School> {
      * 添加粉丝数
      * @param schoolId
      */
-    // TODO: 2020/2/24 还没做，明天必须做
     void addSchoolFansNum(Integer schoolId);
 
     /**
      * 减少粉丝数
      * @param schoolId
      */
-    // TODO: 2020/2/24 还没做，明天必须做
     void decreaseSchoolFansNum(Integer schoolId);
+
+    /**
+     * 更新学校的 点赞数和收藏数
+     * @param schoolId
+     */
+    void updateSchoolGoodCollectionNum(Integer schoolId);
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxV_labelMapper">
+    
+    <delete id="deleteLabelByIds">
+        delete from wx_user_label where wx_user_id = #{wxUserId} and
+        <foreach collection="labelIdList" open="label_id in (" close=")" item="labelId" separator=",">
+            #{labelId}
+        </foreach>
+    </delete>
+
+   <insert id="insertV_labels">
+       insert into v_label values 
+       <foreach collection="v_labelIdList" index="index" separator="," item="item">
+           (#{videoMainId},#{item})
+       </foreach>
+   </insert>
+
+</mapper>

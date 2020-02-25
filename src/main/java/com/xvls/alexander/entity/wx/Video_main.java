@@ -1,6 +1,8 @@
 package com.xvls.alexander.entity.wx;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.xvls.alexander.utils.CalculateUtil;
@@ -18,6 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @TableName("video_main")
 public class Video_main extends Model<Video_main> {
+
+    @TableId(type = IdType.AUTO)
     private Integer videoMainId;//主页ID
     private Integer teacherId;//教师ID
     private String videoMainTitle;//主页标题
@@ -37,6 +41,7 @@ public class Video_main extends Model<Video_main> {
     private String verifyStatus;//审核状态
     private String mainPage;//封面
     private Double heatOfVideo;//视频热度
+    private Integer schoolId;//学校Id
 
     @TableField(exist = false)
     private String playNumText;//播放量文本

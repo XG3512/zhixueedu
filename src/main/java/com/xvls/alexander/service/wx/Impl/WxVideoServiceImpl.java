@@ -175,19 +175,7 @@ public class WxVideoServiceImpl implements WxVideoService {
      */
     @Override
     public void updateVideoHeatOfVideo(Video_main video_main) {
-        Double result = null;
-
-        Long videoDate = (video_main.getVideoDate().getTime()/3600000);
-        Double playNum = video_main.getPlayNum().doubleValue();
-        Double goodNum = video_main.getGoodNum().doubleValue();
-        Double collectionNum = video_main.getCollectionNum().doubleValue();
-        Double commentNum = video_main.getCommentNum().doubleValue();
-        Long date = new Date().getTime()/3600000;
-
-        result = (playNum*0.0769+commentNum*0.1538+goodNum*0.3077+collectionNum*0.4615)*1000;
-        Double temp = Math.pow(date-videoDate+2,1.4);
-        result = result/temp;
-
+        Double result = Calculate(video_main);
         //System.out.println(result);
         wxVideoMapper.updateVideoHeatOfVideo(video_main.getVideoMainId(),result);
     }
@@ -274,6 +262,22 @@ public class WxVideoServiceImpl implements WxVideoService {
         Integer pageSize = pageInfo.getPageSize();
         pageNum=(pageNum-1)*pageSize;
         return wxVideoMapper.getVideoCollectionList(wxUserId,new PageInfo(pageNum,pageSize));
+    }
+
+    public Double Calculate(Video_main video_main){
+        Double result = null;
+
+        Long videoDate = (video_main.getVideoDate().getTime()/3600000);
+        Double playNum = video_main.getPlayNum().doubleValue();
+        Double goodNum = video_main.getGoodNum().doubleValue();
+        Double collectionNum = video_main.getCollectionNum().doubleValue();
+        Double commentNum = video_main.getCommentNum().doubleValue();
+        Long date = new Date().getTime()/3600000;
+
+        result = (playNum*0.0769+commentNum*0.1538+goodNum*0.3077+collectionNum*0.4615)*1000;
+        Double temp = Math.pow(date-videoDate+2,1.4);
+        result = result/temp;
+        return result;
     }
 
 

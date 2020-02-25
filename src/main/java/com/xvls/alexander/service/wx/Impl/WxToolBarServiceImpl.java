@@ -28,6 +28,8 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     WxFollow_teacherMapper wxFollow_teacherMapper;
     @Autowired
     UsersService usersService;
+    @Autowired
+    WxSchoolService wxSchoolService;
 
     /**
      * 对动态进行点赞 , 在前端进行判断是否已经点赞
@@ -252,7 +254,7 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     @Override
     public void addFollowSchool(Follow_school follow_school) {
         wxFollow_schoolMapper.insert(follow_school);
-
+        wxSchoolService.addSchoolFansNum(follow_school.getSchoolId());
     }
 
     /**
@@ -265,6 +267,7 @@ public class WxToolBarServiceImpl implements WxToolBarService {
         queryWrapper.eq("wx_user_id",follow_school.getWxUserId())
                 .eq("school_id",follow_school.getSchoolId());
         wxFollow_schoolMapper.delete(queryWrapper);
+        wxSchoolService.decreaseSchoolFansNum(follow_school.getSchoolId());
     }
 
     /**

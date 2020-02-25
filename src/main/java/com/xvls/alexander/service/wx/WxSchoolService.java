@@ -45,4 +45,22 @@ public interface WxSchoolService {
      * @return
      */
     List<SchoolList> getFollowSchoolListById(Integer wxUserId);
+
+    /**
+     * 添加粉丝数
+     * @param schoolId
+     */
+    void addSchoolFansNum(Integer schoolId);
+
+    /**
+     * 减少粉丝数
+     * @param schoolId
+     */
+    void decreaseSchoolFansNum(Integer schoolId);
+
+    /**
+     * 更新学校的 点赞数和收藏数
+     * @param schoolId
+     */
+    void updateSchoolGoodCollectionNum(Integer schoolId);
 }

@@ -218,7 +218,6 @@
         left join users on video_main.teacher_id=users.user_id
         left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
-        left join v_label on v_label.video_main_id = video_main.video_main_id
         where video_main.public_status='public' and video_main.verify_status='通过'
         ORDER BY video_main.heat_of_video DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
@@ -228,16 +227,20 @@
         update video_main set good_num = good_num + 1 where video_main_id = #{videoId}
     </update>
 
+    <update id="decreaseVideoGoodNum">
+        update video_main set good_num = good_num - 1 where video_main_id = #{videoId}
+    </update>
+
     <update id="addVideoCommentNum">
         update video_main set comment_num = comment_num + 1 where video_main_id = #{videoId}
     </update>
 
-    <update id="addVideoPlayNum">
-        update video_main set play_num = play_num + 1 where video_main_id = #{videoId}
-    </update>
-
     <update id="decreaseVideoCommentNum">
         update video_main set comment_num =  comment_num - 1 where video_main_id = #{videoId}
+    </update>
+
+    <update id="addVideoPlayNum">
+        update video_main set play_num = play_num + 1 where video_main_id = #{videoId}
     </update>
 
     <update id="addVideoCollectionNum">

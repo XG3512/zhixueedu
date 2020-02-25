@@ -168,4 +168,11 @@ public interface WxVideoService {
      * @return
      */
     List<Video_main> getVideoCollectionList(Integer wxUserId, PageInfo pageInfo);
+
+    /**
+     * 计算热度
+     * @param video_main
+     * @return
+     */
+    Double Calculate(Video_main video_main);
 }

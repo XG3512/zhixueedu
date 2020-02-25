@@ -87,5 +87,18 @@
         ORDER BY follow_school.follow_school_date desc
     </select>
     
-    <update id=""
+    <update id="addSchoolFansNum">
+        update school set fans_num = fans_num + 1 where school_id = #{schoolId}
+    </update>
+
+    <update id="decreaseSchoolFansNum">
+        update school set fans_num = fans_num - 1 where school_id = #{schoolId}
+    </update>
+
+    <update id="updateSchoolGoodCollectionNum">
+        update school
+        set good_num = COALESCE((select sum(good_num) from article group by(school_id) having school_id=#{schoolId}),0) + COALESCE((select sum(good_num) from video_main group by (school_id) having school_id=#{schoolId}),0),
+        collection_num = COALESCE((select sum(collection_num) from article group by(school_id) having school_id=#{schoolId}),0)+COALESCE((select sum(collection_num) from video_main group by (school_id) having school_id=#{schoolId}),0)
+        where school_id = #{schoolId}
+    </update>
 </mapper>

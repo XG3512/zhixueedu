@@ -84,4 +84,27 @@ public class WxSchoolServiceImpl implements WxSchoolService {
     public List<SchoolList> getFollowSchoolListById(Integer wxUserId) {
         return wxSchoolMapper.getFollowSchoolListById(wxUserId);
     }
+
+    /**
+     * 增加粉丝数
+     * @param schoolId
+     */
+    @Override
+    public void addSchoolFansNum(Integer schoolId) {
+        wxSchoolMapper.addSchoolFansNum(schoolId);
+    }
+
+    /**
+     * 减少粉丝数
+     * @param schoolId
+     */
+    @Override
+    public void decreaseSchoolFansNum(Integer schoolId) {
+        wxSchoolMapper.decreaseSchoolFansNum(schoolId);
+    }
+
+    @Override
+    public void updateSchoolGoodCollectionNum(Integer schoolId) {
+        wxSchoolMapper.updateSchoolGoodCollectionNum(schoolId);
+    }
 }

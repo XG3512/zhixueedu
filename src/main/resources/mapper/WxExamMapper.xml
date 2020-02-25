@@ -7,6 +7,7 @@
     <resultMap id="exam" type="com.xvls.alexander.entity.wx.Exam">
         <id column="exam_id" property="examId"></id>
         <result column="tc_id" property="tcId"></result>
+        <result column="course_name" property="courseName"></result>
         <result column="classroom_code" property="classroomCode"></result>
         <result column="exam_time" property="examTime"></result>
         <result column="user_name" property="teacherName"></result>
@@ -17,11 +18,13 @@
     <select id="getExamListById" resultMap="exam">
         select exam.*,
         classroom.classroom_code,
-        users.user_name
+        users.user_name,
+        course.course_name
         from exam
         left join classroom on classroom.classroom_id = exam.classroom_id
         left join users on users.user_id = exam.user_id
         left join tc on tc.tc_id = exam.tc_id
+        left join course on course.course_id = tc.course_id
         where tc.class_id IN (select users2.class_id from users users2 where users2.user_id = #{userId})
         ORDER BY exam.exam_time asc
     </select>

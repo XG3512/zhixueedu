@@ -48,6 +48,11 @@ public class WxSchoolController {
             return WeChatResponseUtil.badArgumentValue();
         }
         Map map = Maps.newHashMap();
+        /**
+         * 更新点赞总数和收藏总数
+         */
+        wxSchoolService.updateSchoolGoodCollectionNum(schoolId);
+
         School schoolInfo = wxSchoolService.getSchoolInfo(schoolId,wxUserId);
         map.put("schoolInfo",schoolInfo);
         //System.out.println(schoolInfo);

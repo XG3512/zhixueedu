@@ -3,6 +3,8 @@ package com.xvls.alexander.Controller.wx;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Maps;
 import com.xvls.alexander.dao.WxCollectionMapper;
+import com.xvls.alexander.dao.WxFollow_schoolMapper;
+import com.xvls.alexander.dao.WxFollow_teacherMapper;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.*;
 import com.xvls.alexander.service.wx.*;
@@ -35,6 +37,10 @@ public class WxToolBarController {
     WxVideoService wxVideoService;
     @Autowired
     WxCollectionMapper wxCollectionMapper;
+    @Autowired
+    WxFollow_schoolMapper wxFollow_schoolMapper;
+    @Autowired
+    WxFollow_teacherMapper wxFollow_teacherMapper;
 
     /**
      * 点赞增加
@@ -46,6 +52,9 @@ public class WxToolBarController {
     public Object addGood(@RequestBody Good good, HttpServletRequest httpServletRequest){
         if(good==null||good.getWxUserId()==null||good.getGoodId()==null||good.getGoodType()==null){
             return WeChatResponseUtil.badArgumentValue();
+        }
+        if(good.getGoodTime()==null){
+            good.setGoodTime(new Date());
         }
         /*判断点赞类型*/
         try {
@@ -80,7 +89,7 @@ public class WxToolBarController {
         try {
             if(good.getGoodType().equals("A")){//article
                 return wxToolBarService.decreaseArticleGoodNum(good);
-            }else if(good.getGoodType().equals('V')){//video
+            }else if(good.getGoodType().equals("V")){//video
                 return wxToolBarService.decreaseVideoGoodNum(good);
             }else if(good.getGoodType().equals("N")){//notice
                 return wxToolBarService.decreaseNoticeGoodNum(good);
@@ -283,7 +292,17 @@ public class WxToolBarController {
         follow_school.setSchoolId(schoolId);
         follow_school.setFollowSchoolDate(new Date());
         try {
-            wxToolBarService.addFollowSchool(follow_school);
+            QueryWrapper<Follow_school> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("wx_user_id",follow_school.getWxUserId())
+                    .eq("school_id",follow_school.getSchoolId());
+            Integer count = wxFollow_schoolMapper.selectCount(queryWrapper);
+            if(count > 0){
+                return WeChatResponseUtil.fail(-1,"关注错误~");
+            }
+            else{
+                wxToolBarService.addFollowSchool(follow_school);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return WeChatResponseUtil.fail(-1,"关注失败");
@@ -306,6 +325,13 @@ public class WxToolBarController {
         follow_school.setWxUserId(wxUserId);
         follow_school.setSchoolId(schoolId);
         try {
+            QueryWrapper<Follow_school> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("wx_user_id",follow_school.getWxUserId())
+                    .eq("school_id",follow_school.getSchoolId());
+            Integer count = wxFollow_schoolMapper.selectCount(queryWrapper);
+            if(count == 0){
+                return WeChatResponseUtil.fail(-1,"取消关注错误~");
+            }
             wxToolBarService.cancelFollowSchool(follow_school);
         } catch (Exception e) {
             e.printStackTrace();
@@ -330,6 +356,13 @@ public class WxToolBarController {
         follow_teacher.setTeacherId(teacherId);
         follow_teacher.setFollowTeacherDate(new Date());
         try {
+            QueryWrapper<Follow_teacher> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("wx_user_id",wxUserId)
+                    .eq("teacher_id",teacherId);
+            Integer count = wxFollow_teacherMapper.selectCount(queryWrapper);
+            if(count > 0){
+                return WeChatResponseUtil.fail(-1,"关注错误~");
+            }
             wxToolBarService.addFollowTeacher(follow_teacher);
         } catch (Exception e) {
             e.printStackTrace();
@@ -353,6 +386,13 @@ public class WxToolBarController {
         follow_teacher.setWxUserId(wxUserId);
         follow_teacher.setTeacherId(teacherId);
         try {
+            QueryWrapper<Follow_teacher> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("wx_user_id",wxUserId)
+                    .eq("teacher_id",teacherId);
+            Integer count = wxFollow_teacherMapper.selectCount(queryWrapper);
+            if(count == 0){
+                return WeChatResponseUtil.fail(-1,"取消关注错误~");
+            }
             wxToolBarService.cancelFollowTeacher(follow_teacher);
         } catch (Exception e) {
             e.printStackTrace();

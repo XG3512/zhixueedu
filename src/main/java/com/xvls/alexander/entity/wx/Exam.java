@@ -20,6 +20,10 @@ public class Exam {
     @TableId(type = IdType.AUTO)
     private Integer examId;//考试ID
     private Integer tcId;//考试课程ID
+
+    @TableField(exist = false)
+    private String courseName;//课程名称
+
     //private Integer classroomId;//考试教室
     @TableField(exist = false)
     private String classroomCode;//教室编号
