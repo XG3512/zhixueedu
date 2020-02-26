@@ -25,7 +25,8 @@
         </collection>
     </resultMap>-->
 
-    <resultMap id="getAllComments" type="com.xvls.alexander.entity.wx.Comments">
+    <!--递归查询1-->
+    <resultMap id="getComments" type="com.xvls.alexander.entity.wx.Comments">
         <id column="comment_id" property="commentId"></id>
         <result column="wx_user_id" property="wxUserId"></result>
         <result column="avatar_url" property="avatarUrl"></result>
@@ -39,27 +40,72 @@
         <collection property="members" ofType="com.xvls.alexander.entity.wx.Comments" column="comment_id" select="getCommentsMembers"></collection>
     </resultMap>
 
+    <!--递归查询2-->
+    <resultMap id="getMainComments" type="com.xvls.alexander.entity.wx.Comments">
+        <id column="comment_id" property="commentId"></id>
+        <result column="wx_user_id" property="wxUserId"></result>
+        <result column="avatar_url" property="avatarUrl"></result>
+        <result column="nickname" property="nickname"></result>
+        <result column="belong_type" property="belongType"></result>
+        <result column="belong_id" property="belongId"></result>
+        <result column="vc_content" property="vcContent"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="vc_date" property="vcDate"></result>
+        <result column="parent_vc_id" property="parentVcId"></result>
+        <collection property="members" ofType="com.xvls.alexander.entity.wx.Comments" column="comment_id" select="getMainCommentsMembers"></collection>
+    </resultMap>
+
+    <resultMap id="member" type="com.xvls.alexander.entity.wx.Comments">
+        <id column="comment_id" property="commentId"></id>
+        <result column="wx_user_id" property="wxUserId"></result>
+        <result column="avatar_url" property="avatarUrl"></result>
+        <result column="nickname" property="nickname"></result>
+        <result column="belong_type" property="belongType"></result>
+        <result column="belong_id" property="belongId"></result>
+        <result column="vc_content" property="vcContent"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="vc_date" property="vcDate"></result>
+        <result column="parent_vc_id" property="parentVcId"></result>
+    </resultMap>
+
     <!--<select id="getComments" resultMap="getComments">
         SELECT comments.*,members.* FROM comments
         LEFT JOIN comments members ON comments.`comment_id`=members.`parent_vc_id`
         WHERE comments.belong_type=#{belongType} AND comments.belong_id = #{articleId} and comments.parent_vc_id = 0
     </select>-->
 
-    <!--递归查询-->
-    <select id="getComments" resultMap="getAllComments">
+    <!--递归查询1 查询父评论下的所有子评论-->
+    <select id="getComments" resultMap="getComments">
         select comments.*,wx_user.avatar_url,wx_user.nickname
         from comments
         left join wx_user on wx_user.wx_user_id = comments.wx_user_id
-        where (parent_vc_id = 0 or parent_vc_id is null ) and belong_type = #{belongType} and belong_id = #{id}
+        where (parent_vc_id = 0 or parent_vc_id is null ) and comment_id = #{parentId}
         order by vc_date asc
     </select>
-
-    <select id="getCommentsMembers" resultMap="getAllComments">
+    <select id="getCommentsMembers" resultMap="getComments">
         select comments.*,wx_user.avatar_url,wx_user.nickname
         from comments
         left join wx_user on wx_user.wx_user_id = comments.wx_user_id
         where parent_vc_id = #{comment_id}
         order by vc_date asc
+    </select>
+
+    <!--递归查询2 分页查询父评论以及1条子评论-->
+    <select id="getMainComments" resultMap="getMainComments">
+        select comments.*,wx_user.avatar_url,wx_user.nickname
+        from comments
+        left join wx_user on wx_user.wx_user_id = comments.wx_user_id
+        where (parent_vc_id = 0 or parent_vc_id is null ) and belong_type = #{belongType} and belong_id = #{id}
+        order by vc_date asc
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+    <select id="getMainCommentsMembers" resultMap="member">
+        select comments.*,wx_user.avatar_url,wx_user.nickname
+        from comments
+        left join wx_user on wx_user.wx_user_id = comments.wx_user_id
+        where parent_vc_id = #{comment_id}
+        order by vc_date asc
+        limit 0,1
     </select>
 
 

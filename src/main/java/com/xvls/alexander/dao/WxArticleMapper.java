@@ -32,11 +32,13 @@ public interface WxArticleMapper extends BaseMapper<Article> {
     Article getArticleById(Integer articleId,Integer wxUserId);
 
     /**
-     * 根据学校Id，获得学校的动态信息
+     * 通过 schoolId，wxUserId，pageInfo 获得学校动态信息
      * @param schoolId
+     * @param wxUserId
+     * @param pageInfo
      * @return
      */
-    List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId);
+    List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId,PageInfo pageInfo);
 
     /**
      * 增加点赞
@@ -102,4 +104,11 @@ public interface WxArticleMapper extends BaseMapper<Article> {
      * @return
      */
     List<Article> getHomePageArticleList(Integer wxUserId,PageInfo pageInfo);
+
+    /**
+     * 通过动态 title 搜索文章
+     * @param title
+     * @return
+     */
+    List<Article> searchArticleByTitle(String title , Integer wxUserId);
 }

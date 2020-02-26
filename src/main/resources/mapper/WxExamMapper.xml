@@ -13,6 +13,7 @@
         <result column="user_name" property="teacherName"></result>
         <result column="stu_num" property="stuNum"></result>
         <result column="exam_status" property="examStatus"></result>
+        <result column="seat" property="seat"></result>
     </resultMap>
 
     <select id="getExamListById" resultMap="exam">
@@ -25,7 +26,7 @@
         left join users on users.user_id = exam.user_id
         left join tc on tc.tc_id = exam.tc_id
         left join course on course.course_id = tc.course_id
-        where tc.class_id IN (select users2.class_id from users users2 where users2.user_id = #{userId})
+        where tc.class_id IN (select users2.class_id from users users2 where users2.user_id = #{userId}) and exam_status=false
         ORDER BY exam.exam_time asc
     </select>
 

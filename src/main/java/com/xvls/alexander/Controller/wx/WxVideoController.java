@@ -98,20 +98,20 @@ public class WxVideoController {
      * 通过 videoMainId 获得评论信息
      * @param videoMainId
      * @return
-     */
+     *//*
     @RequestMapping("getVideo_mainComments")
     public Object getVideo_mainComments(@RequestParam("videoMainId")Integer videoMainId){
         if(videoMainId==null){
             return WeChatResponseUtil.badArgument();
         }
-        /**
+        *//**
          * 加入评论
-         */
+         *//*
         Map result = Maps.newHashMap();
         List<Comments> comments = wxCommentsService.getComments("V", videoMainId);
         result.put("comments",comments);
         return WeChatResponseUtil.ok(result);
-    }
+    }*/
 
     /**
      * 对视频进行评论，如果没有父评论的话parentVcId设置为0
@@ -250,5 +250,34 @@ public class WxVideoController {
         return WeChatResponseUtil.ok(result);
     }
 
+    /**
+     * 通过 schoolId，wxUserId，pageInfo 获得学校视频列表
+     * @param body
+     * @return
+     */
+    @RequestMapping("getSchoolVideoList")
+    public Object getSchoolVideoList(@RequestBody String body){
+
+        Integer schoolId = null;
+        Integer wxUserId = null;
+        PageInfo pageInfo = null;
+
+        try {
+            schoolId = JacksonUtil.parseInteger(body,"schoolId");
+            wxUserId = JacksonUtil.parseInteger(body,"wxUserId");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+            if(schoolId == null || wxUserId == null || pageInfo == null || pageInfo.getPageNum()==null || pageInfo.getPageSize()==null){
+                return WeChatResponseUtil.badArgument();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return WeChatResponseUtil.badArgument();
+        }
+        List<Video_main> video_mainList = wxVideoService.getPublicVideoListBySchoolId(schoolId, wxUserId, pageInfo);
+        Map result = Maps.newHashMap();
+        result.put("video_mainList",video_mainList);
+
+        return WeChatResponseUtil.ok(result);
+    }
 
 }

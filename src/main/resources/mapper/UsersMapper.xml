@@ -88,7 +88,7 @@
     </update>
 
     <update id="updateTeacherBackground">
-        update users set backgrounp = #{file_url} where user_id = #{teacherId}
+        update users set background = #{file_url} where user_id = #{teacherId}
     </update>
 
     <update id="updateUserIcon">

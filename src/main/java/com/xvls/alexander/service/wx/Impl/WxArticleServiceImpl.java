@@ -37,9 +37,19 @@ public class WxArticleServiceImpl implements WxArticleService {
         return wxArticleMapper.getArticleById(articleId,wxUserId);
     }
 
+    /**
+     * 通过 schoolId，wxUserId，pageInfo 获得学校动态信息
+     * @param schoolId
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
     @Override
-    public List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId) {
-        return wxArticleMapper.getArticleBySchoolId(schoolId,wxUserId);
+    public List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId,PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return wxArticleMapper.getArticleBySchoolId(schoolId,wxUserId,new PageInfo(pageNum,pageSize));
     }
 
     /**
@@ -147,6 +157,17 @@ public class WxArticleServiceImpl implements WxArticleService {
         Integer pageSize = pageInfo.getPageSize();
         pageNum = (pageNum-1)*pageSize;
         return wxArticleMapper.getHomePageArticleList(wxUserId,pageInfo);
+    }
+
+    /**
+     * 通过动态 title 搜索文章
+     * @param title
+     * @return
+     */
+    @Override
+    public List<Article> searchArticleByTitle(String title , Integer wxUserId) {
+        title = "%"+title+"%";
+        return wxArticleMapper.searchArticleByTitle(title,wxUserId);
     }
 
 

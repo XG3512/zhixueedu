@@ -56,15 +56,6 @@ public class WxSchoolController {
         School schoolInfo = wxSchoolService.getSchoolInfo(schoolId,wxUserId);
         map.put("schoolInfo",schoolInfo);
         //System.out.println(schoolInfo);
-        List<Article> articleList = wxArticleService.getArticleBySchoolId(schoolId,wxUserId);
-        map.put("articleList",articleList);
-        //System.out.println(articleList);
-        List<Notice> noticeList = wxNoticeService.getNoticeListBySchoolId(schoolId);
-        map.put("noticeList",noticeList);
-        //System.out.println(articleList);
-        List<Video_main> video_mainList = wxVideoService.getPublicVideoListBySchoolId(schoolId,wxUserId);
-        map.put("video_mainList",video_mainList);
-        //System.out.println(video_mainList);
         return WeChatResponseUtil.ok(map);
     }
 

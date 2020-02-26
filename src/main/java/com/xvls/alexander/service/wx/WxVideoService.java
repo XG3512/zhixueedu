@@ -21,11 +21,13 @@ public interface WxVideoService {
     List<Video_main> getPublicVideoList(Integer wxUserId);
 
     /**
-     * 通过schoolId获得学校的视频信息，在学校主页面
+     * 通过 schoolId,wxUserId,pageInfo 获得学校的视频信息，在学校主页面
      * @param schoolId
+     * @param pageInfo
+     * @param wxUserId
      * @return
      */
-    List<Video_main> getPublicVideoListBySchoolId(Integer schoolId,Integer wxUserId);
+    List<Video_main> getPublicVideoListBySchoolId(Integer schoolId,Integer wxUserId,PageInfo pageInfo);
 
     /**
      * 通过videoMainId,episodeId,获取该集视频的详细信息

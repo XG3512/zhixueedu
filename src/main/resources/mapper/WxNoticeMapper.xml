@@ -34,6 +34,13 @@
         </collection>
     </resultMap>
 
+    <select id="getNoticeListBySchoolId" resultMap="mainPageNoticeList">
+        select * from notice
+        where school_id = #{schoolId}
+        ORDER BY notice_time DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+
     <select id="getNoticeListByClassificationPage" resultMap="mainPageNoticeList">
         select notice.notice_id,
         notice.school_id,

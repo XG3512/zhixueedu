@@ -1,6 +1,7 @@
 package com.xvls.alexander.service.wx.Impl;
 
 import com.xvls.alexander.dao.WxCommentsMapper;
+import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Comments;
 import com.xvls.alexander.service.wx.WxCommentsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,22 @@ public class WxCommentsServiceImpl implements WxCommentsService {
     @Autowired
     WxCommentsMapper wxCommentsMapper;
 
+    @Override
+    public List<Comments> getMainComments(String belongType, Integer id, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum - 1)*pageSize;
+        return wxCommentsMapper.getMainComments(belongType,id,new PageInfo(pageNum,pageSize));
+    }
+
     /**
-     * 通过 type和id 获得评论信息
-     * @param belongType
-     * @param id
+     * 根据 parentId 获取子评论
+     * @param parentId
      * @return
      */
     @Override
-    public List<Comments> getComments(String belongType , Integer id) {
-        return wxCommentsMapper.getComments(belongType,id);
+    public List<Comments> getComments(Integer parentId) {
+        return wxCommentsMapper.getComments(parentId);
     }
 
     /**

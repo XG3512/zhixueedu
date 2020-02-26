@@ -19,7 +19,14 @@ public interface WxArticleService {
 
     Article getArticleById(Integer articleId , Integer wxUserId);
 
-    List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId);
+    /**
+     * 通过 schoolId，wxUserId，pageInfo 获得学校动态信息
+     * @param schoolId
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Article> getArticleBySchoolId(Integer schoolId,Integer wxUserId,PageInfo pageInfo);
 
     void addArticleGoodNum(Integer articleId);
 
@@ -58,4 +65,12 @@ public interface WxArticleService {
      * @return
      */
     List<Article> getHomePageArticleList(Integer wxUserId,PageInfo pageInfo);
+
+    /**
+     * 通过动态 title 搜索文章
+     * @param title
+     * @param wxUserId
+     * @return
+     */
+    List<Article> searchArticleByTitle(String title , Integer wxUserId);
 }

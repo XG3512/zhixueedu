@@ -80,10 +80,10 @@ public class WxArticleController {
             return WeChatResponseUtil.badArgumentValue();
         }
         Article article = wxArticleService.getArticleById(articleId,wxUserId);
-        List<Comments> comments = wxCommentsService.getComments("A", articleId);
+        //List<Comments> comments = wxCommentsService.getComments("A", articleId);
         Map<Object,Object> result = Maps.newHashMap();
         result.put("article",article);
-        result.put("comments",comments);
+        //result.put("comments",comments);
         return WeChatResponseUtil.ok(result);
     }
 
@@ -111,7 +111,7 @@ public class WxArticleController {
      * @return
      */
     @RequestMapping("addArticleComment")
-    public Object addVideoComment(@RequestParam("wxUserId")Integer wxUserId,
+    public Object addArticleComment(@RequestParam("wxUserId")Integer wxUserId,
                                   @RequestParam("articleId")Integer articleId,
                                   @RequestParam("vcContent")String vcContent,
                                   @RequestParam("parentVcId")Integer parentVcId){
@@ -129,6 +129,56 @@ public class WxArticleController {
         Integer commentId = wxCommentsService.addComment(comments);
         Map result = Maps.newHashMap();
         result.put("commentId",commentId);
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
+     * 通过 schoolId，wxUserId，pageInfo 获得学校动态信息
+     * @param body
+     * @return
+     */
+    @RequestMapping("getSchoolArticleList")
+    public Object getSchoolArticleList(@RequestBody String body){
+
+        Integer schoolId = null;
+        Integer wxUserId = null;
+        PageInfo pageInfo = null;
+
+        try {
+            schoolId = JacksonUtil.parseInteger(body,"schoolId");
+            wxUserId = JacksonUtil.parseInteger(body,"wxUserId");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+            if(schoolId == null || wxUserId == null || pageInfo == null || pageInfo.getPageNum()==null || pageInfo.getPageSize()==null){
+                return WeChatResponseUtil.badArgument();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return WeChatResponseUtil.badArgument();
+        }
+        List<Article> articleList = wxArticleService.getArticleBySchoolId(schoolId, wxUserId, pageInfo);
+        Map result = Maps.newHashMap();
+        result.put("articleList",articleList);
+
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
+     * 通过动态 title 搜索文章
+     * @param title
+     * @param wxUserId
+     * @return
+     */
+    @RequestMapping("searchArticleByTitle")
+    public Object searchArticleByTitle(@RequestParam("title") String title , @RequestParam("wxUserId") Integer wxUserId){
+
+        if(title == null || wxUserId == null){
+            return WeChatResponseUtil.badArgument();
+        }
+
+        List<Article> articles = wxArticleService.searchArticleByTitle(title,wxUserId);
+        Map result = Maps.newHashMap();
+        result.put("articles",articles);
+
         return WeChatResponseUtil.ok(result);
     }
 }

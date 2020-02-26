@@ -33,4 +33,5 @@ public class Exam {
     private String teacherName;//监考老师姓名
     private Integer stuNum;//考试人数
     private Boolean examStatus;//是否完成考试
+    private Integer seat;//座号
 }

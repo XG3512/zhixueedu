@@ -1,5 +1,6 @@
 package com.xvls.alexander.service.wx;
 
+import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Comments;
 
 import java.util.List;
@@ -7,12 +8,20 @@ import java.util.List;
 public interface WxCommentsService {
 
     /**
-     * 获得评论信息
+     * 根据 belongType，Id，pageInfo 获得主评论
      * @param belongType
      * @param id
+     * @param pageInfo
      * @return
      */
-    List<Comments> getComments(String belongType , Integer id);
+    List<Comments> getMainComments(String belongType , Integer id , PageInfo pageInfo);
+
+    /**
+     * 根据 parentId 获取子评论
+     * @param parentId
+     * @return
+     */
+    List<Comments> getComments(Integer parentId);
 
     /**
      * 增加评论信息

@@ -147,8 +147,9 @@
         left join users on video_main.teacher_id = users.user_id
         left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
-        where video_main.public_status='public' and video_main.school_id=#{schoolId} and video_main.verify_status='通过'
+        where video_main.public_status='public' and users.school_id=#{schoolId} and video_main.verify_status='通过'
         ORDER BY  video_main.video_date DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
 
     <select id="getVideoInfoById" resultMap="videoList">

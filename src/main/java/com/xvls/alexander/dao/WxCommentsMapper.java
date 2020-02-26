@@ -1,6 +1,7 @@
 package com.xvls.alexander.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Comments;
 import org.springframework.stereotype.Repository;
 
@@ -13,10 +14,18 @@ import java.util.List;
 public interface WxCommentsMapper extends BaseMapper<Comments> {
 
     /**
-     * 根据 articleId 获取动态的评论信息
-     * @param belongType
-     * @param id
+     * 根据 parentId 获取子评论
+     * @param parentId
      * @return
      */
-    List<Comments> getComments(String belongType , Integer id);
+    List<Comments> getComments(Integer parentId);
+
+    /**
+     * 根据 belongType 和 Id 获得主评论
+     * @param belongType
+     * @param id
+     * @param pageInfo
+     * @return
+     */
+    List<Comments> getMainComments(String belongType , Integer id , PageInfo pageInfo);
 }

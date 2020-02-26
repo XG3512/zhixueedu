@@ -198,7 +198,7 @@ public class TestUserMapper2 {
     WxCommentsService wxCommentsService;
     @Test
     public void testWxCommentsMapper(){
-        List<Comments> comments = wxCommentsService.getComments("A", 1);
+        List<Comments> comments = wxCommentsService.getComments(1);
         for(Comments comment : comments){
             System.out.println(comment);
         }
@@ -238,17 +238,17 @@ public class TestUserMapper2 {
     public void testGetSchoolMainPage(){
         School schoolInfo = wxSchoolService.getSchoolInfo(1,1);
         System.out.println(schoolInfo);
-        List<Article> articleList = wxArticleService.getArticleBySchoolId(1,1);
+        List<Article> articleList = wxArticleService.getArticleBySchoolId(1,1,new PageInfo(1,2));
         for(Article article : articleList){
             System.out.println(article);
         }
         System.out.println("-------------------------------------");
-        List<Notice> noticeList = wxNoticeService.getNoticeListBySchoolId(1);
+        List<Notice> noticeList = wxNoticeService.getNoticeListBySchoolId(1,new PageInfo(1,2));
         for(Notice notice : noticeList){
             System.out.println(notice);
         }
 
-        List<Video_main> video_mainList = wxVideoMapper.getPublicVideoListBySchoolId(1,1);
+        List<Video_main> video_mainList = wxVideoMapper.getPublicVideoListBySchoolId(1,1,new PageInfo(0,1));
         for(Video_main video_main :video_mainList){
             System.out.println(video_main);
         }
@@ -338,6 +338,14 @@ public class TestUserMapper2 {
         for(WxHomeRotation wxHomeRotation : wxHomeRotationList){
             System.out.println(wxHomeRotation);
         }
+    }
+
+    @Test
+    public void testComment(){
+
+        List<Comments> comments = wxCommentsMapper.getMainComments("V", 1, new PageInfo(0, 6));
+        System.out.println(comments);
+
     }
 
 }

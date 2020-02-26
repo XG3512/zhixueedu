@@ -18,15 +18,17 @@ public class WxNoticeServiceImpl implements WxNoticeService {
     WxNoticeMapper wxNoticeMapper;
 
     /**
-     * 通过schoolId获取学校的通知信息
+     * 通过 schoolId，pageInfo 获取学校的通知信息
      * @param schoolId
+     * @param pageInfo
      * @return
      */
     @Override
-    public List<Notice> getNoticeListBySchoolId(Integer schoolId) {
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("school_id",schoolId);
-        return wxNoticeMapper.selectList(queryWrapper);
+    public List<Notice> getNoticeListBySchoolId(Integer schoolId,PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return wxNoticeMapper.getNoticeListBySchoolId(schoolId,new PageInfo(pageNum,pageSize));
     }
 
     /**

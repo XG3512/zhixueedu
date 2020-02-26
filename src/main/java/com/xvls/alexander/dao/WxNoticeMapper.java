@@ -11,6 +11,14 @@ import java.util.List;
 public interface WxNoticeMapper extends BaseMapper<Notice> {
 
     /**
+     * 通过 schoolId，pageInfo 获取学校的通知信息
+     * @param schoolId
+     * @param pageInfo
+     * @return
+     */
+    List<Notice> getNoticeListBySchoolId(Integer schoolId,PageInfo pageInfo);
+
+    /**
      * 通过 类别 和 PageInfo 获得通知列表
      * @param classification
      * @return

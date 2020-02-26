@@ -114,4 +114,33 @@ public class WxNoticeController {
         result.put("latestNotice",latestNotice);
         return WeChatResponseUtil.ok(result);
     }
+
+    /**
+     * 通过 schoolId，pageInfo 获取学校的通知信息
+     * @param body
+     * @return
+     */
+    @RequestMapping("getSchoolNoticeList")
+    public Object getSchoolNoticeList(@RequestBody String body){
+
+        Integer schoolId = null;
+        PageInfo pageInfo = null;
+
+        try {
+            schoolId = JacksonUtil.parseInteger(body,"schoolId");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+            if(schoolId == null || pageInfo == null || pageInfo.getPageNum()==null || pageInfo.getPageSize()==null){
+                return WeChatResponseUtil.badArgument();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return WeChatResponseUtil.badArgument();
+        }
+
+        List<Notice> noticeList = wxNoticeService.getNoticeListBySchoolId(schoolId, pageInfo);
+        Map result = Maps.newHashMap();
+        result.put("noticeList",noticeList);
+
+        return WeChatResponseUtil.ok(result);
+    }
 }

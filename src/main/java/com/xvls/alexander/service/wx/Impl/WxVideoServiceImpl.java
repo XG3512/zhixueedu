@@ -32,13 +32,18 @@ public class WxVideoServiceImpl implements WxVideoService {
     }
 
     /**
-     * 通过schoolId获得学校的视频信息，在学校主页面
+     * 通过 schoolId,wxUserId,pageInfo 获得学校的视频信息，在学校主页面
      * @param schoolId
+     * @param pageInfo
+     * @param wxUserId
      * @return
      */
     @Override
-    public List<Video_main> getPublicVideoListBySchoolId(Integer schoolId,Integer wxUserId) {
-        return wxVideoMapper.getPublicVideoListBySchoolId(schoolId,wxUserId);
+    public List<Video_main> getPublicVideoListBySchoolId(Integer schoolId,Integer wxUserId,PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return wxVideoMapper.getPublicVideoListBySchoolId(schoolId,wxUserId,new PageInfo(pageNum,pageSize));
     }
 
     /**

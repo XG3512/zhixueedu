@@ -151,6 +151,24 @@
         order by file_download.file_date asc
     </select>
 
+    <!--通过Title查询动态-->
+    <select id="searchArticleByTitle" resultMap="article_page">
+        select article.*,
+        school.school_id,
+        school.school_name,
+        school.head,
+        follow_school.follow_school_date,
+        good.good_time,
+        collection.collection_date
+        FROM article
+        LEFT JOIN school ON article.`school_id`=school.`school_id`
+        left join follow_school on follow_school.school_id=school.school_id and follow_school.wx_user_id = #{wxUserId}
+        left join good on good.good_type='A' and good.good_id = article.article_id and good.wx_user_id = #{wxUserId}
+        left join collection on collection.collection_type='A' and collection.collection_id=article.article_id and collection.wx_user_id = #{wxUserId}
+        where article.title like #{title}
+        ORDER BY article.article_time desc
+    </select>
+
     <select id="getAllArticle" parameterType="com.xvls.alexander.entity.PageInfo" resultMap="article_list">
         SELECT article.*,
         school.*
@@ -180,6 +198,7 @@
         left join good on good.good_type='A' and good.good_id = article.article_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='A' and collection.collection_id=article.article_id and collection.wx_user_id = #{wxUserId}
         where school_id=#{schoolId} ORDER BY article_time desc
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
 
     <update id="addArticleGoodNum">
