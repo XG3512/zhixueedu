@@ -126,6 +126,11 @@ public class WxArticleController {
         comments.setVcDate(new Date());
         comments.setParentVcId(parentVcId);
 
+        /**
+         * 增加评论数量
+         */
+        wxArticleService.addArticleCommentNum(articleId);
+
         Integer commentId = wxCommentsService.addComment(comments);
         Map result = Maps.newHashMap();
         result.put("commentId",commentId);

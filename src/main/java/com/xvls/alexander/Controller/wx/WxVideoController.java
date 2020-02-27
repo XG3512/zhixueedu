@@ -133,6 +133,11 @@ public class WxVideoController {
         comments.setVcDate(new Date());
         comments.setParentVcId(parentVcId);
 
+        /**
+         * 增加评论数量
+         */
+        wxVideoService.addVideoCommentNum(videoMainId);
+
         Integer commentId = wxCommentsService.addComment(comments);
         Map result = Maps.newHashMap();
         result.put("commentId",commentId);
@@ -195,7 +200,7 @@ public class WxVideoController {
     }
 
     /**
-     * 通过 wxUserId、teacherId和pageInfo 获得教师主页的视频列表
+     * 通过 wxUserId、teacherId和pageInfo 获得 公开 教师主页的视频列表
      * @param body
      * @return
      */
@@ -216,7 +221,7 @@ public class WxVideoController {
             return WeChatResponseUtil.badArgument();
         }
 
-        List<Video_main> video_mainList = wxVideoService.getPublicVideoListbyTeacherId(wxUserId, teacherId, pageInfo);
+        List<Video_main> video_mainList = wxVideoService.getVideoListByTeacherId(wxUserId, teacherId, pageInfo,"public");
         Map map = Maps.newHashMap();
         map.put("video_mainList",video_mainList);
 

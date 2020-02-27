@@ -40,4 +40,26 @@ public class WxClass_scheduleController {
 
         return WeChatResponseUtil.ok(scheduleList);
     }
+
+    /**
+     * 通过 classroomCode，dayTime 获得教室一天的上课安排
+     * @param classroomCode
+     * @param dayTime
+     * @return
+     */
+    @RequestMapping("getClassroomSchedule")
+    public Object getClassroomSchedule(@RequestParam("classroomCode")String classroomCode,
+                                       @RequestParam("dayTime")Integer dayTime,
+                                       @RequestParam("userId")Integer userId){
+        if(classroomCode == null || dayTime == null || userId == null){
+            return WeChatResponseUtil.badArgument();
+        }
+
+        List<Class_schedule> classroomSchedule = wxClass_scheduleService.getClassroomSchedule(classroomCode, dayTime, userId);
+
+        Map result = Maps.newHashMap();
+        result.put("classroomSchedule",classroomSchedule);
+
+        return WeChatResponseUtil.ok(result);
+    }
 }

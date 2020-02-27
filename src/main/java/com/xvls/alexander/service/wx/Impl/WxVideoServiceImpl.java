@@ -186,26 +186,19 @@ public class WxVideoServiceImpl implements WxVideoService {
     }
 
     /**
-     * 通过 wxUserId、teacherId和pageInfo 获得教师主页的视频列表
+     * 通过 wxUserId，teacherId，publicStatus，pageInfo 获得publicStatus级别的视频
      * @param wxUserInfo
      * @param teacherId
      * @param pageInfo
+     * @param publicStatus
      * @return
      */
     @Override
-    public List<Video_main> getPublicVideoListbyTeacherId(Integer wxUserInfo, Integer teacherId, PageInfo pageInfo) {
+    public List<Video_main> getVideoListByTeacherId(Integer wxUserInfo, Integer teacherId, PageInfo pageInfo,String publicStatus) {
         Integer pageNum = pageInfo.getPageNum();
         Integer pageSize = pageInfo.getPageSize();
         pageInfo.setPageNum((pageNum-1)*pageSize);
-        return wxVideoMapper.getPublicVideoListbyTeacherId(wxUserInfo,teacherId,pageInfo);
-    }
-
-    @Override
-    public List<Video_main> getSchoolVideoListByTeacherId(Integer wxUserInfo, Integer teacherId, PageInfo pageInfo) {
-        Integer pageNum = pageInfo.getPageNum();
-        Integer pageSize = pageInfo.getPageSize();
-        pageInfo.setPageNum((pageNum-1)*pageSize);
-        return wxVideoMapper.getSchoolVideoListByTeacherId(wxUserInfo,teacherId,pageInfo);
+        return wxVideoMapper.getVideoListbyTeacherId(wxUserInfo,teacherId,pageInfo,publicStatus);
     }
 
     /**

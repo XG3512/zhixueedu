@@ -123,8 +123,7 @@ public class WxToolBarController {
                 wxToolBarService.addVideoPlayNum(id);
             }else if(type.equals("N")){//notice
                 wxToolBarService.addNoticeReadNum(id);
-            }
-            else{
+            } else{
                 System.out.println("参数值未能匹配");
                 return WeChatResponseUtil.badArgumentValue();
             }

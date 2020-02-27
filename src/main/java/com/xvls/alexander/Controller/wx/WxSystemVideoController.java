@@ -47,7 +47,7 @@ public class WxSystemVideoController {
     }
 
     /**
-     * 通过 wxUserId,teacherId,pageInfo 得到校内、校外的视频列表
+     * 通过 wxUserId,teacherId,pageInfo 得到校内的视频列表
      * @param body
      * @return
      */
@@ -67,7 +67,7 @@ public class WxSystemVideoController {
         } catch (Exception e) {
             return WeChatResponseUtil.badArgument();
         }
-        List<Video_main> video_mainList = wxVideoService.getPublicVideoListbyTeacherId(wxUserId, teacherId, pageInfo);
+        List<Video_main> video_mainList = wxVideoService.getVideoListByTeacherId(wxUserId, teacherId, pageInfo,"school");
         Map map = Maps.newHashMap();
         map.put("video_mainList",video_mainList);
 

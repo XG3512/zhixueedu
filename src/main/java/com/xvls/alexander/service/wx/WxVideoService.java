@@ -110,6 +110,7 @@ public interface WxVideoService {
      */
     void decreaseVideoCollectionNum(Integer videoId);
 
+
     /**
      * 更新视频热度
      * @param video_main
@@ -117,22 +118,14 @@ public interface WxVideoService {
     void updateVideoHeatOfVideo(Video_main video_main);
 
     /**
-     * 通过 wxUserId、teacherId和pageInfo 获得教师主页的视频列表
+     * 通过 wxUserId，teacherId，publicStatus，pageInfo 获得publicStatus级别的视频
      * @param wxUserInfo
      * @param teacherId
      * @param pageInfo
+     * @param publicStatus
      * @return
      */
-    List<Video_main> getPublicVideoListbyTeacherId(Integer wxUserInfo,Integer teacherId,PageInfo pageInfo);
-
-    /**
-     * 通过 wxUserId，teacherId和pageInfo 获得school级别以上的视频
-     * @param wxUserInfo
-     * @param teacherId
-     * @param pageInfo
-     * @return
-     */
-    List<Video_main> getSchoolVideoListByTeacherId(Integer wxUserInfo,Integer teacherId,PageInfo pageInfo);
+    List<Video_main> getVideoListByTeacherId(Integer wxUserInfo,Integer teacherId,PageInfo pageInfo,String publicStatus);
 
     /**
      * 通过 episodeId 和 videoMainId 查找视频信息

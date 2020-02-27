@@ -256,18 +256,10 @@
         update video_main set heat_of_video = #{heatOfVideo} where video_main_id = #{videoMainId}
     </update>
 
-    <select id="getPublicVideoListbyTeacherId" resultMap="publicTeacherMainPageVideoList">
+    <select id="getVideoListbyTeacherId" resultMap="publicTeacherMainPageVideoList">
         select video_main.*
         from video_main
-        where video_main.public_status='public' and video_main.verify_status='通过' and teacher_id=#{teacherId}
-        ORDER BY video_main.video_date DESC
-        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
-    </select>
-
-    <select id="getSchoolVideoListByTeacherId" resultMap="publicTeacherMainPageVideoList">
-        select video_main.*
-        from video_main
-        where video_main.public_status IN('public','school') and video_main.verify_status='通过' and teacher_id=#{teacherId}
+        where video_main.public_status=#{publicStatus} and video_main.verify_status='通过' and teacher_id=#{teacherId}
         ORDER BY video_main.video_date DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>

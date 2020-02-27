@@ -15,4 +15,13 @@ public interface WxClass_scheduleMapper extends BaseMapper<Class_schedule> {
      * @return
      */
     List<Class_schedule> getClassScheduleById(Integer userId);
+
+    /**
+     * 通过 classroomCode，dayTime，userId 获得教室一天的上课安排
+     * @param classroomCode
+     * @param dayTime
+     * @param userId
+     * @return
+     */
+    List<Class_schedule> getClassroomSchedule(String classroomCode,Integer dayTime , Integer userId);
 }

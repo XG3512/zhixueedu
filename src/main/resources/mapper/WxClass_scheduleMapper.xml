@@ -31,4 +31,19 @@
         order by class_schedule.day_time asc ,class_schedule.start_time asc
     </select>
 
+    <select id="getClassroomSchedule" resultMap="class_schedule">
+        select class_schedule.*,
+        classroom.classroom_code,
+        course.course_name,
+        users.user_name
+        from class_schedule
+        left join classroom on class_schedule.classroom_id = classroom.classroom_id
+        left join tc on tc.tc_id = class_schedule.tc_id
+        left join course on course.course_id = tc.course_id
+        left join users on tc.user_id = users.user_id
+        where classroom.classroom_code=#{classroomCode} and class_schedule.day_time = #{dayTime}
+            and tc.school_id IN (select users2.school_id from users users2 where users2.user_id = #{userId})
+        order by class_schedule.day_time asc ,class_schedule.start_time asc
+    </select>
+
 </mapper>

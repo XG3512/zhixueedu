@@ -214,6 +214,7 @@ public class WxToolBarServiceImpl implements WxToolBarService {
         wxNoticeService.addNoticeReadNum(id);
     }
 
+
     /**
      * 动态收藏数增加
      * @param id
