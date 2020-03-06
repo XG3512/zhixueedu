@@ -95,9 +95,13 @@ mybatis-plus:
 #开发环境配置
 server:
   #端口
-  port: 8082
+  port: 8443
   servlet:
     context-path: /xvls
+  ssl:
+    key-store: classpath:xvls_top.jks
+    key-password: g5c965jc62fa2lu
+    key-store-type: JKS
 spring:
   profiles: dev
   # 数据源配置
@@ -113,7 +117,7 @@ xvls_shiro:
   setHashIterations: 6
   setStoredCredentialsHexEncoded: true
 xvls_qiniu:
-  path: http://xvls.top/
+  path: https://xvls.top/
   qiniuAccess: fVm1qUAtREn6wyBjzJhB7JE4piRHgzypdtvTTCFV
   qiniuKey: 3MngPq1ovKCCCjkOwucoQC7Gxg_clZRJMRFTnKKy
   bucketName: test01

@@ -19,12 +19,16 @@
         <result column="school_id" property="schoolId"></result>
         <result column="news_date" property="newsDate"></result>
         <result column="title" property="title"></result>
-        <result column="news_text" property="newsText"></result>
         <result column="read_num" property="readNum"></result>
     </resultMap>
 
     <select id="getNewsListById" resultMap="newsList">
-        select * from news
+        select news_id,
+        school_id,
+        news_date,
+        title,
+        read_num
+        from news
         where school_id IN (select users.school_id from users where users.user_id = #{userId})
         ORDER BY news.news_date DESC
     </select>

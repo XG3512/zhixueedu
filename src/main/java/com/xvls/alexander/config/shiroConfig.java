@@ -1,8 +1,10 @@
 package com.xvls.alexander.config;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -53,6 +55,9 @@ public class shiroConfig {
 
         filterMap.put("/user/update","authc");
 
+        /*后台管理端url管理*/
+        filterMap.put("/system/article/**","authc");
+
         //设置登录的请求
         shiroFilterFactoryBean.setLoginUrl("/toLogin");
         //设置未授权页面
@@ -90,5 +95,23 @@ public class shiroConfig {
         //此处的设置，true加密用的hex编码，false用的base64编码
         credentialsMatcher.setStoredCredentialsHexEncoded(setStoredCredentialsHexEncoded);
         return credentialsMatcher;
+    }
+
+    /**
+     * 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions)
+     * 配置以下两个bean(DefaultAdvisorAutoProxyCreator和AuthorizationAttributeSourceAdvisor)即可实现此功能
+     * @return
+     */
+    @Bean
+    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
+        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        advisorAutoProxyCreator.setProxyTargetClass(true);
+        return advisorAutoProxyCreator;
+    }
+    @Bean
+        public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") DefaultWebSecurityManager securityManager){
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
     }
 }

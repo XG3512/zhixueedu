@@ -272,8 +272,9 @@ public class WxVideoServiceImpl implements WxVideoService {
         Double commentNum = video_main.getCommentNum().doubleValue();
         Long date = new Date().getTime()/3600000;
 
-        result = (playNum*0.0769+commentNum*0.1538+goodNum*0.3077+collectionNum*0.4615)*1000;
+        result = (playNum*0.0769+commentNum*0.1538+goodNum*0.3077+collectionNum*0.4615)*1000+100.0;//1,2,4,6
         Double temp = Math.pow(date-videoDate+2,1.4);
+        //Double temp = Math.pow(Math.E,0.01279*(date-videoDate));
         result = result/temp;
         return result;
     }

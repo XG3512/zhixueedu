@@ -36,6 +36,10 @@ public class Comments extends Model<Comments> implements Serializable {
     private Integer goodNum;//点赞数
     private Date vcDate;//评论时间
     private Integer parentVcId;//父类
+    private String parentName;
+
+    @TableField(exist = false)
+    private Integer membersCount;//子评论个数
 
     @TableField(exist = false)
     private List<Comments> members;//子评论

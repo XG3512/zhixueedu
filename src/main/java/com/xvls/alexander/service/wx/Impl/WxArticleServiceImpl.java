@@ -1,23 +1,29 @@
 package com.xvls.alexander.service.wx.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xvls.alexander.dao.FileBelongMapper;
 import com.xvls.alexander.dao.WxArticleMapper;
+import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Article;
+import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.wx.WxArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
  * 动态信息
  */
-// TODO: 2020/2/9 点赞、收藏、评论数的字符化，并放入数据库中
 @Service
 public class WxArticleServiceImpl implements WxArticleService {
 
     @Autowired
     WxArticleMapper wxArticleMapper;
+    @Autowired
+    FileBelongMapper fileBelongMapper;
 
     @Override
     public List<Article> getArticleByPage(PageInfo pageInfo,Integer wxUserId) {
@@ -32,6 +38,26 @@ public class WxArticleServiceImpl implements WxArticleService {
         return wxArticleMapper.getAllArticle();
     }
 
+    /**
+     * 通过 pageInfo，wxUserId 获得用户关注学校的动态
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Article> getFollowArticleListByPage(Integer wxUserId, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum - 1)*pageSize;
+        return wxArticleMapper.getFollowArticleListByPage(wxUserId,new PageInfo(pageNum,pageSize));
+    }
+
+    /**
+     * 通过 articleId ，wxUserId 获得动态详情
+     * @param articleId
+     * @param wxUserId
+     * @return
+     */
     @Override
     public Article getArticleById(Integer articleId , Integer wxUserId) {
         return wxArticleMapper.getArticleById(articleId,wxUserId);
@@ -156,7 +182,7 @@ public class WxArticleServiceImpl implements WxArticleService {
         Integer pageNum = pageInfo.getPageNum();
         Integer pageSize = pageInfo.getPageSize();
         pageNum = (pageNum-1)*pageSize;
-        return wxArticleMapper.getHomePageArticleList(wxUserId,pageInfo);
+        return wxArticleMapper.getHomePageArticleList(wxUserId,new PageInfo(pageNum,pageSize));
     }
 
     /**
@@ -168,6 +194,86 @@ public class WxArticleServiceImpl implements WxArticleService {
     public List<Article> searchArticleByTitle(String title , Integer wxUserId) {
         title = "%"+title+"%";
         return wxArticleMapper.searchArticleByTitle(title,wxUserId);
+    }
+
+    @Override
+    public void updateVideoHeatOfVideo(Article article) {
+        Double result = Calculate(article);
+        wxArticleMapper.updateVideoHeatOfVideo(article.getArticleId(),result);
+    }
+
+
+    /*--------------------------------------------------------------------------------------*/
+    /*--------------------------------------后台管理端---------------------------------------*/
+    /*--------------------------------------------------------------------------------------*/
+
+    /**
+     * 增加动态
+     * @param article
+     */
+    @Override
+    public Integer addArticle(Article article) {
+        Double result = Calculate(article);
+        article.setHeatOfArticle(result);
+        wxArticleMapper.insert(article);
+        return article.getArticleId();
+    }
+
+    /**
+     * 通过 userId和pageInfo 获得动态列表
+     * @param pageInfo
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Article> getSystemArticleList(PageInfo pageInfo, Integer userId) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum-1)*pageSize;
+        return wxArticleMapper.getSystemArticleList(new PageInfo(pageNum,pageSize),userId);
+    }
+
+    /**
+     * 通过 userId 获得动态总数目
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer getArticleNumByUserId(Integer userId) {
+        return wxArticleMapper.getArticleNumByUserId(userId);
+    }
+
+    /**
+     * 通过 articleId 删除动态 即 响应的 file_belong
+     * @param articleId
+     */
+    @Override
+    public void deleteArticleById(Integer articleId) {
+        QueryWrapper<File_belong> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("belong_id",articleId)
+                .eq("belong_type","A");
+        fileBelongMapper.delete(queryWrapper);
+
+        QueryWrapper<Article> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("article_id",articleId);
+        wxArticleMapper.delete(queryWrapper1);
+    }
+
+    public Double Calculate(Article article){
+        Double result = null;
+
+        Long articleTime = (article.getArticleTime().getTime()/3600000);
+        Double readNum = article.getReadNum().doubleValue();
+        Double goodNum = article.getGoodNum().doubleValue();
+        Double collectionNum = article.getCollectionNum().doubleValue();
+        Double commentNum = article.getCommentNum().doubleValue();
+        Long date = new Date().getTime()/3600000;
+
+        result = (readNum*0.0769+commentNum*0.1538+goodNum*0.3077+collectionNum*0.4615)*1000+100.0;//1,2,4,6
+        Double temp = Math.pow(date-articleTime+2,1.4);
+        //Double temp = Math.pow(Math.E,0.01279*(date-videoDate));
+        result = result/temp;
+        return result;
     }
 
 

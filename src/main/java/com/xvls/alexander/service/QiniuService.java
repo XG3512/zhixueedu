@@ -2,6 +2,7 @@ package com.xvls.alexander.service;
 
 
 import com.xvls.alexander.entity.File_belong;
+import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.utils.RestResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +19,13 @@ public interface QiniuService {
      * @return
      */
     Map<Object,Object> upload(MultipartFile file, File_belong file_belong) throws IOException, NoSuchAlgorithmException;
+
+    /**
+     * 上传 富文本 图片
+     * @param file
+     * @return
+     */
+    File_download uploadEditorFile(MultipartFile file) throws IOException, NoSuchAlgorithmException;
 
     /**
      * 删除已经上传的图片

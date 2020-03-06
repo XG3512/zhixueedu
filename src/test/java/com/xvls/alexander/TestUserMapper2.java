@@ -98,7 +98,7 @@ public class TestUserMapper2 {
     @Test
     public void updateWxUserInfoByUser_num(){
 
-        Users users = usersService.getWxStudentInfoByUserNum("2017416481");
+        Users users = usersService.getWxStudentInfoByUserNum("sc001");
 
         if(users==null){
             System.out.println(users);

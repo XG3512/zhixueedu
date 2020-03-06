@@ -9,6 +9,8 @@ import com.xvls.alexander.service.wx.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsersServiceImpl implements UsersService {
 
@@ -44,6 +46,18 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public Integer getUserId(String userNum, Integer schoolId, String role) {
         return usersMapper.getUserId(userNum,schoolId,role);
+    }
+
+    /**
+     * 通过 userNum,schoolId,role 获得用户信息
+     * @param userNum
+     * @param schoolId
+     * @param role
+     * @return
+     */
+    @Override
+    public Users getUserInfo(String userNum, Integer schoolId, String role) {
+        return usersMapper.getUserInfo(userNum,schoolId,role);
     }
 
     @Override
@@ -89,6 +103,15 @@ public class UsersServiceImpl implements UsersService {
         usersMapper.decreaseFansNum(teacherId);
     }
 
+    /**
+     * 更新教师 点赞、收藏 数
+     * @param teacherId
+     */
+    @Override
+    public void updateTeacherGoodCollectionNum(Integer teacherId) {
+        usersMapper.updateTeacherGoodCollectionNum(teacherId);
+    }
+
     @Override
     public void updateTeacherBackground(Integer teacherId, String file_url) {
         usersMapper.updateTeacherBackground(teacherId,file_url);
@@ -112,8 +135,18 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public TeacherMainPage getTeacherMainPage(Integer wxUserId, Integer teacherId) {
+        this.updateTeacherGoodCollectionNum(teacherId);
         return usersMapper.getTeacherMainPage(wxUserId,teacherId);
     }
 
+    /**
+     * 通过 wxUserId 获得关注教师列表
+     * @param wxUserId
+     * @return
+     */
+    @Override
+    public List<TeacherMainPage> getFollowTeacherList(Integer wxUserId) {
+        return usersMapper.getFollowTeacherList(wxUserId);
+    }
 
 }

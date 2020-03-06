@@ -1,6 +1,9 @@
 package com.xvls.alexander.Controller;
 
 
+import com.xvls.alexander.utils.RestResponse;
+import com.xvls.alexander.utils.SystemResponse;
+import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -36,8 +39,8 @@ public class MyController {
 
     @RequestMapping("/toLogin")
     @ResponseBody
-    public String toLogin(){
-        return "login";
+    public Object toLogin(){
+        return SystemResponse.unlogin();//请登录
     }
 
     /*@RequestMapping("/login")
@@ -65,7 +68,7 @@ public class MyController {
 
     @RequestMapping("/unauthorized")
     @ResponseBody
-    public String unauthorized(){
-        return "未经授权无法访问此页面";
+    public Object unauthorized(){
+        return SystemResponse.unauthz();//未经授权
     }
 }

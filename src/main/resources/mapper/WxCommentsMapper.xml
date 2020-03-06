@@ -37,6 +37,7 @@
         <result column="good_num" property="goodNum"></result>
         <result column="vc_date" property="vcDate"></result>
         <result column="parent_vc_id" property="parentVcId"></result>
+        <result column="parent_name" property="parentName"></result>
         <collection property="members" ofType="com.xvls.alexander.entity.wx.Comments" column="comment_id" select="getCommentsMembers"></collection>
     </resultMap>
 
@@ -52,7 +53,9 @@
         <result column="good_num" property="goodNum"></result>
         <result column="vc_date" property="vcDate"></result>
         <result column="parent_vc_id" property="parentVcId"></result>
+        <result column="parent_name" property="parentName"></result>
         <collection property="members" ofType="com.xvls.alexander.entity.wx.Comments" column="comment_id" select="getMainCommentsMembers"></collection>
+        <collection property="membersCount" ofType="java.lang.Integer" column="comment_id" select="getCommentsNum"></collection>
     </resultMap>
 
     <resultMap id="member" type="com.xvls.alexander.entity.wx.Comments">
@@ -65,6 +68,7 @@
         <result column="vc_content" property="vcContent"></result>
         <result column="good_num" property="goodNum"></result>
         <result column="vc_date" property="vcDate"></result>
+        <result column="parent_name" property="parentName"></result>
         <result column="parent_vc_id" property="parentVcId"></result>
     </resultMap>
 
@@ -75,7 +79,7 @@
     </select>-->
 
     <!--递归查询1 查询父评论下的所有子评论-->
-    <select id="getComments" resultMap="getComments">
+    <select id="getComments2" resultMap="getComments">
         select comments.*,wx_user.avatar_url,wx_user.nickname
         from comments
         left join wx_user on wx_user.wx_user_id = comments.wx_user_id
@@ -87,6 +91,15 @@
         from comments
         left join wx_user on wx_user.wx_user_id = comments.wx_user_id
         where parent_vc_id = #{comment_id}
+        order by vc_date asc
+    </select>
+
+    <!--通过 父评论Id 查找所有 子评论-->
+    <select id="getComments" resultMap="getComments">
+        select comments.*,wx_user.avatar_url,wx_user.nickname
+        from comments
+        left join wx_user on wx_user.wx_user_id = comments.wx_user_id
+        where parent_vc_id = #{parentId}
         order by vc_date asc
     </select>
 
@@ -106,6 +119,10 @@
         where parent_vc_id = #{comment_id}
         order by vc_date asc
         limit 0,1
+    </select>
+
+    <select id="getCommentsNum" resultType="java.lang.Integer">
+        select count(*) membersCount from comments group by comments.parent_vc_id having parent_vc_id = #{comment_id}
     </select>
 
 

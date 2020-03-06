@@ -63,19 +63,21 @@
         <result column="good_time" property="goodTime"></result>
         <result column="collection_date" property="collectionDate"></result>
         <result column="follow_teacher_date" property="followTeacherDate"></result>
-        <collection property="video_episodeList" ofType="com.xvls.alexander.entity.wx.Video_episode">
-            <id column="video_id" property="videoId"></id>
-            <result column="video_title" property="videoTitle"></result>
-            <result column="video_length" property="videoLength"></result>
-            <result column="video_size" property="videoSize"></result>
-            <result column="video_date" property="videoDate"></result>
-            <result column="episode_id" property="episodeId"></result>
-            <result column="video_source" property="videoSource"></result>
-        </collection>
-        <collection property="labelList" ofType="com.xvls.alexander.entity.wx.Label">
-            <id column="label_id" property="labelId"></id>
-            <result column="label_name" property="labelName"></result>
-        </collection>
+        <collection property="labelList" ofType="com.xvls.alexander.entity.wx.Label" column="video_main_id" select="getLabelList"></collection>
+        <collection property="video_episodeList" ofType="com.xvls.alexander.entity.wx.Video_episode" column="video_main_id" select="getEpisodeList"></collection>
+    </resultMap>
+    <resultMap id="getEpisodeList" type="com.xvls.alexander.entity.wx.Video_episode">
+        <id column="video_id" property="videoId"></id>
+        <result column="video_title" property="videoTitle"></result>
+        <result column="video_length" property="videoLength"></result>
+        <result column="video_size" property="videoSize"></result>
+        <result column="video_date" property="videoDate"></result>
+        <result column="episode_id" property="episodeId"></result>
+        <result column="video_source" property="videoSource"></result>
+    </resultMap>
+    <resultMap id="getLabelList" type="com.xvls.alexander.entity.wx.Label">
+        <id column="label_id" property="labelId"></id>
+        <result column="label_name" property="labelName"></result>
     </resultMap>
 
     <resultMap id="homePageVideoList" type="com.xvls.alexander.entity.wx.Video_main">
@@ -153,37 +155,39 @@
     </select>
 
     <select id="getVideoInfoById" resultMap="videoList">
-        select * from video where video_main_id=#{videoMainId} and episode_id=#{episodeId}
+        select * from video where video_main_id=#{videoMainId} and episode_id=#{episodeId} and verify_status = '通过'
     </select>
 
+    <!--嵌套实现 视频主页信息查询-->
     <select id="getVideoMainInfo" resultMap="videoMainInfo">
         select video_main.*,
         users.user_name,
         users.fans_num,
         users.icon,
-        video.video_id,
-        video.video_title,
-        video.video_length,
-        video.video_size,
-        video.video_date,
-        video.episode_id,
-        video.video_source,
         good.good_time,
         collection.collection_date,
-        follow_teacher.follow_teacher_date,
-        label.label_id,
-        label.label_name
+        follow_teacher.follow_teacher_date
         from video_main
-        left join video on video_main.video_main_id=video.video_main_id
         left join users on video_main.teacher_id = users.user_id
         left join follow_teacher on follow_teacher.wx_user_id = #{wxUserId} and follow_teacher.teacher_id = video_main.teacher_id
         left join good on good.good_type='V' and good.good_id = video_main.video_main_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='V' and collection.collection_id = video_main.video_main_id and collection.wx_user_id = #{wxUserId}
-        left join v_label on v_label.video_main_id = video_main.video_main_id
-        left join label on label.label_id = v_label.label_id
-        where video_main.video_main_id=#{videoMainId}
-        ORDER BY video.episode_id ASC
+        where video_main.video_main_id=#{videoMainId} and video_main.verify_status = '通过'
     </select>
+    <select id="getEpisodeList" resultMap="getEpisodeList">
+        select *
+        from video
+        where video.video_main_id = #{video_main_id} and verify_status='通过'
+        order by episode_id ASC
+    </select>
+    <select id="getLabelList" resultMap="getLabelList">
+        select label.label_id,
+        label.label_name
+        from v_label
+        left join label on v_label.label_id = label.label_id
+        where v_label.video_main_id = #{video_main_id}
+    </select>
+    <!--END-->
 
     <select id="getHomePageVideoList" resultMap="homePageVideoList">
         select video_main.*,
@@ -267,7 +271,7 @@
     <select id="getVideoByEpisodeId_VideoMainId" resultMap="getVideo">
         select *
         from video
-        where video_main_id = #{videoMainId} and episode_id = #{episodeId}
+        where video_main_id = #{videoMainId} and episode_id = #{episodeId} and verify_status = '通过'
     </select>
 
 

@@ -3,6 +3,9 @@ package com.xvls.alexander.service.wx;
 import com.xvls.alexander.entity.wx.Follow_school;
 import com.xvls.alexander.entity.wx.Follow_teacher;
 import com.xvls.alexander.entity.wx.Good;
+import com.xvls.alexander.entity.wx.SchoolList;
+
+import java.util.List;
 
 /**
  * 微信点赞功能
@@ -40,5 +43,11 @@ public interface WxToolBarService {
     void cancelFollowSchool(Follow_school follow_school);
     void addFollowTeacher(Follow_teacher follow_teacher);
     void cancelFollowTeacher(Follow_teacher follow_teacher);
+    /**
+     * 通过 wxUserId 获得用户关注学校数量
+     * @param wxUserId
+     * @return
+     */
+    Integer getFollowSchoolCount(Integer wxUserId);
 
 }

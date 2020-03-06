@@ -14,11 +14,18 @@ import java.util.List;
 public interface WxCommentsMapper extends BaseMapper<Comments> {
 
     /**
-     * 根据 parentId 获取子评论
+     * 据 parentId 获取所有子评论
      * @param parentId
      * @return
      */
     List<Comments> getComments(Integer parentId);
+
+    /**
+     * 据 parentId 获取子评论 并包括 父评论
+     * @param parentId
+     * @return
+     */
+    List<Comments> getComments2(Integer parentId);
 
     /**
      * 根据 belongType 和 Id 获得主评论
@@ -28,4 +35,5 @@ public interface WxCommentsMapper extends BaseMapper<Comments> {
      * @return
      */
     List<Comments> getMainComments(String belongType , Integer id , PageInfo pageInfo);
+
 }

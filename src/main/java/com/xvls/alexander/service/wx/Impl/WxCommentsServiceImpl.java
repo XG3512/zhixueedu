@@ -1,5 +1,6 @@
 package com.xvls.alexander.service.wx.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.WxCommentsMapper;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Comments;
@@ -37,6 +38,16 @@ public class WxCommentsServiceImpl implements WxCommentsService {
     }
 
     /**
+     * 据 parentId 获取子评论 并包括 父评论
+     * @param parentId
+     * @return
+     */
+    @Override
+    public List<Comments> getComments2(Integer parentId) {
+        return wxCommentsMapper.getComments2(parentId);
+    }
+
+    /**
      * 增加评论信息
      * @param comments
      */
@@ -54,6 +65,21 @@ public class WxCommentsServiceImpl implements WxCommentsService {
     @Override
     public void deleteComment(Comments comments) {
 
+    }
+
+    /**
+     * 获得评论数
+     * @param belongType
+     * @param id
+     * @return
+     */
+    @Override
+    public Integer getCommentsNum(String belongType, Integer id) {
+        QueryWrapper<Comments> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("belong_type",belongType)
+                .eq("belong_id",id);
+        Integer count = wxCommentsMapper.selectCount(queryWrapper);
+        return count;
     }
 
 

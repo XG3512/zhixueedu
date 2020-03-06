@@ -17,6 +17,20 @@ public interface WxArticleService {
 
     List<Article> getAllArticle();
 
+    /**
+     * 通过 pageInfo，wxUserId 获得用户关注学校的动态
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Article> getFollowArticleListByPage(Integer wxUserId,PageInfo pageInfo);
+
+    /**
+     * 通过 articleId ，wxUserId 获得动态详情
+     * @param articleId
+     * @param wxUserId
+     * @return
+     */
     Article getArticleById(Integer articleId , Integer wxUserId);
 
     /**
@@ -73,4 +87,42 @@ public interface WxArticleService {
      * @return
      */
     List<Article> searchArticleByTitle(String title , Integer wxUserId);
+
+    /**
+     * 计算并更新热度
+     * @param article
+     */
+    void updateVideoHeatOfVideo(Article article);
+
+    /*--------------------------------------------------------------------------------------*/
+    /*--------------------------------------后台管理端---------------------------------------*/
+    /*--------------------------------------------------------------------------------------*/
+
+    /**
+     * 增加动态
+     * @param article
+     */
+    Integer addArticle(Article article);
+
+    /**
+     * 通过 userId和pageInfo 获得动态列表
+     * @param pageInfo
+     * @param userId
+     * @return
+     */
+    List<Article> getSystemArticleList(PageInfo pageInfo,Integer userId);
+
+    /**
+     * 通过 userId 获得动态总数目
+     * @param userId
+     * @return
+     */
+    Integer getArticleNumByUserId(Integer userId);
+
+    /**
+     * 通过 articleId 删除动态
+     * @param articleId
+     */
+    void deleteArticleById(Integer articleId);
+
 }

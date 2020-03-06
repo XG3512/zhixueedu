@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,5 +35,25 @@ public class WxTeacherController {
         Map map = Maps.newHashMap();
         map.put("teacherMainPage",teacherMainPage);
         return WeChatResponseUtil.ok(map);
+    }
+
+    /**
+     * 通过 wxUserId 获得关注教师列表
+     * @param wxUserId
+     * @return
+     */
+    @RequestMapping("getFollowTeacherList")
+    public Object getFollowTeacherList(@RequestParam("wxUserId") Integer wxUserId){
+
+        if(wxUserId==null){
+            return WeChatResponseUtil.badArgument();
+        }
+
+        List<TeacherMainPage> followTeacherList = usersService.getFollowTeacherList(wxUserId);
+
+        Map result = Maps.newHashMap();
+        result.put("followTeacherList",followTeacherList);
+
+        return WeChatResponseUtil.ok(result);
     }
 }

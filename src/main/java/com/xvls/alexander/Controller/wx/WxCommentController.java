@@ -44,14 +44,16 @@ public class WxCommentController {
         }
 
         List<Comments> mainComments = wxCommentsService.getMainComments(belongType, id, pageInfo);
+        Integer commentsNum = wxCommentsService.getCommentsNum(belongType, id);
         Map result = Maps.newHashMap();
         result.put("mainComments",mainComments);
+        result.put("commentsNum",commentsNum);
 
         return WeChatResponseUtil.ok(result);
     }
 
     /**
-     * 据 parentId 获取子评论
+     * 据 parentId 获取所有子评论
      * @param parentId
      * @return
      */
@@ -62,6 +64,24 @@ public class WxCommentController {
         }
 
         List<Comments> comments = wxCommentsService.getComments(parentId);
+        Map result = Maps.newHashMap();
+        result.put("comments",comments);
+
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
+     * 据 parentId 获取子评论 并包括 父评论
+     * @param parentId
+     * @return
+     */
+    @RequestMapping("getComments2")
+    public Object getComments2(@RequestParam("parentId") Integer parentId){
+        if(parentId == null){
+            return WeChatResponseUtil.badArgument();
+        }
+
+        List<Comments> comments = wxCommentsService.getComments2(parentId);
         Map result = Maps.newHashMap();
         result.put("comments",comments);
 

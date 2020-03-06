@@ -17,11 +17,18 @@ public interface WxCommentsService {
     List<Comments> getMainComments(String belongType , Integer id , PageInfo pageInfo);
 
     /**
-     * 根据 parentId 获取子评论
+     * 据 parentId 获取子评论 并包括 父评论
      * @param parentId
      * @return
      */
     List<Comments> getComments(Integer parentId);
+
+    /**
+     * 据 parentId 获取子评论 并包括 父评论
+     * @param parentId
+     * @return
+     */
+    List<Comments> getComments2(Integer parentId);
 
     /**
      * 增加评论信息
@@ -35,4 +42,12 @@ public interface WxCommentsService {
      */
     // TODO: 2020/2/17 删除评论功能
     void deleteComment(Comments comments);
+
+    /**
+     * 获得评论数
+     * @param belongType
+     * @param id
+     * @return
+     */
+    Integer getCommentsNum(String belongType , Integer id);
 }

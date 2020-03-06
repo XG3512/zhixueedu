@@ -4,25 +4,22 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.xvls.alexander.entity.File_belong;
+import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.service.FileCrudService;
 import com.xvls.alexander.service.QiniuService;
 import com.xvls.alexander.utils.JacksonUtil;
+import com.xvls.alexander.utils.SystemResponse;
 import com.xvls.alexander.utils.QiniuFileUtil;
 import com.xvls.alexander.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -141,6 +138,41 @@ public class FileController {
             return RestResponse.failure(e.toString());
         }
         return RestResponse.success().setData(lists);
+    }
+
+    /**
+     * 富文本 文件上传，返回
+     * @param file
+     * @param httpServletRequest
+     * @return
+     */
+    @RequestMapping("uploadEditorFile")
+    public Object uploadEditorFile(@RequestParam("file") MultipartFile file,HttpServletRequest httpServletRequest){
+        if(file == null){
+            return SystemResponse.badArgument();
+        }
+
+        File_download file_download = null;
+
+        try {
+            file_download = qiniuService.uploadEditorFile(file);
+            if (file_download==null){
+                return SystemResponse.fail(-1,"上传失败");
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return SystemResponse.fail(-1,"上传失败");
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println(e.getMessage());
+            return SystemResponse.fail(-1,"上传失败");
+        }
+
+        Map result = Maps.newHashMap();
+        result.put("fileHash",file_download.getFileHash());
+        result.put("file_url",file_download.getFileUrl());
+        result.put("name",file_download.getName());
+
+        return SystemResponse.ok(result);
     }
 
     /**

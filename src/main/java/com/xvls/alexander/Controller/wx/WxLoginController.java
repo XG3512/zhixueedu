@@ -125,6 +125,7 @@ public class WxLoginController{
         /*shiro 封装用户的登录数据*/
         /**根据user_num,school,role获取userId**/
         Integer userId_temp = usersService.getUserId(userNum,schoolId,role);
+
         if(userId_temp==null){
             return WeChatResponseUtil.fail(401,"账号或密码错误！");
         }
@@ -155,6 +156,7 @@ public class WxLoginController{
             Map<Object, Object> result = new HashMap<Object, Object>();
             result.put("wxUserId",wxUserId);
             result.put("userId", userId);
+            result.put("userNum",userNum);
             //result.put("wxStatus", users.getWxstatus());
             return WeChatResponseUtil.ok(result);
         }else {
@@ -218,10 +220,12 @@ public class WxLoginController{
         if(users==null || users.getUserNum()==null || users.getPassword() == null){
             map.put("wxUserId",wxUserId);
             map.put("userId",userId);
+            map.put("userNum",null);
             return WeChatResponseUtil.ok(map);
         }else{
             Map<Object, Object> result = new HashMap<Object, Object>();
             result.put("userId", users.getUserId());
+            result.put("userNum",users.getUserNum());
             result.put("wxUserId", wxUserId);
             result.put("wxStatus", wxUser.getWxstatus());
             return WeChatResponseUtil.ok(result);

@@ -31,11 +31,13 @@ public class Article extends Model<Article> implements Serializable {
     private String content;
     private String articleText;
     private Integer readNum; //阅读量
-    private Date articleTime;
+    private Date articleTime;//创建时间
     private Integer goodNum;
     private boolean commentStatus;//评论状态
     private Integer commentNum;//评论数
     private Integer collectionNum;//收藏数
+
+    private Double heatOfArticle;//动态热度
 
     private School school;//学校信息
 

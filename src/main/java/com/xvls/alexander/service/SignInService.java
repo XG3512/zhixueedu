@@ -16,7 +16,21 @@ public interface SignInService {
     String GetSignInImage(SignIn_info signIn_info) throws IOException, NoSuchAlgorithmException;
 
     /**
+     * 插入 签到 信息
+     * @param signIn_info
+     * @return
+     */
+    Integer insertSignInfo(SignIn_info signIn_info);
+
+    /**
      * 用户签到
      */
     void SignIn(SignIn_user signIn_user);
+
+    /**
+     * 通过 signIn_user 获得对应签到者的数量
+     * @param signIn_user
+     * @return
+     */
+    Integer selectSignIn_user(SignIn_user signIn_user);
 }

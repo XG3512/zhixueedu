@@ -32,6 +32,14 @@ public interface WxArticleMapper extends BaseMapper<Article> {
     Article getArticleById(Integer articleId,Integer wxUserId);
 
     /**
+     * 通过 pageInfo，wxUserId 获得用户关注学校的动态
+     * @param wxUserId
+     * @param pageInfo
+     * @return
+     */
+    List<Article> getFollowArticleListByPage(Integer wxUserId,PageInfo pageInfo);
+
+    /**
      * 通过 schoolId，wxUserId，pageInfo 获得学校动态信息
      * @param schoolId
      * @param wxUserId
@@ -111,4 +119,30 @@ public interface WxArticleMapper extends BaseMapper<Article> {
      * @return
      */
     List<Article> searchArticleByTitle(String title , Integer wxUserId);
+
+    /**
+     * 计算并更新热度
+     * @param articleId
+     * @param heatOfArticle
+     */
+    void updateVideoHeatOfVideo(Integer articleId , Double heatOfArticle);
+
+    /****************************************************************************************/
+    /***************************************后台管理端****************************************/
+    /****************************************************************************************/
+
+    /**
+     * 通过 userId和pageInfo 获得动态列表
+     * @param pageInfo
+     * @param userId
+     * @return
+     */
+    List<Article> getSystemArticleList(PageInfo pageInfo,Integer userId);
+
+    /**
+     * 通过 userId 获得动态总数目
+     * @param userId
+     * @return
+     */
+    Integer getArticleNumByUserId(Integer userId);
 }

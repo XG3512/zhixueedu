@@ -7,10 +7,13 @@ import com.xvls.alexander.dao.WxGoodMapper;
 import com.xvls.alexander.entity.wx.Follow_school;
 import com.xvls.alexander.entity.wx.Follow_teacher;
 import com.xvls.alexander.entity.wx.Good;
+import com.xvls.alexander.entity.wx.SchoolList;
 import com.xvls.alexander.service.wx.*;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class WxToolBarServiceImpl implements WxToolBarService {
@@ -292,6 +295,18 @@ public class WxToolBarServiceImpl implements WxToolBarService {
                 .eq("teacher_id",follow_teacher.getTeacherId());
         wxFollow_teacherMapper.delete(queryWrapper);
         usersService.decreaseFansNum(follow_teacher.getTeacherId());
+    }
+
+    /**
+     * 通过 wxUserId 获得用户关注学校数量
+     * @param wxUserId
+     * @return
+     */
+    @Override
+    public Integer getFollowSchoolCount(Integer wxUserId) {
+        QueryWrapper<Follow_school> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("wx_user_id",wxUserId);
+        return wxFollow_schoolMapper.selectCount(queryWrapper);
     }
 
 }

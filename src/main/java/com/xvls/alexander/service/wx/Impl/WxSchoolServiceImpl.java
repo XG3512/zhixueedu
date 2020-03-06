@@ -1,8 +1,11 @@
 package com.xvls.alexander.service.wx.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xvls.alexander.dao.WxFollow_schoolMapper;
 import com.xvls.alexander.dao.WxProvinceMapper;
 import com.xvls.alexander.dao.WxSchoolMapper;
 import com.xvls.alexander.entity.School;
+import com.xvls.alexander.entity.wx.Follow_school;
 import com.xvls.alexander.entity.wx.Province;
 import com.xvls.alexander.entity.wx.SchoolList;
 import com.xvls.alexander.service.wx.WxSchoolService;
@@ -21,6 +24,8 @@ public class WxSchoolServiceImpl implements WxSchoolService {
     WxSchoolMapper wxSchoolMapper;
     @Autowired
     WxProvinceMapper wxProvinceMapper;
+    @Autowired
+    WxFollow_schoolMapper wxFollow_schoolMapper;
 
     /**
      * 根据schoolId，获取学校信息
@@ -107,4 +112,6 @@ public class WxSchoolServiceImpl implements WxSchoolService {
     public void updateSchoolGoodCollectionNum(Integer schoolId) {
         wxSchoolMapper.updateSchoolGoodCollectionNum(schoolId);
     }
+
+
 }

@@ -23,5 +23,12 @@
         where file_belong.user_id=#{userId} limit #{m},#{n}
     </select>
 
+    <insert id="insertFileBelong">
+        insert into file_belong values
+        <foreach collection="file_belongs" index="index" separator="," item="item">
+            (#{item.userId},#{item.belongId},#{item.fileHash},#{item.name},#{item.belongType})
+        </foreach>
+    </insert>
+
 
 </mapper>

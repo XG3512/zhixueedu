@@ -27,6 +27,15 @@ public class FileCrudServiceImpl implements FileCrudService {
         return fileCrudMapper.getFileList(userId,(pnum-1)*psize,psize);
     }
 
+    /**
+     * 插入多个file_belongs
+     * @param file_belongs
+     */
+    @Override
+    public void insertFileBelong(List<File_belong> file_belongs) {
+        fileCrudMapper.insertFileBelong(file_belongs);
+    }
+
     @Override
     public void deleteFiles() {
 

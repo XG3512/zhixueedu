@@ -5,6 +5,8 @@ import com.xvls.alexander.entity.wx.TeacherMainPage;
 import com.xvls.alexander.entity.wx.Users;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UsersMapper extends BaseMapper<Users> {
 
@@ -12,6 +14,15 @@ public interface UsersMapper extends BaseMapper<Users> {
     Users getWxStudentInfoByUserNum(String user_num);//加学校！！！
 
     Integer getUserId(String userNum, Integer schoolId, String role);
+
+    /**
+     * 通过 userNum,schoolId,role 获得用户信息
+     * @param userNum
+     * @param schoolId
+     * @param role
+     * @return
+     */
+    Users getUserInfo(String userNum,Integer schoolId,String role);
 
     Users getWxStudentInfoByUserId(Integer userId);
 
@@ -32,6 +43,12 @@ public interface UsersMapper extends BaseMapper<Users> {
     void decreaseFansNum(Integer teacherId);
 
     /**
+     * 更新教师 点赞、收藏 数
+     * @param teacherId
+     */
+    void updateTeacherGoodCollectionNum(Integer teacherId);
+
+    /**
      * 更新教师背景图片
      */
     void updateTeacherBackground(Integer teacherId,String file_url);
@@ -50,4 +67,11 @@ public interface UsersMapper extends BaseMapper<Users> {
      * @return
      */
     TeacherMainPage getTeacherMainPage(Integer wxUserId, Integer teacherId);
+
+    /**
+     * 通过 wxUserId 获得关注教师列表
+     * @param wxUserId
+     * @return
+     */
+    List<TeacherMainPage> getFollowTeacherList(Integer wxUserId);
 }

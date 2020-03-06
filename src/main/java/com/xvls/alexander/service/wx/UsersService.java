@@ -3,6 +3,8 @@ package com.xvls.alexander.service.wx;
 import com.xvls.alexander.entity.wx.TeacherMainPage;
 import com.xvls.alexander.entity.wx.Users;
 
+import java.util.List;
+
 public interface UsersService {
 
     Users getWxStudentInfoByUserNum(String user_num);
@@ -10,6 +12,15 @@ public interface UsersService {
     void saveWxStudentInfo(Users users);
 
     Integer getUserId(String userNum,Integer schoolId,String role);
+
+    /**
+     * 通过 userNum,schoolId,role 获得用户信息
+     * @param userNum
+     * @param schoolId
+     * @param role
+     * @return
+     */
+    Users getUserInfo(String userNum,Integer schoolId,String role);
 
     Users getWxStudentInfoByUserId(Integer userId);
 
@@ -23,6 +34,12 @@ public interface UsersService {
      * 减少粉丝数
      */
     void decreaseFansNum(Integer teacherId);
+
+    /**
+     * 更新教师 点赞、收藏 数
+     * @param teacherId
+     */
+    void updateTeacherGoodCollectionNum(Integer teacherId);
 
     /**
      * 更新教师背景图片
@@ -43,4 +60,13 @@ public interface UsersService {
      * @return
      */
     TeacherMainPage getTeacherMainPage(Integer wxUserId,Integer teacherId);
+
+
+
+    /**
+     * 通过 wxUserId 获得关注教师列表
+     * @param wxUserId
+     * @return
+     */
+    List<TeacherMainPage> getFollowTeacherList(Integer wxUserId);
 }

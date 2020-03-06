@@ -101,4 +101,5 @@
         collection_num = COALESCE((select sum(collection_num) from article group by(school_id) having school_id=#{schoolId}),0)+COALESCE((select sum(collection_num) from video_main group by (school_id) having school_id=#{schoolId}),0)
         where school_id = #{schoolId}
     </update>
+
 </mapper>

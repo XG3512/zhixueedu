@@ -36,7 +36,7 @@ public class WxArticleController {
     WxCommentsService wxCommentsService;
 
     /**
-     * 通过页数获取动态信息
+     * 通过 页数 获取全部动态信息
      * @return
      */
     @RequestMapping("getArticleByPage")
@@ -56,6 +56,37 @@ public class WxArticleController {
         List<Article> articles = wxArticleService.getArticleByPage(pageInfo,wxUserId);
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("articleInfo",articles);
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
+     * 通过 pageInfo，wxUserId 获得用户关注学校的动态
+     * @param body
+     * @return
+     */
+    @RequestMapping("getFollowArticleListByPage")
+    public Object getFollowArticleListByPage(@RequestBody String body){
+
+        System.out.println(body);
+
+        PageInfo pageInfo = null;
+        Integer wxUserId = null;
+
+        try {
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+            wxUserId = JacksonUtil.parseInteger(body,"wxUserId");
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return WeChatResponseUtil.badArgument();
+        }
+        if(pageInfo == null || wxUserId == null){
+            return WeChatResponseUtil.badArgumentValue();
+        }
+
+        List<Article> followArticleList = wxArticleService.getFollowArticleListByPage(wxUserId, pageInfo);
+        Map result = Maps.newHashMap();
+        result.put("followArticleList",followArticleList);
+
         return WeChatResponseUtil.ok(result);
     }
 
@@ -80,6 +111,9 @@ public class WxArticleController {
             return WeChatResponseUtil.badArgumentValue();
         }
         Article article = wxArticleService.getArticleById(articleId,wxUserId);
+        if(article != null){
+            wxArticleService.updateVideoHeatOfVideo(article);
+        }
         //List<Comments> comments = wxCommentsService.getComments("A", articleId);
         Map<Object,Object> result = Maps.newHashMap();
         result.put("article",article);
@@ -112,9 +146,10 @@ public class WxArticleController {
      */
     @RequestMapping("addArticleComment")
     public Object addArticleComment(@RequestParam("wxUserId")Integer wxUserId,
-                                  @RequestParam("articleId")Integer articleId,
-                                  @RequestParam("vcContent")String vcContent,
-                                  @RequestParam("parentVcId")Integer parentVcId){
+                                    @RequestParam("articleId")Integer articleId,
+                                    @RequestParam("vcContent")String vcContent,
+                                    @RequestParam("parentVcId")Integer parentVcId,
+                                    @RequestParam(value = "parentName",required = false) String parentName){
         if(wxUserId==null || articleId==null || vcContent==null || parentVcId==null){
             return WeChatResponseUtil.badArgument();
         }
@@ -125,6 +160,7 @@ public class WxArticleController {
         comments.setVcContent(vcContent);
         comments.setVcDate(new Date());
         comments.setParentVcId(parentVcId);
+        comments.setParentName(parentName);
 
         /**
          * 增加评论数量

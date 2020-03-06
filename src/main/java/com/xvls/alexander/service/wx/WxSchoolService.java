@@ -63,4 +63,6 @@ public interface WxSchoolService {
      * @param schoolId
      */
     void updateSchoolGoodCollectionNum(Integer schoolId);
+
+
 }

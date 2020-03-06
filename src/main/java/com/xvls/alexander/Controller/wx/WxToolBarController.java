@@ -439,4 +439,22 @@ public class WxToolBarController {
             return WeChatResponseUtil.badArgumentValue();
         }
     }
+
+    /**
+     * 通过 wxUserId 获得用户关注学校的数量
+     * @return
+     */
+    @RequestMapping("getFollowSchoolCount")
+    public Object getFollowSchoolCount(@RequestParam("wxUserId") Integer wxUserId){
+
+        if(wxUserId == null){
+            return WeChatResponseUtil.badArgumentValue();
+        }
+
+        Integer followSchoolCount = wxToolBarService.getFollowSchoolCount(wxUserId);
+        Map result = Maps.newHashMap();
+        result.put("followSchoolCount",followSchoolCount);
+
+        return WeChatResponseUtil.ok(result);
+    }
 }

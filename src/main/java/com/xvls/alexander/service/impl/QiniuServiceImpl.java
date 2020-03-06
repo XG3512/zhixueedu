@@ -65,6 +65,18 @@ public class QiniuServiceImpl implements QiniuService {
     }
 
     /**
+     * 上传 富文本 图片
+     * @param file
+     * @return
+     */
+    @Override
+    public File_download uploadEditorFile(MultipartFile file) throws IOException, NoSuchAlgorithmException {
+        File_download file_download = null;
+        file_download = qiniuFileUtil.upload(file);
+        return file_download;
+    }
+
+    /**
      * 删除已经上传的图片
      * @param imgPath
      */

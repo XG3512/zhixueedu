@@ -79,18 +79,20 @@ public class WxVideoController {
         Map result = Maps.newHashMap();
         Video_main videoMainInfo = wxVideoService.getVideoMainInfo(videoMainId,wxUserId);
         result.put("videoMainInfo",videoMainInfo);
-        wxVideoService.updateVideoHeatOfVideo(videoMainInfo);
-        /**
-         * 获得历史记录
-         */
-        V_history v_history = wxV_historyService.getV_historyById(videoMainId, wxUserId);
-        result.put("v_history",v_history);
-        /**
-         * 加入推荐列表信息
-         */
-        PageInfo pageInfo = new PageInfo(1,6);
-        List<Video_main> recommendVideoList = wxVideoService.getPublicVideoListByLabel(pageInfo, videoMainInfo.getLabelList().get(0).getLabelId(), wxUserId);
-        result.put("recommendVideoList",recommendVideoList);
+        if(videoMainInfo!=null){
+            wxVideoService.updateVideoHeatOfVideo(videoMainInfo);
+            /**
+             * 获得历史记录
+             */
+            V_history v_history = wxV_historyService.getV_historyById(videoMainId, wxUserId);
+            result.put("v_history",v_history);
+            /**
+             * 加入推荐列表信息
+             */
+            PageInfo pageInfo = new PageInfo(1,6);
+            List<Video_main> recommendVideoList = wxVideoService.getPublicVideoListByLabel(pageInfo, videoMainInfo.getLabelList().get(0).getLabelId(), wxUserId);
+            result.put("recommendVideoList",recommendVideoList);
+        }
         return WeChatResponseUtil.ok(result);
     }
 
@@ -121,7 +123,8 @@ public class WxVideoController {
     public Object addVideoComment(@RequestParam("wxUserId")Integer wxUserId,
                                   @RequestParam("videoMainId")Integer videoMainId,
                                   @RequestParam("vcContent")String vcContent,
-                                  @RequestParam("parentVcId")Integer parentVcId){
+                                  @RequestParam("parentVcId")Integer parentVcId,
+                                  @RequestParam(value = "parentName",required = false) String parentName){
         if(wxUserId==null || videoMainId==null || vcContent==null || parentVcId==null){
             return WeChatResponseUtil.badArgument();
         }
@@ -132,6 +135,7 @@ public class WxVideoController {
         comments.setVcContent(vcContent);
         comments.setVcDate(new Date());
         comments.setParentVcId(parentVcId);
+        comments.setParentName(parentName);
 
         /**
          * 增加评论数量
