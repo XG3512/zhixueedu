@@ -22,6 +22,13 @@ public interface UsersService {
      */
     Users getUserInfo(String userNum,Integer schoolId,String role);
 
+    /**
+     * 通过 userId 获得用户信息
+     * @param userId
+     * @return
+     */
+    Users getUserInfoByUserId(Integer userId);
+
     Users getWxStudentInfoByUserId(Integer userId);
 
     Users getUsersByWxUserId(Integer wxUserId);

@@ -24,11 +24,6 @@
         <collection property="roleList" ofType="com.xvls.alexander.entity.Role">
             <id column="role_id" property="roleId"></id>
             <result column="role_name" property="roleName"></result>
-            <collection property="permissions" ofType="com.xvls.alexander.entity.Permission">
-                <id column="permission_id" property="permissionId"></id>
-                <result column="permission_name" property="permissionName"></result>
-                <result column="permission_code" property="permissionCode"></result>
-            </collection>
         </collection>
         <collection property="permissions" ofType="com.xvls.alexander.entity.Permission">
             <id column="permission_id" property="permissionId"></id>
@@ -87,6 +82,15 @@
         left join role_permission on role_permission.role_id=user_role.role_id
         left join permission on permission.permission_id=role_permission.permission_id
         where users.user_num = #{userNum} and users.school_id = #{schoolId} and role.role_name = #{role}
+    </select>
+    <select id="getUserInfoByUserId" resultMap="userRole">
+        select users.*,role.*,permission.*
+        from users
+        inner join user_role on users.user_id = user_role.user_id
+        inner join role on user_role.role_id = role.role_id
+        left join role_permission on role_permission.role_id=user_role.role_id
+        left join permission on permission.permission_id=role_permission.permission_id
+        where users.user_id = #{userId}
     </select>
 
     <select id="getWxStudentInfoByUserId" parameterType="java.lang.Integer" resultMap="userRole">

@@ -40,7 +40,7 @@ public class SignInServiceImpl implements SignInService {
 
         QrConfig config = new QrConfig(400, 400);
         // 设置边距，既二维码和背景之间的边距
-        config.setMargin(3);
+        config.setMargin(2);
         BufferedImage generate = QrCodeUtil.generate(JacksonUtil.to(SystemResponse.ok(result)), config);
         String s = QiniuFileUtil.uploadBySystem(generate);
         return s;

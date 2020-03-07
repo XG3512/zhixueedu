@@ -55,8 +55,9 @@ public class shiroConfig {
 
         filterMap.put("/user/update","authc");
 
-        /*后台管理端url管理*/
+        /**后台管理端url管理*/
         filterMap.put("/system/article/**","authc");
+        filterMap.put("/system/system_menu/**","authc");
 
         //设置登录的请求
         shiroFilterFactoryBean.setLoginUrl("/toLogin");

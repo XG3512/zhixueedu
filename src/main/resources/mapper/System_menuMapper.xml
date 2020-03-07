@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.System_menuMapper">
+
+    <!--递归查询系统菜单-->
+    <resultMap id="menuList" type="com.xvls.alexander.entity.System_menu">
+        <id column="menu_id" property="menuId"></id>
+        <result column="menu_name" property="menuName"></result>
+        <result column="menu_url" property="menuUrl"></result>
+        <result column="parent_id" property="parentId"></result>
+        <result column="icon" property="icon"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="role_id" property="roleId"></result>
+        <result column="order_num" property="orderNum"></result>
+        <collection property="members" ofType="com.xvls.alexander.entity.System_menu" column="menu_id" select="getMembers"></collection>
+    </resultMap>
+
+    <resultMap id="menuMembers" type="com.xvls.alexander.entity.System_menu">
+        <id column="menu_id" property="menuId"></id>
+        <result column="menu_name" property="menuName"></result>
+        <result column="menu_url" property="menuUrl"></result>
+        <result column="parent_id" property="parentId"></result>
+        <result column="icon" property="icon"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="role_id" property="roleId"></result>
+        <result column="order_num" property="orderNum"></result>
+    </resultMap>
+
+
+
+    <!--递归查询系统菜单-->
+    <!--查询主菜单-->
+    <select id="getMenuListById" resultMap="menuList">
+        select *
+        from system_menu
+        where system_menu.role_id IN (select role_id from user_role where user_id = #{userId}) and (parent_id = 0 or parent_id is null)
+        ORDER BY system_menu.order_num ASC , system_menu.create_time ASC
+    </select>
+    <select id="getMembers" resultMap="menuMembers">
+        select *
+        from system_menu
+        where parent_id = #{menu_id}
+        ORDER BY system_menu.order_num ASC , system_menu.create_time ASC
+    </select>
+
+
+</mapper>

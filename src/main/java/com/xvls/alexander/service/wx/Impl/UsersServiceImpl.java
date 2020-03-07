@@ -60,6 +60,16 @@ public class UsersServiceImpl implements UsersService {
         return usersMapper.getUserInfo(userNum,schoolId,role);
     }
 
+    /**
+     * 通过 userId 获得用户信息
+     * @param userId
+     * @return
+     */
+    @Override
+    public Users getUserInfoByUserId(Integer userId) {
+        return usersMapper.getUserInfoByUserId(userId);
+    }
+
     @Override
     public Users getWxStudentInfoByUserId(Integer userId) {
         return usersMapper.getWxStudentInfoByUserId(userId);
