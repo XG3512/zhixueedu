@@ -23,7 +23,9 @@ public class System_menu extends Model<System_menu> {
 
     @TableId(type = IdType.AUTO)
     private Integer menuId;
+    private String path;
     private String menuName;
+    private String menuLabel;
     private String menuUrl;
     private Integer parentId;
     private String icon;

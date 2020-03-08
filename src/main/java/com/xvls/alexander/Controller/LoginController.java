@@ -77,6 +77,7 @@ public class LoginController {
         Subject user = SecurityUtils.getSubject();
         /*shiro 封装用户的登录数据*/
         /**根据user_num,school,role获取userId**/
+        // TODO: 2020/3/8 有错误，需要在mapper中使用嵌套查询
         Users userInfo = usersService.getUserInfo(userNum, schoolId, role);
         if(userInfo == null){
             return SystemResponse.fail(-1,"账号或密码错误！");

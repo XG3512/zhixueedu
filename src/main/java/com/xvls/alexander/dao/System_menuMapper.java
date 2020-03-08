@@ -15,4 +15,16 @@ public interface System_menuMapper extends BaseMapper<System_menu> {
      * @return
      */
     List<System_menu> getMenuListById(Integer userId);
+
+    /**
+     * 获得所有菜单列表
+     * @return
+     */
+    List<System_menu> getAllMenuList();
+
+    /**
+     * 通过 menuId 删除菜单
+     * @param menuId
+     */
+    void deleteMenu(Integer menuId);
 }

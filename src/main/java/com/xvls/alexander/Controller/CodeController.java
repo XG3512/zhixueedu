@@ -23,7 +23,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/system/code")
 public class CodeController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CodeController.class);
 
     /**
      * 获取验证码图片和文本(验证码文本会保存在HttpSession中)

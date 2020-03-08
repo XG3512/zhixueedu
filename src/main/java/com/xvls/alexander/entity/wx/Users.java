@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.xvls.alexander.entity.Permission;
 import com.xvls.alexander.entity.Role;
@@ -14,6 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -47,10 +49,10 @@ public class Users extends Model<Users> implements Serializable {
     //private String motto;//座右铭
 
     @TableField(exist = false)//该字段在数据库表中不存在
-    private Set<Role> roleList = Sets.newHashSet();//角色列表
+    private Set<Role> roleList;//角色列表
 
     @TableField(exist = false)
-    private Set<Permission> permissions = Sets.newHashSet();//权限列表
+    private Set<Permission> permissions;//权限列表
 
     @TableField(exist = false)
     private Integer fansNum;//粉丝数

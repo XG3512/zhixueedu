@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -16,5 +17,5 @@ public class Role implements Serializable {
     private Integer roleId;
     private String roleName;
 
-    private Set<Permission> permissions  = Sets.newHashSet();//权限列表
+    private Set<Permission> permissions;//权限列表
 }

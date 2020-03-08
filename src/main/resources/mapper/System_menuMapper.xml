@@ -7,7 +7,9 @@
     <!--递归查询系统菜单-->
     <resultMap id="menuList" type="com.xvls.alexander.entity.System_menu">
         <id column="menu_id" property="menuId"></id>
+        <result column="path" property="path"></result>
         <result column="menu_name" property="menuName"></result>
+        <result column="menu_label" property="menuLabel"></result>
         <result column="menu_url" property="menuUrl"></result>
         <result column="parent_id" property="parentId"></result>
         <result column="icon" property="icon"></result>
@@ -19,7 +21,9 @@
 
     <resultMap id="menuMembers" type="com.xvls.alexander.entity.System_menu">
         <id column="menu_id" property="menuId"></id>
+        <result column="path" property="path"></result>
         <result column="menu_name" property="menuName"></result>
+        <result column="menu_label" property="menuLabel"></result>
         <result column="menu_url" property="menuUrl"></result>
         <result column="parent_id" property="parentId"></result>
         <result column="icon" property="icon"></result>
@@ -27,7 +31,6 @@
         <result column="role_id" property="roleId"></result>
         <result column="order_num" property="orderNum"></result>
     </resultMap>
-
 
 
     <!--递归查询系统菜单-->
@@ -44,6 +47,17 @@
         where parent_id = #{menu_id}
         ORDER BY system_menu.order_num ASC , system_menu.create_time ASC
     </select>
+
+    <select id="getAllMenuList" resultMap="menuList">
+        select *
+        from system_menu
+        where (parent_id = 0 or parent_id is null)
+        ORDER BY system_menu.order_num ASC , system_menu.create_time ASC
+    </select>
+
+    <delete id="deleteMenu">
+        delete from system_menu where menu_id = #{menuId} or parent_id = #{menuId}
+    </delete>
 
 
 </mapper>

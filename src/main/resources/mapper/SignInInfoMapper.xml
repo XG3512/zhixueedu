@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.SignInInfoMapper">
+
+    <!--递归查询系统菜单-->
+    <resultMap id="signIn_infoList" type="com.xvls.alexander.entity.SignIn_infoList">
+        <id column="sii_id" property="siiId"></id>
+        <result column="tc_id" property="tcId"></result>
+        <result column="teacher_id" property="teacherId"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="start_time" property="startTime"></result>
+        <result column="end_time" property="endTime"></result>
+        <result column="course_name" property="courseName"></result>
+        <result column="class_name" property="className"></result>
+        <result column="semester" property="semester"></result>
+        <result column="school_id" property="schoolId"></result>
+        <result column="school_name" property="schoolName"></result>
+    </resultMap>
+
+
+    <select id="getSignInInfoList" resultMap="signIn_infoList">
+        select signIn_info.sii_id,
+        signIn_info.tc_id,
+        signIn_info.teacher_id,
+        signIn_info.start_time,
+        signIn_info.end_time,
+        users.user_name,
+        course.course_name,
+        class.class_name,
+        tc.semester,
+        tc.school_id,
+        school.school_name
+        from signIn_info
+        left join tc on tc.tc_id = signIn_info.tc_id
+        left join course on course.course_id = tc.course_id
+        left join class on class.class_id = tc.class_id
+        left join users on users.user_id = signIn_info.teacher_id
+        left join school on school.school_id = tc.school_id
+        where signIn_info.teacher_id = #{userId}
+        order by signIn_info.sii_id desc
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+
+    <delete id="deleteSignIn_info">
+        delete from signIn_info where sii_id = #{siiId}
+    </delete>
+
+</mapper>
