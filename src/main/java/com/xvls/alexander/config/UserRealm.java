@@ -38,7 +38,7 @@ public class UserRealm extends AuthorizingRealm {
         Subject subject = SecurityUtils.getSubject();
         Users currentUser = (Users) subject.getPrincipal();//拿到user对象
 
-        System.out.println("AuthorizationInfo,users:"+currentUser.getPermissions());
+        System.out.println("currentUsers:"+currentUser.getUserNum());
 
         /************ 从数据库中添加权限 *************/
         Set<Role> roles = currentUser.getRoleList();

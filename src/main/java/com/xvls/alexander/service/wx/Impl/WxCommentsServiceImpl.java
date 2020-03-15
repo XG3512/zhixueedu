@@ -57,14 +57,13 @@ public class WxCommentsServiceImpl implements WxCommentsService {
         return comments.getCommentId();
     }
 
-    // TODO: 2020/2/12 删除评论信息
     /**
-     * 删除评论信息，前端需要判断该用户id是否与评论中的wxUserId一致
-     * @param comments
+     * 批量删除评论信息 及其子评论信息
+     * @param commentIdList
      */
     @Override
-    public void deleteComment(Comments comments) {
-
+    public void deleteComment(List<Integer> commentIdList) {
+        wxCommentsMapper.deleteComment(commentIdList);
     }
 
     /**

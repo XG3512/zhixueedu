@@ -57,6 +57,12 @@ public interface WxArticleService {
     void decreaseArticleCollectionNum(Integer articleId);
 
     /**
+     * 通过 articleId 更新动态评论总数
+     * @param articleId
+     */
+    void updateArticleCommentsNum(Integer articleId);
+
+    /**
      * 通过 wxUserId 和 pageInfo 获得动态的点赞记录
      * @param wxUserId
      * @param pageInfo
@@ -118,6 +124,13 @@ public interface WxArticleService {
      * @return
      */
     Integer getArticleNumByUserId(Integer userId);
+
+    /**
+     * 通过 articleId，userId，commentStatus 更新评论状态
+     * @param articleId
+     * @param commentStatus
+     */
+    void updateArticleCommentStatus(Integer articleId,Boolean commentStatus);
 
     /**
      * 通过 articleId 删除动态

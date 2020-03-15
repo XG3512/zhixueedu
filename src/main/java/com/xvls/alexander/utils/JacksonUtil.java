@@ -16,7 +16,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsParser;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsSchema;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+//import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
@@ -50,7 +50,7 @@ public class JacksonUtil {
     private static YAMLMapper yamlMapper;
     private static JavaPropsMapper propsMapper;
     private static CsvMapper csvMapper;
-    private static XmlMapper xmlMapper;
+    //private static XmlMapper xmlMapper;
 
     /**
      * 序列化级别，默认只序列化属性值发生过改变的字段
@@ -89,7 +89,7 @@ public class JacksonUtil {
         yamlMapper = new YAMLMapper();
         propsMapper = new JavaPropsMapper();
         csvMapper = new CsvMapper();
-        xmlMapper = new XmlMapper();
+        //xmlMapper = new XmlMapper();
     }
 
     private static void configCommon() {
@@ -97,7 +97,7 @@ public class JacksonUtil {
         config(yamlMapper);
         config(propsMapper);
         config(csvMapper);
-        config(xmlMapper);
+        //config(xmlMapper);
     }
 
     private static void configPropertyInclusion() {
@@ -105,7 +105,7 @@ public class JacksonUtil {
         yamlMapper.setSerializationInclusion(DEFAULT_PROPERTY_INCLUSION);
         propsMapper.setSerializationInclusion(DEFAULT_PROPERTY_INCLUSION);
         csvMapper.setSerializationInclusion(DEFAULT_PROPERTY_INCLUSION);
-        xmlMapper.setSerializationInclusion(DEFAULT_PROPERTY_INCLUSION);
+        //xmlMapper.setSerializationInclusion(DEFAULT_PROPERTY_INCLUSION);
     }
 
     private static void configIndentOutput() {
@@ -113,7 +113,7 @@ public class JacksonUtil {
         yamlMapper.configure(SerializationFeature.INDENT_OUTPUT, IS_ENABLE_INDENT_OUTPUT);
         propsMapper.configure(SerializationFeature.INDENT_OUTPUT, IS_ENABLE_INDENT_OUTPUT);
         csvMapper.configure(SerializationFeature.INDENT_OUTPUT, IS_ENABLE_INDENT_OUTPUT);
-        xmlMapper.configure(SerializationFeature.INDENT_OUTPUT, IS_ENABLE_INDENT_OUTPUT);
+        //xmlMapper.configure(SerializationFeature.INDENT_OUTPUT, IS_ENABLE_INDENT_OUTPUT);
     }
 
     private static void configSpecial() {
@@ -460,7 +460,7 @@ public class JacksonUtil {
      * 反序列化Recources目录下的Xml文件
      * @param name 文件名
      */
-    public static <V> V fromXmlRecource(String name, Class<V> c) {
+    /*public static <V> V fromXmlRecource(String name, Class<V> c) {
         try (InputStream inputStream = getResourceStream(name); InputStreamReader reader = getResourceReader(inputStream)) {
             if (reader == null) {
                 return null;
@@ -470,13 +470,13 @@ public class JacksonUtil {
             //log.error("jackson from xml recource error, name: {}, type: {}", name, c, e);
             return null;
         }
-    }
+    }*/
 
     /**
      * 反序列化Recources目录下的Xml文件
      * @param name 文件名
      */
-    public static <V> V fromXmlRecource(String name, TypeReference<V> type) {
+    /*public static <V> V fromXmlRecource(String name, TypeReference<V> type) {
         try (InputStream inputStream = getResourceStream(name); InputStreamReader reader = getResourceReader(inputStream)) {
             if (reader == null) {
                 return null;
@@ -486,57 +486,57 @@ public class JacksonUtil {
             //log.error("jackson from xml recource error, name: {}, type: {}", name, type, e);
             return null;
         }
-    }
+    }*/
 
     /**
      * 反序列化Xml文件
      * @param path 文件路径
      */
-    public static <V> V fromXmlFile(String path, Class<V> c) {
+    /*public static <V> V fromXmlFile(String path, Class<V> c) {
         try {
             return xmlMapper.readValue(new File(path), c);
         } catch (IOException e) {
             //log.error("jackson from xml error, path: {}, type: {}", path, c, e);
             return null;
         }
-    }
+    }*/
 
     /**
      * 反序列化Xml文件
      * @param path 文件路径
      */
-    public static <V> V fromXmlFile(String path, TypeReference<V> type) {
+    /*public static <V> V fromXmlFile(String path, TypeReference<V> type) {
         try {
             return xmlMapper.readValue(new File(path), type);
         } catch (IOException e) {
             //log.error("jackson from xml error, path: {}, type: {}", path, type, e);
             return null;
         }
-    }
+    }*/
 
     /**
      * 反序列化Xml字符串
      */
-    public static <V> V fromXml(String xml, Class<V> c) {
+    /*public static <V> V fromXml(String xml, Class<V> c) {
         try {
             return xmlMapper.readValue(xml, c);
         } catch (IOException e) {
             //log.error("jackson from xml error, xml: {}, type: {}", xml, c, e);
             return null;
         }
-    }
+    }*/
 
     /**
      * 反序列化Xml字符串
      */
-    public static <V> V fromXml(String xml, TypeReference<V> type) {
+    /*public static <V> V fromXml(String xml, TypeReference<V> type) {
         try {
             return xmlMapper.readValue(xml, type);
         } catch (IOException e) {
             //log.error("jackson from xml error, xml: {}, type: {}", xml, type, e);
             return null;
         }
-    }
+    }*/
 
     /**
      * 序列化为JSON
@@ -721,14 +721,14 @@ public class JacksonUtil {
     /**
      * 序列化为XML
      */
-    public static <V> String toXml(V v) {
+    /*public static <V> String toXml(V v) {
         return toXml(v, true);
-    }
+    }*/
 
     /**
      * 序列化为XML
      */
-    public static <V> String toXml(V v, boolean isIndent) {
+    /*public static <V> String toXml(V v, boolean isIndent) {
         try {
             if (isIndent) {
                 return xmlMapper.writerWithDefaultPrettyPrinter().writeValueAsString(v);
@@ -739,19 +739,19 @@ public class JacksonUtil {
             //log.error("jackson to xml error, obj: {}, isIndent, {}", v, isIndent, e);
             return null;
         }
-    }
+    }*/
 
     /**
      * 序列化为XML文件
      */
-    public static <V> void toXmlFile(String path, V v) {
+    /*public static <V> void toXmlFile(String path, V v) {
         toXmlFile(path, v, true);
-    }
+    }*/
 
     /**
      * 序列化为XML文件
      */
-    public static <V> void toXmlFile(String path, V v, boolean isIndent) {
+    /*public static <V> void toXmlFile(String path, V v, boolean isIndent) {
         try (Writer writer = new FileWriter(new File(path), true)) {
             if (isIndent) {
                 xmlMapper.writerWithDefaultPrettyPrinter().writeValue(writer, v);
@@ -762,7 +762,7 @@ public class JacksonUtil {
         } catch (Exception e) {
             //log.error("jackson to xml file error, path: {}, obj: {}, isIndent: {}", path, v, isIndent, e);
         }
-    }
+    }*/
 
     /**
      * 从json串中获取某个字段

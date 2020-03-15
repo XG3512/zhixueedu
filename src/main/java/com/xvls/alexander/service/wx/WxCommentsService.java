@@ -37,11 +37,10 @@ public interface WxCommentsService {
     Integer addComment(Comments comments);
 
     /**
-     * 删除评论信息
-     * @param comments
+     * 批量删除评论信息及其子评论信息
+     * @param commentIdList
      */
-    // TODO: 2020/2/17 删除评论功能
-    void deleteComment(Comments comments);
+    void deleteComment(List<Integer> commentIdList);
 
     /**
      * 获得评论数

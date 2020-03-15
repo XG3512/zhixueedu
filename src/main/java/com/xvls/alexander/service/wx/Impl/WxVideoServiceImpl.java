@@ -175,6 +175,16 @@ public class WxVideoServiceImpl implements WxVideoService {
     }
 
     /**
+     * 更新视频评论总数
+     * @param videoMainId
+     */
+    @Override
+    public void updateVideoCommentNum(Integer videoMainId) {
+
+    }
+
+
+    /**
      * 计算并更新视频热度
      * @param video_main
      */

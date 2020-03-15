@@ -25,9 +25,9 @@ public class System_menuSerticeImpl implements System_menuService {
     @Override
     public List<System_menu> getMenuListById(Integer userId) {
         List<System_menu> menuList = system_menuMapper.getMenuListById(userId);
-        System.out.println("menuList.size():"+menuList.size());
+        //System.out.println("menuList.size():"+menuList.size());
         if(menuList.size()==1){
-            return menuList.get(0).getMembers();
+            return menuList.get(0).getChildren();
         }else{
             return menuList;
         }

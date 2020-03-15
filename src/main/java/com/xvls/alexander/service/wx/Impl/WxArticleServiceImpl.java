@@ -142,6 +142,15 @@ public class WxArticleServiceImpl implements WxArticleService {
     }
 
     /**
+     * 通过 articleId 更新动态评论总数
+     * @param articleId
+     */
+    @Override
+    public void updateArticleCommentsNum(Integer articleId) {
+        wxArticleMapper.updateArticleCommentsNum(articleId);
+    }
+
+    /**
      * 通过 wxUserId 和 pageInfo 获得动态的点赞记录
      * @param wxUserId
      * @param pageInfo
@@ -199,7 +208,7 @@ public class WxArticleServiceImpl implements WxArticleService {
     @Override
     public void updateVideoHeatOfVideo(Article article) {
         Double result = Calculate(article);
-        wxArticleMapper.updateVideoHeatOfVideo(article.getArticleId(),result);
+        wxArticleMapper.updateArticleHeatOfArticle(article.getArticleId(),result);
     }
 
 
@@ -241,6 +250,16 @@ public class WxArticleServiceImpl implements WxArticleService {
     @Override
     public Integer getArticleNumByUserId(Integer userId) {
         return wxArticleMapper.getArticleNumByUserId(userId);
+    }
+
+    /**
+     * 通过 articleId，userId，commentStatus 更新评论状态
+     * @param articleId
+     * @param commentStatus
+     */
+    @Override
+    public void updateArticleCommentStatus(Integer articleId, Boolean commentStatus) {
+        wxArticleMapper.updateArticleCommentStatus(articleId,commentStatus);
     }
 
     /**

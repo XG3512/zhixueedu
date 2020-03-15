@@ -9,6 +9,7 @@ import com.xvls.alexander.service.wx.WxSchoolService;
 import com.xvls.alexander.service.wx.WxVideoService;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import java.util.Map;
 /**
  * 学校主页
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/wx/school")
 public class WxSchoolController {

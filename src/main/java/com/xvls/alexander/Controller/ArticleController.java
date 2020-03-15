@@ -137,6 +137,23 @@ public class ArticleController {
     }
 
     /**
+     * 通过 articleId，userId，commentStatus 更新评论状态
+     * @param articleId
+     * @param commentStatus
+     * @return
+     */
+    @RequiresPermissions("article:updateCommentStatus")
+    @RequestMapping("setArticleCommentStatus")
+    public Object setArticleCommentStatus(@RequestParam("articleId") Integer articleId,
+                                          @RequestParam("commentStatus")Boolean commentStatus){
+        if(articleId == null || commentStatus == null){
+            return SystemResponse.badArgument();
+        }
+        wxArticleService.updateArticleCommentStatus(articleId,commentStatus);
+        return SystemResponse.ok();
+    }
+
+    /**
      * 通过 articleId 删除动态及file_belong
      * @param articleId
      * @return

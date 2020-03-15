@@ -14,16 +14,21 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//@CrossOrigin(allowCredentials ="true")//设置是否允许客户端发送cookie信息。默认是false
+@CrossOrigin
 @RestController
 @RequestMapping("/system/login")
 public class LoginController {
@@ -32,6 +37,8 @@ public class LoginController {
     UsersService usersService;
     @Autowired
     System_menuService system_menuService;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 后台管理端 登录 功能，通过 userNum,password,schoolId,role
@@ -39,7 +46,7 @@ public class LoginController {
      * @return
      */
     @RequestMapping("login")
-    public Object login(@RequestBody String body, HttpServletRequest request){
+    public Object login(@RequestBody String body, HttpServletRequest request, HttpServletResponse response){
 
         String userNum = null;
         String password = null;
@@ -47,6 +54,7 @@ public class LoginController {
         Integer schoolId = null;//用户学校
         Boolean rememberMe = null;//记住我
         String code = null;//验证码
+        String verifyCodeId = null;//验证码id
         try {
             userNum = JacksonUtil.parseString(body,"userNum");
             password = JacksonUtil.parseString(body,"password");
@@ -54,21 +62,27 @@ public class LoginController {
             role = JacksonUtil.parseString(body,"role");
             rememberMe = JacksonUtil.parseBoolean(body,"rememberMe");
             code = JacksonUtil.parseString(body,"code");
+            verifyCodeId = JacksonUtil.parseString(body,"verifyCodeId");
 
-            if (userNum == null || password == null || role == null || schoolId == null || rememberMe == null || code==null) {
+            if (userNum == null || password == null || role == null || schoolId == null || rememberMe == null || code==null || verifyCodeId==null) {
                 return SystemResponse.badArgument();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return SystemResponse.badArgument();
         }
-        HttpSession session = request.getSession();
+        /*HttpSession session = request.getSession();
+        System.out.println("session:"+session.getId());
         if(session == null){
+            System.out.println("session is null");
             return SystemResponse.fail(-1,"session超时");
         }
-        String trueCode = (String)session.getAttribute(Constants.VALIDATE_CODE);
+        String trueCode = (String)session.getAttribute(Constants.VALIDATE_CODE);*/
+        System.out.println("login sessionId:"+request.getSession().getId());
+        String trueCode = redisTemplate.opsForValue().get(verifyCodeId);
+        System.out.println("验证码："+trueCode);
         if(StringUtils.isBlank(trueCode)){
-            return SystemResponse.fail(-1,"验证码超时");
+            return SystemResponse.fail(-1,"验证码已超时，请刷新后重新输入");
         }
         if(StringUtils.isBlank(code) || !trueCode.toLowerCase().equals(code.toLowerCase())){
             return SystemResponse.fail(-1,"验证码错误");
@@ -77,7 +91,6 @@ public class LoginController {
         Subject user = SecurityUtils.getSubject();
         /*shiro 封装用户的登录数据*/
         /**根据user_num,school,role获取userId**/
-        // TODO: 2020/3/8 有错误，需要在mapper中使用嵌套查询
         Users userInfo = usersService.getUserInfo(userNum, schoolId, role);
         if(userInfo == null){
             return SystemResponse.fail(-1,"账号或密码错误！");
@@ -93,7 +106,7 @@ public class LoginController {
         try {
             user.login(token);//执行登录方法，如果没有异常就登录成功
         }catch (IncorrectCredentialsException e) {
-            shiroerror = "登录密码错误.";
+            shiroerror = "请检查账号,密码，身份或学校是否填写正确";
         } catch (ExcessiveAttemptsException e) {
             shiroerror = "登录失败次数过多";
         } catch (LockedAccountException e) {
@@ -103,7 +116,7 @@ public class LoginController {
         } catch (ExpiredCredentialsException e) {
             shiroerror = "帐号已过期.";
         } catch (UnknownAccountException e) {
-            shiroerror = "帐号不存在";
+            shiroerror = "请检查账号,密码，身份或学校是否填写正确";
         } catch (UnauthorizedException e) {
             shiroerror = "您没有得到相应的授权！";
         }
@@ -119,7 +132,7 @@ public class LoginController {
 
             result.put("userInfo",userInfo);
             result.put("menuList",menuList);
-            result.put("token",token);
+            result.put("token",user.getSession().getId());
 
             return SystemResponse.ok(result);
         }else {

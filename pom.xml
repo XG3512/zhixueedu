@@ -27,6 +27,7 @@
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
         <commons-io.version>2.4</commons-io.version>
         <shiro.version>1.4.0</shiro.version>
+        <shiro-redis.version>2.4.2.1-RELEASE</shiro-redis.version>
         <thymeleaf.version>2.0.0</thymeleaf.version>
         <weixin.version>3.3.0</weixin.version>
         <hutool-all.version>5.1.2</hutool-all.version>
@@ -154,6 +155,7 @@
             <version>${jackson.version}</version>
         </dependency>
 
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -213,6 +215,17 @@
             <artifactId>shiro-spring</artifactId>
             <version>${shiro.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
+            <version>${shiro-redis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
         <!--thymeleaf模板-->
 <!--        <dependency>
             <groupId>org.springframework.boot</groupId>

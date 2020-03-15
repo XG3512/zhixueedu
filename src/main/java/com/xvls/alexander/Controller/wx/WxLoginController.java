@@ -27,7 +27,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/wx/auth")
 @Validated
-// TODO: 2020/2/11 完成登录上对WxUser和Users的转换，之后需要去评论功能进行转换
 public class WxLoginController{
 
     private static String appid="wx085b04d8a31a7f20";

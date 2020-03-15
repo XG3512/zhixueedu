@@ -44,6 +44,7 @@ public class Users extends Model<Users> implements Serializable {
     private String phone;
     private String mail;
     private String address;
+    private String icon;
     private String salt;
     private Integer wxUserId;
     //private String motto;//座右铭

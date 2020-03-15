@@ -14,12 +14,12 @@
         <result column="parent_id" property="parentId"></result>
         <result column="icon" property="icon"></result>
         <result column="create_time" property="createTime"></result>
-        <result column="role_id" property="roleId"></result>
+        <result column="permission_code" property="permissionCode"></result>
         <result column="order_num" property="orderNum"></result>
-        <collection property="members" ofType="com.xvls.alexander.entity.System_menu" column="menu_id" select="getMembers"></collection>
+        <collection property="children" ofType="com.xvls.alexander.entity.System_menu" column="{menu_id=menu_id,userId = user_id}" select="getChildren"></collection>
     </resultMap>
 
-    <resultMap id="menuMembers" type="com.xvls.alexander.entity.System_menu">
+    <resultMap id="menuChildren" type="com.xvls.alexander.entity.System_menu">
         <id column="menu_id" property="menuId"></id>
         <result column="path" property="path"></result>
         <result column="menu_name" property="menuName"></result>
@@ -28,7 +28,35 @@
         <result column="parent_id" property="parentId"></result>
         <result column="icon" property="icon"></result>
         <result column="create_time" property="createTime"></result>
-        <result column="role_id" property="roleId"></result>
+        <result column="permission_code" property="permissionCode"></result>
+        <result column="order_num" property="orderNum"></result>
+    </resultMap>
+
+    <!--递归查询全部系统菜单-->
+    <resultMap id="allMenuList" type="com.xvls.alexander.entity.System_menu">
+        <id column="menu_id" property="menuId"></id>
+        <result column="path" property="path"></result>
+        <result column="menu_name" property="menuName"></result>
+        <result column="menu_label" property="menuLabel"></result>
+        <result column="menu_url" property="menuUrl"></result>
+        <result column="parent_id" property="parentId"></result>
+        <result column="icon" property="icon"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="permission_code" property="permissionCode"></result>
+        <result column="order_num" property="orderNum"></result>
+        <collection property="children" ofType="com.xvls.alexander.entity.System_menu" column="menu_id" select="getAllChildren"></collection>
+    </resultMap>
+
+    <resultMap id="AllMenuChildren" type="com.xvls.alexander.entity.System_menu">
+        <id column="menu_id" property="menuId"></id>
+        <result column="path" property="path"></result>
+        <result column="menu_name" property="menuName"></result>
+        <result column="menu_label" property="menuLabel"></result>
+        <result column="menu_url" property="menuUrl"></result>
+        <result column="parent_id" property="parentId"></result>
+        <result column="icon" property="icon"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="permission_code" property="permissionCode"></result>
         <result column="order_num" property="orderNum"></result>
     </resultMap>
 
@@ -36,22 +64,39 @@
     <!--递归查询系统菜单-->
     <!--查询主菜单-->
     <select id="getMenuListById" resultMap="menuList">
-        select *
+        select DISTINCT system_menu.*,
+        user_role.user_id
         from system_menu
-        where system_menu.role_id IN (select role_id from user_role where user_id = #{userId}) and (parent_id = 0 or parent_id is null)
+        inner join permission on permission.permission_code = system_menu.permission_code
+        inner join role_permission on role_permission.permission_id = permission.permission_id
+        inner join user_role on user_role.role_id = role_permission.role_id
+        where (system_menu.parent_id = 0 or system_menu.parent_id is null) and user_role.user_id = #{userId}
         ORDER BY system_menu.order_num ASC , system_menu.create_time ASC
     </select>
-    <select id="getMembers" resultMap="menuMembers">
+    <select id="getChildren" resultMap="menuChildren">
         select *
         from system_menu
-        where parent_id = #{menu_id}
+        where parent_id = #{menu_id} and permission_code IN (
+            select permission_code
+            from user_role
+            left join role_permission on role_permission.role_id = user_role.role_id
+            left join permission on permission.permission_id = role_permission.permission_id
+            where user_id = #{userId}
+        )
         ORDER BY system_menu.order_num ASC , system_menu.create_time ASC
     </select>
 
-    <select id="getAllMenuList" resultMap="menuList">
+    <!-- 查询全部菜单 -->
+    <select id="getAllMenuList" resultMap="allMenuList">
         select *
         from system_menu
         where (parent_id = 0 or parent_id is null)
+        ORDER BY system_menu.order_num ASC , system_menu.create_time ASC
+    </select>
+    <select id="getAllChildren" resultMap="AllMenuChildren">
+        select *
+        from system_menu
+        where parent_id = #{menu_id}
         ORDER BY system_menu.order_num ASC , system_menu.create_time ASC
     </select>
 

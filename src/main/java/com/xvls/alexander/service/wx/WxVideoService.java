@@ -110,6 +110,12 @@ public interface WxVideoService {
      */
     void decreaseVideoCollectionNum(Integer videoId);
 
+    /**
+     * 更新视频的评论数
+     * @param videoMainId
+     */
+    void updateVideoCommentNum(Integer videoMainId);
+
 
     /**
      * 更新视频热度

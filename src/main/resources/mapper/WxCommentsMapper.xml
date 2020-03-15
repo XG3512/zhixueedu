@@ -125,5 +125,17 @@
         select count(*) membersCount from comments group by comments.parent_vc_id having parent_vc_id = #{comment_id}
     </select>
 
+    <!--删除评论信息 及其子评论信息-->
+    <delete id="deleteComment">
+        delete from comments where comment_id IN
+        <foreach collection="list" open="(" close=")" item="commentId" separator=",">
+            #{commentId}
+        </foreach>
+        or parent_vc_id IN
+        <foreach collection="list" open="(" close=")" item="commentId" separator=",">
+            #{commentId}
+        </foreach>
+    </delete>
+
 
 </mapper>

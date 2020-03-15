@@ -36,4 +36,10 @@ public interface WxCommentsMapper extends BaseMapper<Comments> {
      */
     List<Comments> getMainComments(String belongType , Integer id , PageInfo pageInfo);
 
+    /**
+     * 批量删除评论信息及其子评论信息
+     * @param commentIdList
+     */
+    void deleteComment(List<Integer> commentIdList);
+
 }

@@ -3,9 +3,13 @@ package com.xvls.alexander.Controller.wx;
 import com.google.common.collect.Maps;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Comments;
+import com.xvls.alexander.service.wx.WxArticleService;
 import com.xvls.alexander.service.wx.WxCommentsService;
+import com.xvls.alexander.service.wx.WxVideoService;
 import com.xvls.alexander.utils.JacksonUtil;
+import com.xvls.alexander.utils.SystemResponse;
 import com.xvls.alexander.utils.WeChatResponseUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,10 @@ public class WxCommentController {
 
     @Autowired
     WxCommentsService wxCommentsService;
+    @Autowired
+    WxVideoService wxVideoService;
+    @Autowired
+    WxArticleService wxArticleService;
 
     /**
      * 根据 belongType，Id，pageInfo 获得主评论
@@ -86,6 +94,42 @@ public class WxCommentController {
         result.put("comments",comments);
 
         return WeChatResponseUtil.ok(result);
+    }
+
+    /**
+     * 通过 commentIdList数组 批量删除评论信息及其子评论信息
+     * @param body
+     * @return
+     */
+    @RequiresPermissions("comments:delete")
+    @RequestMapping("deleteComments")
+    public Object deleteComments(@RequestBody String body){
+        List<Integer> commentIdList = null;
+        String belongType = null;
+        Integer belongId = null;
+        try {
+            commentIdList = JacksonUtil.parseIntegerList(body, "commentIdList");
+            belongType = JacksonUtil.parseString(body,"belongType");
+            belongId = JacksonUtil.parseInteger(body,"belongId");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return SystemResponse.fail(-1,"Json转换出错");
+        }
+        if(commentIdList == null || commentIdList.size()==0 || belongId == null || belongType == null){
+            return SystemResponse.badArgument();
+        }
+        wxCommentsService.deleteComment(commentIdList);
+        /**更新评论数*/
+        if(belongType.equals("A")){
+            wxArticleService.updateArticleCommentsNum(belongId);
+        }else if(belongType.equals("V")){
+            wxVideoService.updateVideoCommentNum(belongId);
+        }else{
+            return SystemResponse.fail(-1,"所属类型错误");
+        }
+
+        return SystemResponse.ok();
     }
 
 

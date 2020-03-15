@@ -268,6 +268,12 @@
         update article set collection_num = collection_num - 1 where article_id = #{articleId}
     </update>
 
+    <update id="updateArticleCommentsNum">
+        UPDATE article
+        SET article.`comment_num`=(SELECT COUNT(*) FROM comments WHERE comments.belong_type = 'A' AND comments.belong_id = #{articleId})
+        WHERE article.article_id=#{articleId};
+    </update>
+
 
     <select id="getArticleGoodList" resultMap="article_page">
         select article.*,
@@ -323,7 +329,7 @@
     </select>
 
     <!--更新热度-->
-    <update id="updateVideoHeatOfVideo">
+    <update id="updateArticleHeatOfArticle">
         update article set heat_of_article = #{heatOfArticle} where article_id = #{articleId}
     </update>
 
@@ -341,5 +347,10 @@
         from article
         where article.school_id IN (select users.school_id from users where users.user_id = #{userId})
     </select>
+
+    <update id="updateArticleCommentStatus">
+        update article set comment_status = #{commentStatus}
+        where article_id = #{articleId}
+    </update>
 
 </mapper>

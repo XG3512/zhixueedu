@@ -7,14 +7,13 @@ import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.SystemResponse;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/system/system_menu")
 public class System_menuController {
@@ -45,7 +44,7 @@ public class System_menuController {
      */
     @RequiresPermissions("system_menu:selectAll")
     @RequestMapping("getAllMenuList")
-    public Object getAllMenuList(){
+    public Object getAllMenuList(HttpServletRequest request){
         List<System_menu> menuList = system_menuService.getAllMenuList();
         Map result = Maps.newHashMap();
         result.put("menuList",menuList);

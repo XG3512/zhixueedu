@@ -256,6 +256,13 @@
         update video_main set collection_num =  collection_num - 1 where video_main_id = #{videoId}
     </update>
 
+    <!--更新评论总数-->
+    <update id="updateVideoCommentNum">
+        UPDATE video_main
+        SET video_main.`comment_num`=(SELECT COUNT(*) FROM comments WHERE comments.belong_type = 'V' AND comments.belong_id = #{videoMainId})
+        WHERE video_main.`video_main_id`=#{videoMainId};
+    </update>
+
     <update id="updateVideoHeatOfVideo">
         update video_main set heat_of_video = #{heatOfVideo} where video_main_id = #{videoMainId}
     </update>

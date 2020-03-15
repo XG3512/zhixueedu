@@ -30,9 +30,9 @@ public class System_menu extends Model<System_menu> {
     private Integer parentId;
     private String icon;
     private Date createTime;
-    private Integer roleId;
+    private String permissionCode;
     private Integer orderNum;
 
     @TableField(exist = false)
-    List<System_menu> members;
+    List<System_menu> children;
 }

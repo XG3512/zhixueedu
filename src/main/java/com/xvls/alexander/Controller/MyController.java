@@ -12,12 +12,15 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+@CrossOrigin
 @Controller
 public class MyController {
 
+    @CrossOrigin
     @RequestMapping({"/","/index"})
     @ResponseBody
     public String toIndex(Model model){
@@ -25,18 +28,21 @@ public class MyController {
         return "index";
     }
 
+    @CrossOrigin
     @RequestMapping("/user/add")
     @ResponseBody
     public String add(){
         return "/user/add";
     }
 
+    @CrossOrigin
     @RequestMapping("/user/update")
     @ResponseBody
     public String update(){
         return "/user/update";
     }
 
+    @CrossOrigin
     @RequestMapping("/toLogin")
     @ResponseBody
     public Object toLogin(){
@@ -66,6 +72,7 @@ public class MyController {
         return "success";
     }*/
 
+    @CrossOrigin
     @RequestMapping("/unauthorized")
     @ResponseBody
     public Object unauthorized(){
