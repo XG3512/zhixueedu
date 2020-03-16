@@ -90,6 +90,18 @@ public class SignInServiceImpl implements SignInService {
     }
 
     /**
+     * 通过 userId 获得签到信息总数
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer getSignInInfoCount(Integer userId) {
+        QueryWrapper<SignIn_info> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("teacher_id",userId);
+        return signInInfoMapper.selectCount(queryWrapper);
+    }
+
+    /**
      * 通过 siiId 获得 签到学生的列表
      * @param pageInfo
      * @param siiId
@@ -128,6 +140,18 @@ public class SignInServiceImpl implements SignInService {
     @Override
     public void SignIn(SignIn_user signIn_user) {
         signIn_user.insert();
+    }
+
+    /**
+     * 通过 siiId 获得签到总记录数
+     * @param siiId
+     * @return
+     */
+    @Override
+    public Integer getSignIn_userCount(Integer siiId) {
+        QueryWrapper<SignIn_user> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("sii_id",siiId);
+        return signInUserMapper.selectCount(queryWrapper);
     }
 
     /**

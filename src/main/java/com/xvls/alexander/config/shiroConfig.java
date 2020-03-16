@@ -77,8 +77,20 @@ public class shiroConfig {
         filterMap.put("/user/update","custom");
 
         /**后台管理端url管理*/
+        filterMap.put("/SignIn/SignIn","anon");
+
         filterMap.put("/system/article/**","custom");
         filterMap.put("/system/system_menu/**","custom");
+
+        filterMap.put("/SignIn/**","custom");
+        /*filterMap.put("/SignIn/ReGetSignInImage","custom");
+        filterMap.put("/SignIn/getSignInInfoListByUserId","custom");
+        filterMap.put("/SignIn/getSignInInfoCount","custom");
+        filterMap.put("/SignIn/deleteSignInInfo","custom");
+        filterMap.put("/SignIn/getSignIn_userList","custom");
+        filterMap.put("/SignIn/getSignIn_userCount","custom");*/
+
+        filterMap.put("/system/tc/**","custom");
 
         //设置登录的请求
         //shiroFilterFactoryBean.setLoginUrl("/toLogin");

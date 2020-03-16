@@ -43,7 +43,14 @@ public interface SignInService {
     List<SignIn_infoList> getSignInInfoList(PageInfo pageInfo, Integer userId);
 
     /**
-     * 通过 siiId 获得 签到学生的列表
+     * 通过 userId 获得签到信息总数
+     * @param userId
+     * @return
+     */
+    Integer getSignInInfoCount(Integer userId);
+
+    /**
+     * 通过 siiId , pageInfo 获得 签到学生的列表
      * @param pageInfo
      * @param siiId
      * @return
@@ -66,6 +73,13 @@ public interface SignInService {
      * 用户签到
      */
     void SignIn(SignIn_user signIn_user);
+
+    /**
+     * 通过 siiId 获得签到总记录数
+     * @param siiId
+     * @return
+     */
+    Integer getSignIn_userCount(Integer siiId);
 
     /**
      * 通过 signIn_user 获得对应签到者的数量

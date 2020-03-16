@@ -52,7 +52,7 @@
         province,
         introduction
         from school
-        ORDER BY school.province asc
+        ORDER BY school.province asc,
     </select>
 
     <update id="updateSchoolBackground">

@@ -4,13 +4,11 @@ import com.google.common.collect.Maps;
 import com.xvls.alexander.entity.*;
 import com.xvls.alexander.service.SignInService;
 import com.xvls.alexander.utils.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +21,7 @@ import java.util.Map;
 /**
  * 签到
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/SignIn")
 public class SignInController {
@@ -41,6 +40,7 @@ public class SignInController {
      * @return
      * @throws IOException
      */
+    @RequiresPermissions("signIn_info:add")
     @RequestMapping("FirstGetSignInImage")
     public Object FirstGetSignInImage(@RequestBody String body, HttpServletRequest request, HttpServletResponse response) throws IOException {
         SignIn_info signIn_info = null;
@@ -91,6 +91,7 @@ public class SignInController {
      * @return
      * @throws IOException
      */
+    @RequiresPermissions("signIn_info:add")//只要能添加，就能获取签到码
     @RequestMapping("ReGetSignInImage")
     public Object ReGetSignInImage(@RequestBody String body, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -136,6 +137,7 @@ public class SignInController {
      * @param body
      * @return
      */
+    @RequiresPermissions("signIn_info:select")
     @RequestMapping("getSignInInfoListByUserId")
     public Object getSignInInfoList(@RequestBody String body){
         PageInfo pageInfo = null;
@@ -157,10 +159,30 @@ public class SignInController {
     }
 
     /**
+     * 通过 userId 获得签到信息总数
+     * @param userId
+     * @return
+     */
+    @RequiresPermissions("signIn_info:select")
+    @RequestMapping("getSignInInfoCount")
+    public Object getSignInInfoCount(@RequestParam("userId")Integer userId){
+
+        if(userId == null){
+            return SystemResponse.badArgument();
+        }
+        Integer count = signInService.getSignInInfoCount(userId);
+        Map result = Maps.newHashMap();
+        result.put("count",count);
+
+        return SystemResponse.ok(result);
+    }
+
+    /**
      * 通过 siiId 删除对应的signIn_info和signIn_user
      * @param siiId
      * @return
      */
+    @RequiresPermissions("signIn_info:delete")
     @RequestMapping("deleteSignInInfo")
     public Object deleteSignInInfo(@RequestParam("siiId") Integer siiId){
         if(siiId == null){
@@ -176,6 +198,7 @@ public class SignInController {
      * @param body
      * @return
      */
+    @RequiresPermissions("signIn_user:select")
     @RequestMapping("getSignIn_userList")
     public Object getSignIn_userList(@RequestBody String body){
         Integer siiId = null;
@@ -194,6 +217,23 @@ public class SignInController {
         Map result = Maps.newHashMap();
         result.put("signIn_userList",signIn_userList);
 
+        return SystemResponse.ok(result);
+    }
+
+    /**
+     * 通过 siiId 获得签到总记录数
+     * @param siiId
+     * @return
+     */
+    @RequiresPermissions("signIn_user:select")
+    @RequestMapping("getSignIn_userCount")
+    public Object getSignIn_userCount(@RequestParam("siiId")Integer siiId){
+        if(siiId == null){
+            return SystemResponse.badArgument();
+        }
+        Integer count = signInService.getSignIn_userCount(siiId);
+        Map result = Maps.newHashMap();
+        result.put("count",count);
         return SystemResponse.ok(result);
     }
 

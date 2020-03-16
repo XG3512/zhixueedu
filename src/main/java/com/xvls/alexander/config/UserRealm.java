@@ -15,12 +15,16 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Set;
 
 //自定义的UserRealm
 public class UserRealm extends AuthorizingRealm {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     UserServiceImpl userService;
@@ -38,7 +42,7 @@ public class UserRealm extends AuthorizingRealm {
         Subject subject = SecurityUtils.getSubject();
         Users currentUser = (Users) subject.getPrincipal();//拿到user对象
 
-        System.out.println("currentUsers:"+currentUser.getUserNum());
+        logger.info("currentUsers:"+currentUser.getUserNum());
 
         /************ 从数据库中添加权限 *************/
         Set<Role> roles = currentUser.getRoleList();

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.TcMapper">
+
+    <resultMap id="Tc" type="com.xvls.alexander.entity.Tc">
+        <id column="tc_id" property="tcId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="course_id" property="courseId"></result>
+        <result column="course_name" property="courseName"></result>
+        <result column="school_id" property="schoolId"></result>
+        <result column="school_name" property="schoolName"></result>
+        <result column="class_id" property="classId"></result>
+        <result column="class_name" property="className"></result>
+        <result column="semester" property="semester"></result>
+    </resultMap>
+
+    <select id="getTcList" resultMap="Tc">
+        select tc.*,
+        course.course_name,
+        school.school_name,
+        class.class_name
+        from tc
+        left join course on course.course_id = tc.course_id
+        left join school on school.school_id = tc.school_id
+        left join class on class.class_id = tc.class_id
+        where tc.user_id = #{teacherId}
+        ORDER by tc.semester DESC
+    </select>
+
+    <select id="getTcListByUserId" resultMap="Tc">
+        select tc.*,
+        course.course_name,
+        school.school_name,
+        class.class_name
+        from tc
+        left join course on course.course_id = tc.course_id
+        left join school on school.school_id = tc.school_id
+        left join class on class.class_id = tc.class_id
+        where tc.user_id = #{teacherId}
+        ORDER by tc.semester DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+
+
+</mapper>
