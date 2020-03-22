@@ -5,7 +5,7 @@ import com.xvls.alexander.entity.wx.Users;
 
 import java.util.List;
 
-public interface UsersService {
+public interface WxUsersService {
 
     Users getWxStudentInfoByUserNum(String user_num);
 
@@ -68,12 +68,12 @@ public interface UsersService {
      */
     TeacherMainPage getTeacherMainPage(Integer wxUserId,Integer teacherId);
 
-
-
     /**
      * 通过 wxUserId 获得关注教师列表
      * @param wxUserId
      * @return
      */
     List<TeacherMainPage> getFollowTeacherList(Integer wxUserId);
+
+
 }

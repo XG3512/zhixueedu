@@ -8,7 +8,7 @@ import com.xvls.alexander.entity.wx.UserInfo;
 import com.xvls.alexander.entity.wx.WxLoginInfo;
 import com.xvls.alexander.entity.wx.Users;
 import com.xvls.alexander.entity.wx.WxUser;
-import com.xvls.alexander.service.wx.UsersService;
+import com.xvls.alexander.service.wx.WxUsersService;
 import com.xvls.alexander.service.wx.WxUserService;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.WeChatResponseUtil;
@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class WxLoginController{
     private final WxMaServiceImpl wxMaService = new WxMaServiceImpl();
 
     @Autowired
-    private UsersService usersService;
+    private WxUsersService wxUsersService;
     @Autowired
     private WxUserService wxUserService;
 
@@ -104,7 +105,7 @@ public class WxLoginController{
      * @return
      */
     @RequestMapping("login")
-    public Object login(@RequestBody String body){
+    public Object login(@RequestBody String body, HttpServletRequest request, HttpServletResponse response){
         String userNum = JacksonUtil.parseString(body,"userId");
         String password = JacksonUtil.parseString(body,"password");
 
@@ -123,7 +124,7 @@ public class WxLoginController{
         Subject user = SecurityUtils.getSubject();
         /*shiro 封装用户的登录数据*/
         /**根据user_num,school,role获取userId**/
-        Integer userId_temp = usersService.getUserId(userNum,schoolId,role);
+        Integer userId_temp = wxUsersService.getUserId(userNum,schoolId,role);
 
         if(userId_temp==null){
             return WeChatResponseUtil.fail(401,"账号或密码错误！");
@@ -150,12 +151,14 @@ public class WxLoginController{
         }
         if (shiroerror == null){
             /**绑定微信信息**/
-            usersService.updateUsersWxUserIdByUserId(userId_temp,wxUserId);
+            wxUsersService.updateUsersWxUserIdByUserId(userId_temp,wxUserId);
 
             Map<Object, Object> result = new HashMap<Object, Object>();
             result.put("wxUserId",wxUserId);
             result.put("userId", userId);
             result.put("userNum",userNum);
+            result.put("token",user.getSession().getId());
+            System.out.println("login session:"+user.getSession().getId());
             //result.put("wxStatus", users.getWxstatus());
             return WeChatResponseUtil.ok(result);
         }else {
@@ -214,7 +217,7 @@ public class WxLoginController{
             wxUserId = wxUser.getWxUserId();
         }
         /**判断是否已经绑定学号**/
-        Users users = usersService.getUsersByWxUserId(wxUserId);
+        Users users = wxUsersService.getUsersByWxUserId(wxUserId);
 
         if(users==null || users.getUserNum()==null || users.getPassword() == null){
             map.put("wxUserId",wxUserId);
@@ -229,6 +232,24 @@ public class WxLoginController{
             result.put("wxStatus", wxUser.getWxstatus());
             return WeChatResponseUtil.ok(result);
         }
+    }
+
+    /**
+     * 解除学号和微信账号的绑定
+     * @param wxUserId
+     * @return
+     */
+    @RequestMapping("wxUserLogout")
+    public Object wxUserLogout(@RequestParam("wxUserId") Integer wxUserId){
+        if(wxUserId == null){
+            return WeChatResponseUtil.badArgument();
+        }
+        Users users = wxUsersService.getUsersByWxUserId(wxUserId);
+        if(users==null){
+            return WeChatResponseUtil.fail(-1,"对不起，您未绑定任何账号");
+        }
+        wxUserService.wxUserLogout(users.getUserId());
+        return WeChatResponseUtil.ok();
     }
 
     /**

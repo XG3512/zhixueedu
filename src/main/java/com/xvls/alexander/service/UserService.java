@@ -4,5 +4,7 @@ import com.xvls.alexander.entity.User;
 
 public interface UserService {
 
-    public User queryUserByName(String name);
+    User queryUserByName(String name);
+
+
 }

@@ -36,7 +36,10 @@
     </select>
 
     <delete id="deleteSignIn_user">
-        delete from signIn_user where sii_id = #{siiId}
+        delete from signIn_user where 1=1 and
+        <foreach collection="list" open="sii_id in (" close=")" item="siiId" separator=",">
+            #{siiId}
+        </foreach>
     </delete>
 
 </mapper>

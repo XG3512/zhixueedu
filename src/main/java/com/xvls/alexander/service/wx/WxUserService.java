@@ -10,4 +10,10 @@ public interface WxUserService {
     Integer insertNewWxUser(WxUser wxUser);
 
     void updateLoginInfo(Integer wxUserId, UserInfo userInfo);
+
+    /**
+     * 解除学号和微信账号的绑定
+     * @param userId
+     */
+    void wxUserLogout(Integer userId);
 }

@@ -158,4 +158,10 @@ public interface WxArticleMapper extends BaseMapper<Article> {
      * @param commentStatus
      */
     void updateArticleCommentStatus(Integer articleId,Boolean commentStatus);
+
+    /**
+     * 通过 articleIdList 批量删除动态
+     * @param articleIdList
+     */
+    void deleteArticleByIdList(List<Integer> articleIdList);
 }

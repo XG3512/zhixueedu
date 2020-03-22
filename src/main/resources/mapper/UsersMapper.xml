@@ -61,6 +61,19 @@
         <result column="follow_teacher_date" property="followTeacherDate"></result>
     </resultMap>
 
+    <resultMap id="wxUsersInfo" type="com.xvls.alexander.entity.wx.Users">
+        <id column="user_id" property="userId"></id>
+        <result column="user_num" property="userNum"></result>
+        <result column="password" property="password"></result>
+        <result column="school_name" property="schoolName"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="sex" property="sex"></result>
+        <result column="nation" property="nation"></result>
+        <result column="phone" property="phone"></result>
+        <result column="mail" property="mail"></result>
+        <result column="motto" property="motto"></result>
+    </resultMap>
+
     <!--嵌套查询-->
     <select id="getWxStudentInfoByUserNum" parameterType="java.lang.String" resultMap="userRole">
         SELECT users.*
@@ -112,6 +125,22 @@
         WHERE users.user_id=#{userId}
     </select>
 
+    <select id="getWxUserInfoByUserId" resultMap="wxUsersInfo">
+        select users.user_id,
+        users.user_num,
+        users.password,
+        school.school_name,
+        users.user_name,
+        users.sex,
+        users.nation,
+        users.phone,
+        users.mail,
+        users.motto
+        from users
+        left join school on users.school_id = school.school_id
+        where users.user_id = #{userId}
+    </select>
+
     <update id="updateUsersWxUserIdByUserId">
         update users set wx_user_id = #{wxUserId} where user_id = #{userId}
     </update>
@@ -160,5 +189,30 @@
         ORDER BY follow_teacher.follow_teacher_date DESC
     </select>
 
+    <!--微信端 修改密码-->
+    <update id="wxUpdatePassword">
+        update users set password = #{password},salt = #{salt} where user_id = #{userId}
+    </update>
+    <!--微信端 修改个人信息-->
+    <update id="wxUpdatePersonalInfo">
+        update users set phone = #{phone} , mail = #{mail} , motto = #{motto} where user_id = #{userId};
+    </update>
+    <!--微信端 修改phone-->
+    <update id="wxUpdatePhone">
+        update users set phone = #{phone} where user_id = #{userId}
+    </update>
+    <!--微信端 修改mail-->
+    <update id="wxUpdateMail">
+        update users set mail = #{mail} where user_id = #{userId};
+    </update>
+    <!--微信端 修改motto-->
+    <update id="wxUpdateMotto">
+        update users set motto = #{motto} where user_id = #{userId};
+    </update>
+    
+    <!--解除学号和微信账号的绑定-->
+    <update id="wxUserLogout">
+        update users set wx_user_id = null where user_id = #{userId};
+    </update>
 
 </mapper>

@@ -33,6 +33,8 @@ public class Users extends Model<Users> implements Serializable {
     private String userNum;
     private String password;
     private Integer schoolId;
+    @TableField(exist = false)
+    private String schoolName;
     private Integer departmentId;
     private Integer majorId;
     private Integer classId;
@@ -47,7 +49,7 @@ public class Users extends Model<Users> implements Serializable {
     private String icon;
     private String salt;
     private Integer wxUserId;
-    //private String motto;//座右铭
+    private String motto;//座右铭
 
     @TableField(exist = false)//该字段在数据库表中不存在
     private Set<Role> roleList;//角色列表

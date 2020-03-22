@@ -116,21 +116,21 @@ public class SignInServiceImpl implements SignInService {
     }
 
     /**
-     * 通过 siiId 删除对应的SignIn_info
-     * @param siiId
+     * 通过 siiIdList 删除对应的SignIn_info
+     * @param siiIdList
      */
     @Override
-    public void deleteSignIn_info(Integer siiId) {
-        signInInfoMapper.deleteSignIn_info(siiId);
+    public void deleteSignIn_info(List<Integer> siiIdList) {
+        signInInfoMapper.deleteSignIn_info(siiIdList);
     }
 
     /**
-     * 通过 siiId 删除对应的SignIn_user
-     * @param siiId
+     * 通过 siiIdList 删除对应的SignIn_user
+     * @param siiIdList
      */
     @Override
-    public void deleteSignIn_user(Integer siiId) {
-        signInUserMapper.deleteSignIn_user(siiId);
+    public void deleteSignIn_user(List<Integer> siiIdList) {
+        signInUserMapper.deleteSignIn_user(siiIdList);
     }
 
     /**

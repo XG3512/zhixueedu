@@ -20,8 +20,8 @@ public interface SignInInfoMapper extends BaseMapper<SignIn_info> {
     List<SignIn_infoList> getSignInInfoList(PageInfo pageInfo, Integer userId);
 
     /**
-     * 通过 siiId 删除对应的SignIn_info
-     * @param siiId
+     * 通过 siiIdList 删除对应的SignIn_info
+     * @param siiIdList
      */
-    void deleteSignIn_info(Integer siiId);
+    void deleteSignIn_info(List<Integer> siiIdList);
 }

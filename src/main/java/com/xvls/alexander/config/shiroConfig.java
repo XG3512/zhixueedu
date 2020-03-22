@@ -76,12 +76,22 @@ public class shiroConfig {
 
         filterMap.put("/user/update","custom");
 
+        /**微信端*/
+        filterMap.put("/system/users/getWxUsersInfoByIdd","anon");
+        filterMap.put("/system/users/wxUpdatePassword","custom");
+        filterMap.put("/system/users/wxUpdatePersonalInfo","custom");
+        filterMap.put("/system/users/wxUpdatePhone","custom");
+        filterMap.put("/system/users/wxUpdateMail","custom");
+        filterMap.put("/system/users/wxUpdateMotto","custom");
+
         /**后台管理端url管理*/
         filterMap.put("/SignIn/SignIn","anon");
 
+        /*动态*/
         filterMap.put("/system/article/**","custom");
+        /*系统菜单*/
         filterMap.put("/system/system_menu/**","custom");
-
+        /*签到*/
         filterMap.put("/SignIn/**","custom");
         /*filterMap.put("/SignIn/ReGetSignInImage","custom");
         filterMap.put("/SignIn/getSignInInfoListByUserId","custom");
@@ -91,6 +101,8 @@ public class shiroConfig {
         filterMap.put("/SignIn/getSignIn_userCount","custom");*/
 
         filterMap.put("/system/tc/**","custom");
+        /*角色*/
+        filterMap.put("/system/role/**","custom");
 
         //设置登录的请求
         //shiroFilterFactoryBean.setLoginUrl("/toLogin");

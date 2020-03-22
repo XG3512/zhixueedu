@@ -263,19 +263,13 @@ public class WxArticleServiceImpl implements WxArticleService {
     }
 
     /**
-     * 通过 articleId 删除动态 即 响应的 file_belong
-     * @param articleId
+     * 通过 articleIdList 删除动态 即 相应的 file_belong
+     * @param articleIdList
      */
     @Override
-    public void deleteArticleById(Integer articleId) {
-        QueryWrapper<File_belong> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("belong_id",articleId)
-                .eq("belong_type","A");
-        fileBelongMapper.delete(queryWrapper);
-
-        QueryWrapper<Article> queryWrapper1 = new QueryWrapper<>();
-        queryWrapper1.eq("article_id",articleId);
-        wxArticleMapper.delete(queryWrapper1);
+    public void deleteArticleByIdList(List<Integer> articleIdList) {
+        fileBelongMapper.deleteFileBelongByArticleIdList(articleIdList);
+        wxArticleMapper.deleteArticleByIdList(articleIdList);
     }
 
     public Double Calculate(Article article){

@@ -353,4 +353,12 @@
         where article_id = #{articleId}
     </update>
 
+    <!--通过 articleIdList 批量删除article-->
+    <delete id="deleteArticleByIdList">
+        delete from article where 1=1 and
+        <foreach collection="list" open="article_id in (" close=")" item="articleId" separator=",">
+            #{articleId}
+        </foreach>
+    </delete>
+
 </mapper>

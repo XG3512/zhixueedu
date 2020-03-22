@@ -1,6 +1,7 @@
 package com.xvls.alexander.service.wx.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xvls.alexander.dao.UsersMapper;
 import com.xvls.alexander.dao.WxUserMapper;
 import com.xvls.alexander.entity.wx.UserInfo;
 import com.xvls.alexander.entity.wx.WxUser;
@@ -13,6 +14,8 @@ public class WxUserServiceImpl implements WxUserService {
 
     @Autowired
     WxUserMapper wxUserMapper;
+    @Autowired
+    UsersMapper usersMapper;
 
     /**
      * 通过openid获得微信用户信息
@@ -45,5 +48,14 @@ public class WxUserServiceImpl implements WxUserService {
     @Override
     public void updateLoginInfo(Integer wxUserId, UserInfo userInfo) {
         wxUserMapper.updateLoginInfo(wxUserId,userInfo);
+    }
+
+    /**
+     * 解除学号和微信账号的绑定
+     * @param userId
+     */
+    @Override
+    public void wxUserLogout(Integer userId) {
+        usersMapper.wxUserLogout(userId);
     }
 }

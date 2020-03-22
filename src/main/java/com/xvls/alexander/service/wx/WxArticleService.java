@@ -133,9 +133,9 @@ public interface WxArticleService {
     void updateArticleCommentStatus(Integer articleId,Boolean commentStatus);
 
     /**
-     * 通过 articleId 删除动态
-     * @param articleId
+     * 通过 articleIdList 删除动态
+     * @param articleIdList
      */
-    void deleteArticleById(Integer articleId);
+    void deleteArticleByIdList(List<Integer> articleIdList);
 
 }

@@ -31,6 +31,13 @@ public interface UsersMapper extends BaseMapper<Users> {
      */
     Users getUserInfoByUserId(Integer userId);
 
+    /**
+     * 获得 wxUser 信息
+     * @param userId
+     * @return
+     */
+    Users getWxUserInfoByUserId(Integer userId);
+
     Users getWxStudentInfoByUserId(Integer userId);
 
     /**
@@ -81,4 +88,46 @@ public interface UsersMapper extends BaseMapper<Users> {
      * @return
      */
     List<TeacherMainPage> getFollowTeacherList(Integer wxUserId);
+
+    /**
+     * 微信端 修改个人信息
+     * @param userId
+     * @param phone
+     * @param mail
+     * @param motto
+     */
+    void wxUpdatePersonalInfo(Integer userId,String phone,String mail,String motto);
+
+    /**
+     * 微信端通过 userId,password,salt 修改password
+     * @param userId
+     */
+    void wxUpdatePassword(Integer userId,String password,String salt);
+
+    /**
+     * 微信端 修改phone
+     * @param userId
+     * @param phone
+     */
+    void wxUpdatePhone(Integer userId,String phone);
+
+    /**
+     * 微信端 修改mail
+     * @param userId
+     * @param mail
+     */
+    void wxUpdateMail(Integer userId,String mail);
+
+    /**
+     * 微信端 修改motto
+     * @param userId
+     * @param motto
+     */
+    void wxUpdateMotto(Integer userId,String motto);
+
+    /**
+     * 解除学号和微信账号的绑定
+     * @param userId
+     */
+    void wxUserLogout(Integer userId);
 }

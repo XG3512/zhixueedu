@@ -178,18 +178,25 @@ public class SignInController {
     }
 
     /**
-     * 通过 siiId 删除对应的signIn_info和signIn_user
-     * @param siiId
+     * 通过 siiIdList 批量删除对应的signIn_info和signIn_user
+     * @param body
      * @return
      */
     @RequiresPermissions("signIn_info:delete")
     @RequestMapping("deleteSignInInfo")
-    public Object deleteSignInInfo(@RequestParam("siiId") Integer siiId){
-        if(siiId == null){
+    public Object deleteSignInInfo(@RequestBody String body){
+        List<Integer> siiIdList = null;
+        try {
+            siiIdList = JacksonUtil.parseIntegerList(body,"siiIdList");
+            if(siiIdList==null || siiIdList.size()==0){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
             return SystemResponse.badArgument();
         }
-        signInService.deleteSignIn_info(siiId);
-        signInService.deleteSignIn_user(siiId);
+        signInService.deleteSignIn_info(siiIdList);
+        signInService.deleteSignIn_user(siiIdList);
         return SystemResponse.ok();
     }
 

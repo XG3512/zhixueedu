@@ -7,13 +7,10 @@ import com.xvls.alexander.dao.WxGoodMapper;
 import com.xvls.alexander.entity.wx.Follow_school;
 import com.xvls.alexander.entity.wx.Follow_teacher;
 import com.xvls.alexander.entity.wx.Good;
-import com.xvls.alexander.entity.wx.SchoolList;
 import com.xvls.alexander.service.wx.*;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class WxToolBarServiceImpl implements WxToolBarService {
@@ -30,7 +27,7 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     @Autowired
     WxFollow_teacherMapper wxFollow_teacherMapper;
     @Autowired
-    UsersService usersService;
+    WxUsersService wxUsersService;
     @Autowired
     WxSchoolService wxSchoolService;
 
@@ -281,7 +278,7 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     @Override
     public void addFollowTeacher(Follow_teacher follow_teacher) {
         wxFollow_teacherMapper.insert(follow_teacher);
-        usersService.addFansNum(follow_teacher.getTeacherId());
+        wxUsersService.addFansNum(follow_teacher.getTeacherId());
     }
 
     /**
@@ -294,7 +291,7 @@ public class WxToolBarServiceImpl implements WxToolBarService {
         queryWrapper.eq("wx_user_id",follow_teacher.getWxUserId())
                 .eq("teacher_id",follow_teacher.getTeacherId());
         wxFollow_teacherMapper.delete(queryWrapper);
-        usersService.decreaseFansNum(follow_teacher.getTeacherId());
+        wxUsersService.decreaseFansNum(follow_teacher.getTeacherId());
     }
 
     /**

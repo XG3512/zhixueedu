@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.RoleMapper">
+
+    <!--递归查询系统菜单-->
+    <resultMap id="roleList" type="com.xvls.alexander.entity.Role">
+        <id column="role_id" property="roleId"></id>
+        <result column="role_name" property="roleName"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="edit_time" property="editTime"></result>
+    </resultMap>
+
+    <select id="getRoleList" resultMap="roleList">
+        select *
+        from role
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="getRoleListByName" resultMap="roleList">
+        select *
+        from role
+        where role_name like #{roleName}
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize};
+    </select>
+
+    <insert id="addRole_permissions">
+        insert into role_permission values
+        <foreach collection="permissions" item="permissionId" separator=",">
+            (#{roleId},#{permissionId})
+        </foreach>
+    </insert>
+
+    <!--批量删除 role 中相应的内容-->
+    <delete id="deleteRole">
+        delete from role where 1=1 and
+        <foreach collection="list" open="role_id IN(" close=")" item="roleId" separator=",">
+            #{roleId}
+        </foreach>
+    </delete>
+    <!--通过 roleIdList 删除role_permission中的相应内容-->
+    <delete id="deleteRole_permissionByRoleIdList">
+        delete from role_permission where 1=1 and
+        <foreach collection="list" open="role_id IN(" close=")" item="roleId" separator=",">
+            #{roleId}
+        </foreach>
+    </delete>
+    <!--通过 roleIdList 删除user_role中的相应内容-->
+    <delete id="deleteUser_roleByRoleIdList">
+        delete from user_role where 1=1 and
+        <foreach collection="list" open="role_id IN(" close=")" item="roleId" separator=",">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <update id="updateRoleName_EditTimeById">
+        update role set role_name = #{roleName} , edit_time = #{editTime} where role_id = #{roleId}
+    </update>
+
+    <delete id="deleteRole_permissionByRoleId">
+        delete from role_permission where role_id = #{roleId};
+    </delete>
+    <update id="insertRole_permission">
+        insert into role_permission
+        values 
+        <foreach collection="permissionIdList" item="permissionId" separator=",">
+            (#{roleId},#{permissionId})
+        </foreach>
+    </update>
+
+</mapper>

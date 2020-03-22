@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.FileBelongMapper">
+
+
+    <!--通过 articleIdList 批量删除FileBelong-->
+    <delete id="deleteFileBelongByArticleIdList">
+        delete from file_belong where belong_type = 'A' and
+        <foreach collection="list" open="belong_id in (" close=")" item="articleId" separator=",">
+            #{articleId}
+        </foreach>
+    </delete>
+
+</mapper>

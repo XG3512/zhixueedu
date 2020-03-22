@@ -155,16 +155,23 @@ public class ArticleController {
 
     /**
      * 通过 articleId 删除动态及file_belong
-     * @param articleId
+     * @param body
      * @return
      */
     @RequiresPermissions("article:delete")
-    @RequestMapping("deleteArticleById")
-    public Object deleteArticleById(@RequestParam("articleId") Integer articleId){
-        if(articleId == null){
+    @RequestMapping("deleteArticleByIdList")
+    public Object deleteArticleByIdList(@RequestBody String body){
+        List<Integer> articleIdList = null;
+        try {
+            articleIdList = JacksonUtil.parseIntegerList(body,"articleIdList");
+            if(articleIdList==null || articleIdList.size()==0){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
             return SystemResponse.badArgument();
         }
-        wxArticleService.deleteArticleById(articleId);
+        wxArticleService.deleteArticleByIdList(articleIdList);
         return SystemResponse.ok();
     }
 }

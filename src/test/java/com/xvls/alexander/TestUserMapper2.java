@@ -1,6 +1,5 @@
 package com.xvls.alexander;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +28,7 @@ public class TestUserMapper2 {
     @Autowired
     UserServiceImpl userService;
     @Autowired
-    UsersService usersService;
+    WxUsersService wxUsersService;
     @Autowired
     UsersMapper usersMapper;
 
@@ -52,7 +50,7 @@ public class TestUserMapper2 {
 
     @Test
     public void getWxStudentInfoByUserNum(){
-        Users users = usersService.getWxStudentInfoByUserNum("2017414540");
+        Users users = wxUsersService.getWxStudentInfoByUserNum("2017414540");
         System.out.println(users);
     }
 
@@ -98,7 +96,7 @@ public class TestUserMapper2 {
     @Test
     public void updateWxUserInfoByUser_num(){
 
-        Users users = usersService.getWxStudentInfoByUserNum("sc001001");
+        Users users = wxUsersService.getWxStudentInfoByUserNum("2018416025");
 
         if(users==null){
             System.out.println(users);
@@ -117,7 +115,7 @@ public class TestUserMapper2 {
         users.setPassword(md5Hash.toHex());//注意一致
 
         //更新用户信息
-        usersService.saveWxStudentInfo(users);
+        wxUsersService.saveWxStudentInfo(users);
     }
 
     @Test

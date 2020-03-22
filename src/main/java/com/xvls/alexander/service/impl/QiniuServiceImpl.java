@@ -6,14 +6,13 @@ import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.service.QiniuService;
-import com.xvls.alexander.service.wx.UsersService;
+import com.xvls.alexander.service.wx.WxUsersService;
 import com.xvls.alexander.service.wx.WxSchoolService;
 import com.xvls.alexander.service.wx.WxVideoService;
 import com.xvls.alexander.utils.QiniuFileUtil;
 import com.xvls.alexander.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class QiniuServiceImpl implements QiniuService {
     @Autowired
     WxSchoolService wxSchoolService;
     @Autowired
-    UsersService usersService;
+    WxUsersService wxUsersService;
     @Autowired
     WxVideoService wxVideoService;
 
@@ -121,7 +120,7 @@ public class QiniuServiceImpl implements QiniuService {
         if(type.equals("S")){
             wxSchoolService.updateSchoolBackground(id,file_download.getFileUrl());
         }else if(type.equals("T")){
-            usersService.updateTeacherBackground(id,file_download.getFileUrl());
+            wxUsersService.updateTeacherBackground(id,file_download.getFileUrl());
         }
         map.put("name",file_download.getName());
         return map;
@@ -143,7 +142,7 @@ public class QiniuServiceImpl implements QiniuService {
         if(type.equals("S")){
             wxSchoolService.updateSchoolHead(id,file_download.getFileUrl());
         }else if(type.equals("T")){
-            usersService.updateUserIcon(id,file_download.getFileUrl());
+            wxUsersService.updateUserIcon(id,file_download.getFileUrl());
         }
         map.put("name",file_download.getName());
         return map;

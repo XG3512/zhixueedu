@@ -44,7 +44,10 @@
     </select>
 
     <delete id="deleteSignIn_info">
-        delete from signIn_info where sii_id = #{siiId}
+        delete from signIn_info where 1=1 and
+        <foreach collection="list" open="sii_id in (" close=")" item="siiId" separator=",">
+            #{siiId}
+        </foreach>
     </delete>
 
 </mapper>

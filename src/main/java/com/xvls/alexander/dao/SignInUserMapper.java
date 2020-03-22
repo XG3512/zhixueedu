@@ -12,10 +12,10 @@ import java.util.List;
 public interface SignInUserMapper extends BaseMapper<SignIn_user> {
 
     /**
-     * 通过 siiId 删除对应的SignIn_user
-     * @param siiId
+     * 通过 siiIdList 删除对应的SignIn_user
+     * @param siiIdList
      */
-    void deleteSignIn_user(Integer siiId);
+    void deleteSignIn_user(List<Integer> siiIdList);
 
     /**
      * 通过 siiId 获得 签到学生的列表

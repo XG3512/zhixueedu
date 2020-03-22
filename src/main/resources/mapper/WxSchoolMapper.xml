@@ -47,12 +47,13 @@
 
     <select id="getSchoolList" resultMap="schoolList">
         select school.school_id,
-        school_name,
-        head,
-        province,
-        introduction
-        from school
-        ORDER BY school.province asc,
+        school.school_name,
+        school.head,
+        school.province,
+        school.introduction
+        from province
+        right join school on school.province = province.province_name
+        ORDER BY province.province_id asc,school.school_id ASC
     </select>
 
     <update id="updateSchoolBackground">

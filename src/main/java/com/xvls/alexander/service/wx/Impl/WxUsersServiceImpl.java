@@ -3,16 +3,15 @@ package com.xvls.alexander.service.wx.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.UsersMapper;
 import com.xvls.alexander.entity.wx.TeacherMainPage;
-import com.xvls.alexander.entity.wx.UserInfo;
 import com.xvls.alexander.entity.wx.Users;
-import com.xvls.alexander.service.wx.UsersService;
+import com.xvls.alexander.service.wx.WxUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UsersServiceImpl implements UsersService {
+public class WxUsersServiceImpl implements WxUsersService {
 
     @Autowired
     private UsersMapper usersMapper;
@@ -158,5 +157,7 @@ public class UsersServiceImpl implements UsersService {
     public List<TeacherMainPage> getFollowTeacherList(Integer wxUserId) {
         return usersMapper.getFollowTeacherList(wxUserId);
     }
+
+
 
 }

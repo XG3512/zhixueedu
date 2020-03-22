@@ -2,7 +2,7 @@ package com.xvls.alexander.Controller.wx;
 
 import com.google.common.collect.Maps;
 import com.xvls.alexander.entity.wx.TeacherMainPage;
-import com.xvls.alexander.service.wx.UsersService;
+import com.xvls.alexander.service.wx.WxUsersService;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class WxTeacherController {
 
     @Autowired
-    UsersService usersService;
+    WxUsersService wxUsersService;
 
     /**
      * 获得教师主页信息
@@ -31,7 +31,7 @@ public class WxTeacherController {
         if(teacherId == null || wxUserId == null){
             return WeChatResponseUtil.badArgument();
         }
-        TeacherMainPage teacherMainPage = usersService.getTeacherMainPage(wxUserId, teacherId);
+        TeacherMainPage teacherMainPage = wxUsersService.getTeacherMainPage(wxUserId, teacherId);
         Map map = Maps.newHashMap();
         map.put("teacherMainPage",teacherMainPage);
         return WeChatResponseUtil.ok(map);
@@ -49,7 +49,7 @@ public class WxTeacherController {
             return WeChatResponseUtil.badArgument();
         }
 
-        List<TeacherMainPage> followTeacherList = usersService.getFollowTeacherList(wxUserId);
+        List<TeacherMainPage> followTeacherList = wxUsersService.getFollowTeacherList(wxUserId);
 
         Map result = Maps.newHashMap();
         result.put("followTeacherList",followTeacherList);

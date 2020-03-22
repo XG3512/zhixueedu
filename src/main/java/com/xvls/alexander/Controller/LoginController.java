@@ -3,11 +3,9 @@ package com.xvls.alexander.Controller;
 import com.xvls.alexander.entity.System_menu;
 import com.xvls.alexander.entity.wx.Users;
 import com.xvls.alexander.service.System_menuService;
-import com.xvls.alexander.service.wx.UsersService;
-import com.xvls.alexander.utils.Constants;
+import com.xvls.alexander.service.wx.WxUsersService;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.SystemResponse;
-import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +31,7 @@ import java.util.Map;
 public class LoginController {
 
     @Autowired
-    UsersService usersService;
+    WxUsersService wxUsersService;
     @Autowired
     System_menuService system_menuService;
     @Autowired
@@ -91,7 +88,7 @@ public class LoginController {
         Subject user = SecurityUtils.getSubject();
         /*shiro 封装用户的登录数据*/
         /**根据user_num,school,role获取userId**/
-        Users userInfo = usersService.getUserInfo(userNum, schoolId, role);
+        Users userInfo = wxUsersService.getUserInfo(userNum, schoolId, role);
         if(userInfo == null){
             return SystemResponse.fail(-1,"账号或密码错误！");
         }
@@ -181,7 +178,7 @@ public class LoginController {
         if (shiroerror == null){
             Map<Object, Object> result = new HashMap<Object, Object>();
             List<System_menu> menuList = system_menuService.getMenuListById(userId);
-            Users userInfo = usersService.getUserInfoByUserId(userId);
+            Users userInfo = wxUsersService.getUserInfoByUserId(userId);
             result.put("userInfo",userInfo);
             result.put("menuList",menuList);
             result.put("token",token);

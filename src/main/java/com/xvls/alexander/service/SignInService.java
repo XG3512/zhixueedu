@@ -58,16 +58,16 @@ public interface SignInService {
     List<SignIn_userList> getSignIn_userList(PageInfo pageInfo,Integer siiId);
 
     /**
-     * 通过 siiId 删除对应的SignIn_info
-     * @param siiId
+     * 通过 siiIdList 删除对应的SignIn_info
+     * @param siiIdList
      */
-    void deleteSignIn_info(Integer siiId);
+    void deleteSignIn_info(List<Integer> siiIdList);
 
     /**
      * 通过 siiId 删除对应的SignIn_user
-     * @param siiId
+     * @param siiIdList
      */
-    void deleteSignIn_user(Integer siiId);
+    void deleteSignIn_user(List<Integer> siiIdList);
 
     /**
      * 用户签到
