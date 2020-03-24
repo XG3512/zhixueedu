@@ -48,6 +48,36 @@ public class WxCommentsServiceImpl implements WxCommentsService {
     }
 
     /**
+     * 根据 belongType，Id，pageInfo 只获得父评论
+     * @param belongType
+     * @param id
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Comments> getParentComments(String belongType, Integer id, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum - 1)*pageSize;
+        return wxCommentsMapper.getParentComments(belongType,id,new PageInfo(pageNum,pageSize));
+    }
+
+    /**
+     * 根据 belongType，Id，pageInfo 获得所有评论
+     * @param belongType
+     * @param id
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Comments> getAllComments(String belongType, Integer id, PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum - 1)*pageSize;
+        return wxCommentsMapper.getAllComments(belongType,id,new PageInfo(pageNum,pageSize));
+    }
+
+    /**
      * 增加评论信息
      * @param comments
      */
@@ -79,6 +109,17 @@ public class WxCommentsServiceImpl implements WxCommentsService {
                 .eq("belong_id",id);
         Integer count = wxCommentsMapper.selectCount(queryWrapper);
         return count;
+    }
+
+    /**
+     * 获得父评论数
+     * @param belongType
+     * @param id
+     * @return
+     */
+    @Override
+    public Integer getParentCommentsNum(String belongType, Integer id) {
+        return wxCommentsMapper.getParentCommentsNum(belongType,id);
     }
 
 

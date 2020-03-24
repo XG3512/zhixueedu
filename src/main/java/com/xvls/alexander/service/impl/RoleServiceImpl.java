@@ -45,6 +45,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
+     * 获取角色数据总条数
+     * @return
+     */
+    @Override
+    public Integer getRoleCount() {
+        return roleMapper.selectCount(null);
+    }
+
+    /**
      * 增加角色
      * @param role
      */

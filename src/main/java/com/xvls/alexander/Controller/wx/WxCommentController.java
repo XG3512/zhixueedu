@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/wx/comment")
 public class WxCommentController {
@@ -97,6 +98,70 @@ public class WxCommentController {
     }
 
     /**
+     * 根据 belongType，Id，pageInfo 只获得父评论
+     * @param body
+     * @return
+     */
+    @RequestMapping("getParentComments")
+    public Object getParentComments(@RequestBody String body){
+        String belongType = null;
+        Integer id = null;
+        PageInfo pageInfo = null;
+        try {
+            belongType = JacksonUtil.parseString(body,"belongType");
+            id = JacksonUtil.parseInteger(body,"id");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+
+            if(belongType == null || id == null || pageInfo == null || pageInfo.getPageNum()==null || pageInfo.getPageSize()==null){
+                return WeChatResponseUtil.badArgument();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return WeChatResponseUtil.badArgument();
+        }
+        List<Comments> comments = wxCommentsService.getParentComments(belongType,id,pageInfo);
+        Integer commentsNum = wxCommentsService.getCommentsNum(belongType, id);
+        Integer parentCommentsNum = wxCommentsService.getParentCommentsNum(belongType, id);
+        Map result = Maps.newHashMap();
+        result.put("comments",comments);
+        result.put("commentsNum",commentsNum);
+        result.put("parentCommentsNum",parentCommentsNum);
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
+     * 根据 belongType，Id，pageInfo 获得所有评论
+     * @param body
+     * @return
+     */
+    @RequestMapping("getAllComments")
+    public Object getAllComments(@RequestBody String body){
+        String belongType = null;
+        Integer id = null;
+        PageInfo pageInfo = null;
+        try {
+            belongType = JacksonUtil.parseString(body,"belongType");
+            id = JacksonUtil.parseInteger(body,"id");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+
+            if(belongType == null || id == null || pageInfo == null || pageInfo.getPageNum()==null || pageInfo.getPageSize()==null){
+                return WeChatResponseUtil.badArgument();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return WeChatResponseUtil.badArgument();
+        }
+        List<Comments> comments = wxCommentsService.getAllComments(belongType,id,pageInfo);
+        Integer commentsNum = wxCommentsService.getCommentsNum(belongType, id);
+        Integer parentCommentsNum = wxCommentsService.getParentCommentsNum(belongType, id);
+        Map result = Maps.newHashMap();
+        result.put("comments",comments);
+        result.put("commentsNum",commentsNum);
+        result.put("parentCommentsNum",parentCommentsNum);
+        return WeChatResponseUtil.ok(result);
+    }
+
+    /**
      * 通过 commentIdList数组 批量删除评论信息及其子评论信息
      * @param body
      * @return
@@ -131,6 +196,8 @@ public class WxCommentController {
 
         return SystemResponse.ok();
     }
+
+
 
 
 }

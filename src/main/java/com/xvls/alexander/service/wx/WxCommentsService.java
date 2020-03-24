@@ -31,6 +31,24 @@ public interface WxCommentsService {
     List<Comments> getComments2(Integer parentId);
 
     /**
+     * 根据 belongType，Id，pageInfo 只获得父评论
+     * @param belongType
+     * @param id
+     * @param pageInfo
+     * @return
+     */
+    List<Comments> getParentComments(String belongType , Integer id , PageInfo pageInfo);
+
+    /**
+     * 根据 belongType，Id，pageInfo 获得所有评论
+     * @param belongType
+     * @param id
+     * @param pageInfo
+     * @return
+     */
+    List<Comments> getAllComments(String belongType , Integer id , PageInfo pageInfo);
+
+    /**
      * 增加评论信息
      * @param comments
      */
@@ -49,4 +67,12 @@ public interface WxCommentsService {
      * @return
      */
     Integer getCommentsNum(String belongType , Integer id);
+
+    /**
+     * 获得父评论数
+     * @param belongType
+     * @param id
+     * @return
+     */
+    Integer getParentCommentsNum(String belongType,Integer id);
 }

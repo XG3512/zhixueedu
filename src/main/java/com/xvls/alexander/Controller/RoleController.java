@@ -2,7 +2,9 @@ package com.xvls.alexander.Controller;
 
 import com.google.common.collect.Maps;
 import com.xvls.alexander.entity.PageInfo;
+import com.xvls.alexander.entity.Permission;
 import com.xvls.alexander.entity.Role;
+import com.xvls.alexander.service.PermissionService;
 import com.xvls.alexander.service.RoleService;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.SystemResponse;
@@ -21,6 +23,8 @@ public class RoleController {
 
     @Autowired
     RoleService roleService;
+    @Autowired
+    PermissionService permissionService;
 
     /**
      * 通过 pageInfo 获得roleList
@@ -69,6 +73,43 @@ public class RoleController {
         List<Role> roleList = roleService.getRoleListByName(pageInfo, roleName);
         Map result = Maps.newHashMap();
         result.put("roleList",roleList);
+        return SystemResponse.ok(result);
+    }
+
+    /**
+     * 通过 roleId 获得所有permission 并对已有权限进行标记
+     * @param body
+     * @return
+     */
+    @RequiresPermissions("role:select")
+    @RequestMapping("getRolePermissions")
+    public Object getRolePermissions(@RequestBody String body){
+        Integer roleId = null;
+        try {
+            roleId = JacksonUtil.parseInteger(body,"roleId");
+            if(roleId == null){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return SystemResponse.badArgument();
+        }
+        List<Permission> permissions = permissionService.getRolePermissions(roleId);
+        Map result = Maps.newHashMap();
+        result.put("permissions",permissions);
+        return SystemResponse.ok(result);
+    }
+
+    /**
+     * 获取角色数据总条数
+     * @return
+     */
+    @RequiresPermissions("role:select")
+    @RequestMapping("getRoleCount")
+    public Object getRoleCount(){
+        Integer roleCount = roleService.getRoleCount();
+        Map result = Maps.newHashMap();
+        result.put("roleCount",roleCount);
         return SystemResponse.ok(result);
     }
 

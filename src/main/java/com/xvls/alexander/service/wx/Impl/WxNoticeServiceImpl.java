@@ -93,4 +93,47 @@ public class WxNoticeServiceImpl implements WxNoticeService {
         wxNoticeMapper.decreaseNoticeGoodNum(noticeId);
     }
 
+    /**
+     * 通过 pageInfo 获得通知列表
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Notice> getNoticeList(PageInfo pageInfo,Integer userId) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum-1)*pageSize;
+        return wxNoticeMapper.getNoticeList(new PageInfo(pageNum,pageSize),userId);
+    }
+
+    /**
+     * 通过 userId 获得通知总条目数
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer getNoticeCount(Integer userId) {
+        return wxNoticeMapper.getNoticeCount(userId);
+    }
+
+    /**
+     * 添加通知
+     * @param notice
+     * @return
+     */
+    @Override
+    public Integer addNotice(Notice notice) {
+        Integer insert = wxNoticeMapper.insert(notice);
+        return notice.getNoticeId();
+    }
+
+    /**
+     * 通过 noticeIdList 批量删除通知
+     * @param noticeIdList
+     */
+    @Override
+    public void deleteNotices(List<Integer> noticeIdList) {
+        wxNoticeMapper.deleteNotices(noticeIdList);
+    }
+
 }

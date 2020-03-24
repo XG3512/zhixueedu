@@ -63,4 +63,25 @@ public interface WxNoticeMapper extends BaseMapper<Notice> {
      * @return
      */
     List<Notice> getNoticeGoodList(Integer wxUserId,PageInfo pageInfo);
+
+    /**------------------------------后台管理端---------------------------------*/
+    /**
+     * 通过 pageInfo 获得通知列表
+     * @param pageInfo
+     * @return
+     */
+    List<Notice> getNoticeList(PageInfo pageInfo,Integer userId);
+
+    /**
+     * 通过 userId 获得通知总条目数
+     * @param userId
+     * @return
+     */
+    Integer getNoticeCount(Integer userId);
+
+    /**
+     * 通过 noticeIdList 批量删除通知
+     * @param noticeIdList
+     */
+    void deleteNotices(List<Integer> noticeIdList);
 }

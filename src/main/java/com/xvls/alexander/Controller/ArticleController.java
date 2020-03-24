@@ -12,10 +12,7 @@ import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.SystemResponse;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -24,6 +21,7 @@ import java.util.Map;
 /**
  * 后台管理端 动态管理
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/system/article")
 public class ArticleController {
@@ -129,6 +127,38 @@ public class ArticleController {
         }
         List<Article> articleList = wxArticleService.getSystemArticleList(pageInfo, userId);
         Integer articleNum = wxArticleService.getArticleNumByUserId(userId);
+        Map result = Maps.newHashMap();
+        result.put("articleList",articleList);
+        result.put("articleNum",articleNum);
+
+        return SystemResponse.ok(result);
+    }
+
+    /**
+     * 通过 userId，title，pageInfo 模糊查询动态
+     * @param body
+     * @return
+     */
+    @RequiresPermissions("article:select")
+    @RequestMapping("getArticleListByTitle")
+    public Object getArticleListByTitle(@RequestBody String body){
+        PageInfo pageInfo = null;
+        Integer userId = null;
+        String title = null;
+
+        try {
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+            userId = JacksonUtil.parseInteger(body,"userId");
+            title = JacksonUtil.parseString(body,"title");
+            if(pageInfo==null || userId==null || title == null){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return SystemResponse.badArgument();
+        }
+        List<Article> articleList = wxArticleService.getArticleListByTitle(userId, title, pageInfo);
+        Integer articleNum = wxArticleService.getArticleCountByTitle(userId,title);
         Map result = Maps.newHashMap();
         result.put("articleList",articleList);
         result.put("articleNum",articleNum);

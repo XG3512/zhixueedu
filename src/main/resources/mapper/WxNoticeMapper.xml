@@ -34,6 +34,19 @@
         </collection>
     </resultMap>
 
+    <resultMap id="notice" type="com.xvls.alexander.entity.wx.Notice">
+        <id column="notice_id" property="noticeId"></id>
+        <result column="school_id" property="schoolId"></result>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="notice_text" property="noticeText"></result>
+        <result column="read_num" property="readNum"></result>
+        <result column="notice_time" property="noticeTime"></result>
+        <result column="classification" property="classification"></result>
+        <result column="info_from" property="infoFrom"></result>
+        <result column="school_name" property="schoolName"></result>
+    </resultMap>
+
     <select id="getNoticeListBySchoolId" resultMap="mainPageNoticeList">
         select * from notice
         where school_id = #{schoolId}
@@ -95,5 +108,27 @@
     <update id="decreaseNoticeGoodNum">
         update notice set good_num = good_num-1 where notice_id = #{noticeId}
     </update>
+
+    <!--                              后台管理端                                       -->
+    <select id="getNoticeList" resultMap="notice">
+        select notice.*,
+        school.school_name
+        from notice
+        left join school on notice.school_id = school.school_id
+        where notice.school_id IN(select users.school_id from users where users.user_id = #{userId})
+        ORDER BY notice.notice_time DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize};
+    </select>
+
+    <select id="getNoticeCount" resultType="java.lang.Integer">
+        select count(*) from notice where notice.school_id IN(select users.school_id from users where users.user_id = #{userId});
+    </select>
+
+    <delete id="deleteNotices">
+        delete from notice where 1=1 and
+        <foreach collection="list" open="notice_id in (" close=")" item="noticeId" separator=",">
+            #{noticeId}
+        </foreach>
+    </delete>
 
 </mapper>

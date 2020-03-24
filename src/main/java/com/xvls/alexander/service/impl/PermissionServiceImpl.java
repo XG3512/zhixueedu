@@ -22,4 +22,14 @@ public class PermissionServiceImpl implements PermissionService {
     public List<Permission> getAllPermissionList() {
         return permissionMapper.getAllPermissionList();
     }
+
+    /**
+     * 通过 roleId 获得所有permission 并对已有权限进行标记
+     * @param roleId
+     * @return
+     */
+    @Override
+    public List<Permission> getRolePermissions(Integer roleId) {
+        return permissionMapper.getRolePermissions(roleId);
+    }
 }

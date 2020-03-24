@@ -103,6 +103,8 @@ public class shiroConfig {
         filterMap.put("/system/tc/**","custom");
         /*角色*/
         filterMap.put("/system/role/**","custom");
+        /*通知*/
+        filterMap.put("/system/notice/**","custom");
 
         //设置登录的请求
         //shiroFilterFactoryBean.setLoginUrl("/toLogin");

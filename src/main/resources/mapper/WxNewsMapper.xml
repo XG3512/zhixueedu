@@ -14,6 +14,17 @@
         <result column="read_num" property="readNum"></result>
     </resultMap>
 
+    <resultMap id="system_news" type="com.xvls.alexander.entity.wx.WxNews">
+        <id column="news_id" property="newsId"></id>
+        <result column="school_id" property="schoolId"></result>
+        <result column="school_name" property="schoolName"></result>
+        <result column="news_date" property="newsDate"></result>
+        <result column="title" property="title"></result>
+        <result column="news_content" property="newsContent"></result>
+        <result column="news_text" property="newsText"></result>
+        <result column="read_num" property="readNum"></result>
+    </resultMap>
+
     <resultMap id="newsList" type="com.xvls.alexander.entity.wx.WxNews">
         <id column="news_id" property="newsId"></id>
         <result column="school_id" property="schoolId"></result>
@@ -41,5 +52,42 @@
     <update id="addReadNum">
         update news set read_num = read_num + 1 where news_Id = #{newsId}
     </update>
+
+    <!--                          后台管理端                                  -->
+    <select id="getNewsListByIdAndPage" resultMap="system_news">
+        select news.*,
+        school.school_name
+        from news
+        left join school on school.school_id = news.school_id
+        where news.school_id IN (select users.school_id from users where user_id = #{userId})
+        ORDER BY news.news_date DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+
+    <select id="getNewsByTitle" resultMap="system_news">
+        select news.*,
+        school.school_name
+        from news
+        left join school on school.school_id = news.school_id
+        where news.school_id IN (select users.school_id from users where user_id = #{userId}) and news.title like #{title}
+        ORDER BY news.news_date DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize}
+    </select>
+    <select id="getNewsCountByTitle" resultType="java.lang.Integer">
+        select count(*) from news
+        where news.school_id IN (select users.school_id from users where user_id = #{userId}) and news.title like #{title};
+    </select>
+
+    <select id="getNewsCount" resultType="java.lang.Integer">
+        select count(*) from news where news.school_id IN (select users.school_id from users where users.user_id = #{userId})
+    </select>
+
+    <!--批量删除-->
+    <delete id="deleteNews">
+        delete from news where 1=1 and
+        <foreach collection="list" open="news_id in (" close=")" item="newsId" separator=",">
+            #{newsId}
+        </foreach>
+    </delete>
 
 </mapper>
