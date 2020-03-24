@@ -74,6 +74,22 @@ public interface WxNoticeService {
     Integer getNoticeCount(Integer userId);
 
     /**
+     * 招生信息搜索
+     * @param userId
+     * @param content
+     * @param pageInfo
+     * @return
+     */
+    List<Notice> searchNotice(Integer userId,String content,PageInfo pageInfo);
+    /**
+     * 获得招生信息搜索总数
+     * @param userId
+     * @param content
+     * @return
+     */
+    Integer getSearchNoticeCount(Integer userId,String content);
+
+    /**
      * 添加通知
      * @param notice
      * @return

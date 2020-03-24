@@ -64,18 +64,18 @@
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
 
-    <select id="getNewsByTitle" resultMap="system_news">
+    <select id="searchNews" resultMap="system_news">
         select news.*,
         school.school_name
         from news
         left join school on school.school_id = news.school_id
-        where news.school_id IN (select users.school_id from users where user_id = #{userId}) and news.title like #{title}
+        where news.school_id IN (select users.school_id from users where user_id = #{userId}) and (news.title like #{content} or news.news_content like #{content})
         ORDER BY news.news_date DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
-    <select id="getNewsCountByTitle" resultType="java.lang.Integer">
+    <select id="getSearchNewsCount" resultType="java.lang.Integer">
         select count(*) from news
-        where news.school_id IN (select users.school_id from users where user_id = #{userId}) and news.title like #{title};
+        where news.school_id IN (select users.school_id from users where user_id = #{userId}) and (news.title like #{content} or news.news_content like #{content});
     </select>
 
     <select id="getNewsCount" resultType="java.lang.Integer">

@@ -77,6 +77,36 @@ public class NoticeController {
     }
 
     /**
+     * 招生信息搜索
+     * @param body
+     * @return
+     */
+    @RequiresPermissions("notice:select")
+    @RequestMapping("searchNotice")
+    public Object searchNotice(@RequestBody String body){
+        Integer userId = null;
+        String content = null;
+        PageInfo pageInfo = null;
+        try {
+            userId = JacksonUtil.parseInteger(body,"userId");
+            content = JacksonUtil.parseString(body,"content");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+            if(userId == null || content == null || pageInfo == null){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return SystemResponse.badArgument();
+        }
+        List<Notice> noticeList = wxNoticeService.searchNotice(userId, content, pageInfo);
+        Integer noticeCount = wxNoticeService.getSearchNoticeCount(userId, content);
+        Map result = Maps.newHashMap();
+        result.put("noticeList",noticeList);
+        result.put("noticeCount",noticeCount);
+        return SystemResponse.ok(result);
+    }
+
+    /**
      * 通知增加功能，schoolId，title，content，noticeText，noticeTime，classification，infoFrom
      * @param body
      * @return

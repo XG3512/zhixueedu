@@ -245,29 +245,29 @@ public class WxArticleServiceImpl implements WxArticleService {
     /**
      * 通过 userId，title，pageInfo 模糊查询动态
      * @param userId
-     * @param title
+     * @param content
      * @param pageInfo
      * @return
      */
     @Override
-    public List<Article> getArticleListByTitle(Integer userId, String title, PageInfo pageInfo) {
+    public List<Article> searchArticle(Integer userId, String content, PageInfo pageInfo) {
         Integer pageNum = pageInfo.getPageNum();
         Integer pageSize = pageInfo.getPageSize();
         pageNum = (pageNum-1)*pageSize;
-        title = "%"+title+"%";
-        return wxArticleMapper.getArticleListByTitle(userId,title,new PageInfo(pageNum,pageSize));
+        content = "%"+content+"%";
+        return wxArticleMapper.searchArticle(userId,content,new PageInfo(pageNum,pageSize));
     }
 
     /**
      * 通过 userId，title 获得模糊查询数目
      * @param userId
-     * @param title
+     * @param content
      * @return
      */
     @Override
-    public Integer getArticleCountByTitle(Integer userId, String title) {
-        title = "%"+title+"%";
-        return wxArticleMapper.getArticleCountByTitle(userId,title);
+    public Integer getSearchArticleCount(Integer userId, String content) {
+        content = "%"+content+"%";
+        return wxArticleMapper.getSearchArticleCount(userId,content);
     }
 
     /**

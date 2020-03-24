@@ -342,17 +342,17 @@
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
 
-    <select id="getArticleListByTitle" resultMap="system_article">
+    <select id="searchArticle" resultMap="system_article">
         select *
         from article
-        where article.school_id IN (select users.school_id from users where users.user_id = #{userId}) and title like #{title}
+        where article.school_id IN (select users.school_id from users where users.user_id = #{userId}) and (content like #{content} or content like #{content})
         ORDER BY article.article_time desc
         limit #{pageInfo.pageNum},#{pageInfo.pageSize}
     </select>
-    <select id="getArticleCountByTitle" resultType="java.lang.Integer">
+    <select id="getSearchArticleCount" resultType="java.lang.Integer">
         select count(*)
         from article
-        where article.school_id IN (select users.school_id from users where users.user_id = #{userId}) and title like #{title};
+        where article.school_id IN (select users.school_id from users where users.user_id = #{userId}) and (content like #{content} or content like #{content});
     </select>
     
     <select id="getArticleNumByUserId" resultType="java.lang.Integer">

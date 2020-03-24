@@ -61,25 +61,31 @@ public class WxNewsServiceImpl implements WxNewsService {
     }
 
     /**
-     * 通过 title，pageInfo 进行模糊搜索
+     * 通过 userId，content，pageInfo 进行模糊搜索
      * @param userId
-     * @param title
+     * @param content
      * @param pageInfo
      * @return
      */
     @Override
-    public List<WxNews> getNewsByTitle(Integer userId , String title, PageInfo pageInfo) {
+    public List<WxNews> searchNews(Integer userId , String content, PageInfo pageInfo) {
         Integer pageNum = pageInfo.getPageNum();
         Integer pageSize = pageInfo.getPageSize();
         pageNum = (pageNum-1)*pageSize;
-        title = "%"+title+"%";
-        return wxNewsMapper.getNewsByTitle(userId,title,new PageInfo(pageNum,pageSize));
+        content = "%"+content+"%";
+        return wxNewsMapper.searchNews(userId,content,new PageInfo(pageNum,pageSize));
     }
 
+    /**
+     * 通过 userId，content 获得通知数量
+     * @param userId
+     * @param content
+     * @return
+     */
     @Override
-    public Integer getNewsCountByTitle(Integer userId, String title) {
-        title = "%"+title+"%";
-        return wxNewsMapper.getNewsCountByTitle(userId,title);
+    public Integer getSearchNewsCount(Integer userId, String content) {
+        content = "%"+content+"%";
+        return wxNewsMapper.getSearchNewsCount(userId,content);
     }
 
     /**

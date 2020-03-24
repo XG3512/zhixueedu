@@ -52,8 +52,10 @@ public class NewsController {
             return SystemResponse.badArgument();
         }
         List<WxNews> newsList = wxNewsService.getNewsListById(userId, pageInfo);
+        Integer newsCount = wxNewsService.getNewsCount(userId);
         Map result = Maps.newHashMap();
         result.put("newsList",newsList);
+        result.put("count",newsCount);
         return SystemResponse.ok(result);
     }
 
@@ -63,24 +65,24 @@ public class NewsController {
      * @return
      */
     @RequiresPermissions("news:select")
-    @RequestMapping("getNewsByTitle")
-    public Object getNewsByTitle(@RequestBody String body){
+    @RequestMapping("searchNews")
+    public Object searchNews(@RequestBody String body){
         Integer userId = null;
-        String title = null;
+        String content = null;
         PageInfo pageInfo = null;
         try {
             userId = JacksonUtil.parseInteger(body,"userId");
-            title = JacksonUtil.parseString(body,"title");
+            content = JacksonUtil.parseString(body,"content");
             pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
-            if(userId == null || title == null || pageInfo == null){
+            if(userId == null || content == null || pageInfo == null){
                 return SystemResponse.badArgumentValue();
             }
         } catch (Exception e) {
             System.out.println(e);
             return SystemResponse.badArgument();
         }
-        List<WxNews> newsList = wxNewsService.getNewsByTitle(userId, title, pageInfo);
-        Integer count = wxNewsService.getNewsCountByTitle(userId, title);
+        List<WxNews> newsList = wxNewsService.searchNews(userId, content, pageInfo);
+        Integer count = wxNewsService.getSearchNewsCount(userId, content);
         Map result = Maps.newHashMap();
         result.put("newsList",newsList);
         result.put("count",count);

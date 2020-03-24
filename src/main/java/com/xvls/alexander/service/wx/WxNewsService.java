@@ -41,21 +41,21 @@ public interface WxNewsService {
     List<WxNews> getNewsListById(Integer userId, PageInfo pageInfo);
 
     /**
-     * 通过 userId，title，pageInfo 进行模糊搜索
+     * 通过 userId，content，pageInfo 进行模糊搜索
      * @param userId
-     * @param title
+     * @param content
      * @param pageInfo
      * @return
      */
-    List<WxNews> getNewsByTitle(Integer userId , String title,PageInfo pageInfo);
+    List<WxNews> searchNews(Integer userId,String content,PageInfo pageInfo);
 
     /**
-     * 通过 userId，title 获得通知数量
+     * 通过 userId，content 获得通知数量
      * @param userId
-     * @param title
+     * @param content
      * @return
      */
-    Integer getNewsCountByTitle(Integer userId , String title);
+    Integer getSearchNewsCount(Integer userId , String content);
 
     /**
      * 添加通知

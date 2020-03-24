@@ -124,6 +124,21 @@
         select count(*) from notice where notice.school_id IN(select users.school_id from users where users.user_id = #{userId});
     </select>
 
+    <select id="searchNotice" resultMap="notice">
+        select notice.*,
+        school.school_name
+        from notice
+        left join school on notice.school_id = school.school_id
+        where notice.school_id IN(select users.school_id from users where users.user_id = #{userId}) and (notice.title like #{content} or notice.content like #{content})
+        ORDER BY notice.notice_time DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize};
+    </select>
+    <select id="getSearchNoticeCount" resultType="java.lang.Integer">
+        select count(*)
+        from notice
+        where notice.school_id IN(select users.school_id from users where users.user_id = #{userId}) and (notice.title like #{content} or notice.content like #{content});
+    </select>
+
     <delete id="deleteNotices">
         delete from notice where 1=1 and
         <foreach collection="list" open="notice_id in (" close=")" item="noticeId" separator=",">

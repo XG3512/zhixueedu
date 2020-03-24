@@ -146,21 +146,21 @@ public interface WxArticleMapper extends BaseMapper<Article> {
     List<Article> getSystemArticleList(PageInfo pageInfo,Integer userId);
 
     /**
-     * 通过 userId，title，pageInfo 模糊查询动态
+     * 通过 userId，content，pageInfo 模糊查询动态
      * @param userId
-     * @param title
+     * @param content
      * @param pageInfo
      * @return
      */
-    List<Article> getArticleListByTitle(Integer userId,String title,PageInfo pageInfo);
+    List<Article> searchArticle(Integer userId,String content,PageInfo pageInfo);
 
     /**
-     * 通过 userId，title 获得模糊查询数目
+     * 通过 userId，content 获得模糊查询数目
      * @param userId
-     * @param title
+     * @param content
      * @return
      */
-    Integer getArticleCountByTitle(Integer userId,String title);
+    Integer getSearchArticleCount(Integer userId,String content);
 
     /**
      * 通过 userId 获得动态总数目
