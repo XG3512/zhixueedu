@@ -105,6 +105,8 @@ public class shiroConfig {
         filterMap.put("/system/role/**","custom");
         /*通知*/
         filterMap.put("/system/notice/**","custom");
+        /*教师视频管理*/
+        filterMap.put("/system/video/**","custom");
 
         //设置登录的请求
         //shiroFilterFactoryBean.setLoginUrl("/toLogin");

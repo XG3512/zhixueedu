@@ -272,6 +272,7 @@ public class WxVideoServiceImpl implements WxVideoService {
         return wxVideoMapper.getVideoCollectionList(wxUserId,new PageInfo(pageNum,pageSize));
     }
 
+
     public Double Calculate(Video_main video_main){
         Double result = null;
 

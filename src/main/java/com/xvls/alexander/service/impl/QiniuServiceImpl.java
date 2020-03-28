@@ -11,6 +11,7 @@ import com.xvls.alexander.service.wx.WxSchoolService;
 import com.xvls.alexander.service.wx.WxVideoService;
 import com.xvls.alexander.utils.QiniuFileUtil;
 import com.xvls.alexander.utils.RestResponse;
+import com.xvls.alexander.utils.SystemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -155,10 +156,10 @@ public class QiniuServiceImpl implements QiniuService {
      * @return
      */
     @Override
-    public RestResponse uploadVideo(MultipartFile file, Video video) throws IOException, NoSuchAlgorithmException {
+    public Object uploadVideo(MultipartFile file, Video video) throws IOException, NoSuchAlgorithmException {
         File_download file_download = qiniuFileUtil.upload(file);
         if(video.getEpisodeId()==null || video.getVideoMainId()==null){
-            return RestResponse.failure("参数错误");
+            return SystemResponse.badArgument();
         }
         Video video_result = wxVideoService.getVideoByEpisodeId_VideoMainId(video.getEpisodeId(), video.getVideoMainId());
         if(video_result != null){
@@ -183,9 +184,9 @@ public class QiniuServiceImpl implements QiniuService {
             Integer videoId = wxVideoService.insertVideo(video);
             Map result = Maps.newHashMap();
             result.put("videoId",videoId);
-            return RestResponse.success().setData(result);
+            return SystemResponse.ok(result);
         }
-        return RestResponse.success();
+        return SystemResponse.ok();
     }
 
 

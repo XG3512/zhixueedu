@@ -203,7 +203,7 @@
         left join follow_school on follow_school.school_id=school.school_id and follow_school.wx_user_id = #{wxUserId}
         left join good on good.good_type='A' and good.good_id = article.article_id and good.wx_user_id = #{wxUserId}
         left join collection on collection.collection_type='A' and collection.collection_id=article.article_id and collection.wx_user_id = #{wxUserId}
-        where article.title like #{title}
+        where (article.title like #{title} or article.content like #{title})
         ORDER BY article.article_time desc
     </select>
 

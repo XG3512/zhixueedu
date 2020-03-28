@@ -81,5 +81,5 @@ public interface QiniuService {
      * @param video
      * @return
      */
-    RestResponse uploadVideo(MultipartFile file, Video video) throws IOException, NoSuchAlgorithmException;
+    Object uploadVideo(MultipartFile file, Video video) throws IOException, NoSuchAlgorithmException;
 }

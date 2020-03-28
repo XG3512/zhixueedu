@@ -19,5 +19,6 @@ public class Video_episode {
     private String videoSize;//视频大小
     private Date videoDate;//视频日期
     private Integer episodeId;//视频集数ID
+    private String verifyStatus;//审核状态
     private String videoSource;//视频资源地址
 }

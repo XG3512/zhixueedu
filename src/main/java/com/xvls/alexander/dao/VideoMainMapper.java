@@ -1,21 +1,14 @@
-package com.xvls.alexander.service;
+package com.xvls.alexander.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.VideoMain;
-import com.xvls.alexander.entity.wx.Video_main;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * 后台管理端的视频Service
- */
-public interface Video_mainService {
-
-    /**
-     * 上传 视频主页 信息
-     * @param video_main
-     */
-    Integer uploadVideoMain(Video_main video_main);
+@Repository
+public interface VideoMainMapper extends BaseMapper<VideoMain> {
 
     /**
      * 通过 teacherId，pageInfo 获得视频列表
@@ -35,11 +28,11 @@ public interface Video_mainService {
     /**
      * 通过 teacherId,content,pageInfo 进行模糊查询
      * @param teacherId
-     * @param conent
+     * @param content
      * @param pageInfo
      * @return
      */
-    List<VideoMain> getVideoMainListByContent(Integer teacherId,String conent,PageInfo pageInfo);
+    List<VideoMain> getVideoMainListByContent(Integer teacherId,String content,PageInfo pageInfo);
 
     /**
      * 更新视频主页图片
@@ -69,23 +62,14 @@ public interface Video_mainService {
      * @param videoMainIdList
      */
     void deleteVideoMain(List<Integer> videoMainIdList);
-
     /**
      * 通过 videoMainIdList 批量删除video
      * @param videoMainIdList
      */
     void deleteVideoByMainId(List<Integer> videoMainIdList);
-
     /**
      * 通过 videoIdList 批量删除视频
      * @param videoIdList
      */
     void deleteVideo(List<Integer> videoIdList);
-
-    /**
-     * 计算热度
-     * @param video_main
-     * @return
-     */
-    Double Calculate(Video_main video_main);
 }

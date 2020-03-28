@@ -170,6 +170,9 @@ public interface WxVideoService {
      */
     List<Video_main> getVideoCollectionList(Integer wxUserId, PageInfo pageInfo);
 
+    /**********************************后台管理端*************************************/
+
+
     /**
      * 计算热度
      * @param video_main

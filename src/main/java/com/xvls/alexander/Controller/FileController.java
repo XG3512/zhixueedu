@@ -13,6 +13,7 @@ import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.SystemResponse;
 import com.xvls.alexander.utils.QiniuFileUtil;
 import com.xvls.alexander.utils.RestResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -263,8 +264,9 @@ public class FileController {
      * @param file
      * @return
      */
+    @RequiresPermissions("video_main:add")
     @RequestMapping("uploadVideo")
-    public RestResponse uploadVideo(MultipartFile file,HttpServletRequest httpServletRequest){
+    public Object uploadVideo(MultipartFile file,HttpServletRequest httpServletRequest){
         Video video = null;
         try {
             video = JacksonUtil.parseObject(httpServletRequest.getParameter("video"),Video.class);

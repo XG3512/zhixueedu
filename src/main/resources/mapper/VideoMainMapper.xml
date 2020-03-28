@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.VideoMainMapper">
+
+    <!--后台管理端-->
+    <resultMap id="videoMainPageList" type="com.xvls.alexander.entity.VideoMain">
+        <id column="video_main_id" property="videoMainId"></id>
+        <result column="teacher_id" property="teacherId"></result>
+        <result column="video_main_title" property="videoMainTitle"></result>
+        <result column="summary" property="summary"></result>
+        <result column="play_num" property="playNum"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="collection_num" property="collectionNum"></result>
+        <result column="fans_num" property="teacherFansNum"></result>
+        <result column="video_date" property="videoDate"></result>
+        <result column="comment_num" property="commentNum"></result>
+        <result column="comment_status" property="commentStatus"></result>
+        <result column="video_length" property="videoLength"></result>
+        <result column="public_status" property="publicStatus"></result>
+        <result column="verify_status" property="verifyStatus"></result>
+        <result column="main_page" property="mainPage"></result>
+        <result column="heat_of_video" property="heatOfVideo"></result>
+
+        <collection property="labelList" ofType="com.xvls.alexander.entity.wx.Label" column="video_main_id" select="getLabelList"></collection>
+        <collection property="episodeListOfPass" ofType="com.xvls.alexander.entity.wx.Video_episode" column="video_main_id" select="getEpisodeListOfPass"></collection>
+        <collection property="episodeListOfVerify" ofType="com.xvls.alexander.entity.wx.Video_episode" column="video_main_id" select="getEpisodeListOfVerify"></collection>
+        <collection property="episodeListOfNotPass" ofType="com.xvls.alexander.entity.wx.Video_episode" column="video_main_id" select="getEpisodeListOfNotPass"></collection>
+    </resultMap>
+    <resultMap id="getEpisodeList" type="com.xvls.alexander.entity.wx.Video_episode">
+        <id column="video_id" property="videoId"></id>
+        <result column="video_title" property="videoTitle"></result>
+        <result column="video_length" property="videoLength"></result>
+        <result column="video_size" property="videoSize"></result>
+        <result column="video_date" property="videoDate"></result>
+        <result column="episode_id" property="episodeId"></result>
+        <result column="verify_status" property="verifyStatus"></result>
+        <result column="video_source" property="videoSource"></result>
+    </resultMap>
+    <resultMap id="getLabelList" type="com.xvls.alexander.entity.wx.Label">
+        <id column="label_id" property="labelId"></id>
+        <result column="label_name" property="labelName"></result>
+    </resultMap>
+
+    <select id="getVideoListByTeacherId" resultMap="videoMainPageList">
+        select video_main.*
+        from video_main
+        where video_main.teacher_id = #{teacherId}
+        ORDER BY video_main.video_date DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize};
+    </select>
+    <select id="getEpisodeListOfPass" resultMap="getEpisodeList">
+        select *
+        from video
+        where video.video_main_id = #{video_main_id} and verify_status='通过'
+        order by episode_id ASC
+    </select>
+    <select id="getEpisodeListOfVerify" resultMap="getEpisodeList">
+        select *
+        from video
+        where video.video_main_id = #{video_main_id} and verify_status='审核中'
+        order by episode_id ASC
+    </select>
+    <select id="getEpisodeListOfNotPass" resultMap="getEpisodeList">
+        select *
+        from video
+        where video.video_main_id = #{video_main_id} and verify_status='未通过'
+        order by episode_id ASC
+    </select>
+    <select id="getLabelList" resultMap="getLabelList">
+        select label.label_id,
+        label.label_name
+        from v_label
+        left join label on v_label.label_id = label.label_id
+        where v_label.video_main_id = #{video_main_id}
+    </select>
+
+    <!--通过 videoMainId 获得视频详细信息-->
+    <select id="getVideoMainInfoById" resultMap="videoMainPageList">
+        select video_main.*
+        from video_main
+        where video_main.video_main_id = #{videoMainId};
+    </select>
+
+    <!--通过 teacherId,content,pageInfo 进行模糊查询-->
+    <select id="getVideoMainListByContent" resultMap="videoMainPageList">
+        select video_main.*
+        from video_main
+        where video_main.teacher_id = #{teacherId} and (video_main.video_main_title like #{content} or video_main.summary like #{content})
+        ORDER BY video_main.video_date DESC
+        limit #{pageInfo.pageNum},#{pageInfo.pageSize};
+    </select>
+
+    <!--更新视频主页图片-->
+    <update id="updateMainPage">
+        update video_main set main_page = #{mainPage} where video_main_id = #{videoMainId};
+    </update>
+
+    <!--通过 videoMainId,videoMainTitle,summary 修改视频主页信息-->
+    <update id="updateMainPageInfo">
+        update video_main set video_main_title = #{videoMainTitle},summary = #{summary} where video_main_id = #{videoMainId};
+    </update>
+
+    <!--通过 videoId，videoTitle，episodeId 修改视频信息-->
+    <update id="updateVideoInfo">
+        update video set video_title = #{videoTitle},episode_id = #{episodeId} where video_id = #{videoId};
+    </update>
+
+    <!--通过 videoMainIdList 批量删除视频主页信息-->
+    <delete id="deleteVideoMain">
+        delete from video_main where 1=1 and
+        <foreach collection="list" open="video_main_id in (" close=")" item="videoMainId" separator=",">
+            #{videoMainId}
+        </foreach>
+    </delete>
+    <delete id="deleteVideoByMainId">
+        delete from video where 1=1 and
+        <foreach collection="list" open="video_main_id in (" close=")" item="videoMainId" separator=",">
+            #{videoMainId}
+        </foreach>
+    </delete>
+    <delete id="deleteVideo">
+        delete from video where 1=1 and
+        <foreach collection="list" open="video_id in (" close=")" item="videoId" separator=",">
+            #{videoId}
+        </foreach>
+    </delete>
+
+</mapper>
