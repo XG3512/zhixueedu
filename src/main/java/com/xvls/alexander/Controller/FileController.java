@@ -9,6 +9,8 @@ import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.service.FileCrudService;
 import com.xvls.alexander.service.QiniuService;
+import com.xvls.alexander.service.wx.WxHomeRotationService;
+import com.xvls.alexander.service.wx.WxVideoRotationService;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.SystemResponse;
 import com.xvls.alexander.utils.QiniuFileUtil;
@@ -38,6 +40,12 @@ public class FileController {
     @Autowired
     FileCrudService fileCrudService;
 
+    @Autowired
+    WxHomeRotationService wxHomeRotationService;
+
+    @Autowired
+    WxVideoRotationService wxVideoRotationService;
+
     /**
      * 普通上传图片,需要上传文件,userId,belongType,belongId,name,
      * @param file
@@ -65,6 +73,63 @@ public class FileController {
             return RestResponse.failure(e.getMessage());
         }
         return RestResponse.success().setData(map);
+    }
+
+    /**
+     * 通过 file，homeRotationId 更改首页轮播图图片
+     * @param file
+     * @param homeRotationId
+     * @return
+     */
+    @RequiresPermissions("home_rotation:update")
+    @RequestMapping("uploadHomeRotationImage")
+    public Object uploadHomeRotationImage(@RequestParam("file")MultipartFile file,@RequestParam("homeRotationId") Integer homeRotationId){
+        if(file == null || homeRotationId == null){
+            return SystemResponse.badArgument();
+        }
+        File_download file_download = null;
+        try {
+            file_download = qiniuService.uploadEditorFile(file);
+            if (file_download==null){
+                return SystemResponse.fail(-1,"上传失败");
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return SystemResponse.fail(-1,"上传失败");
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println(e.getMessage());
+            return SystemResponse.fail(-1,"上传失败");
+        }
+        wxHomeRotationService.updateHomeRotationSourse(homeRotationId,file_download.getFileUrl());
+        Map result = Maps.newHashMap();
+        result.put("url",file_download.getFileUrl());
+        return SystemResponse.ok(result);
+    }
+
+    /**
+     * 通过 file，videoRotationId 更新视频轮播图图片
+     * @param file
+     * @param videoRotationId
+     * @return
+     */
+    @RequiresPermissions("video_rotation:update")
+    @RequestMapping("updateVideoRotationImage")
+    public Object updateVideoRotationImage(@RequestParam("file")MultipartFile file,@RequestParam("videoRotationId") Integer videoRotationId){
+        if(file==null || videoRotationId == null){
+            return SystemResponse.badArgument();
+        }
+        try {
+            String url = wxVideoRotationService.updateVideoRotationImage(file, videoRotationId);
+            Map result = Maps.newHashMap();
+            result.put("url",url);
+            return SystemResponse.ok(result);
+        } catch (IOException e) {
+            System.out.println(e);
+            return SystemResponse.fail(-1,e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println(e);
+            return SystemResponse.fail(-1,e.getMessage());
+        }
     }
 
     /**
@@ -266,22 +331,33 @@ public class FileController {
      */
     @RequiresPermissions("video_main:add")
     @RequestMapping("uploadVideo")
-    public Object uploadVideo(MultipartFile file,HttpServletRequest httpServletRequest){
-        Video video = null;
-        try {
+    public Object uploadVideo(@RequestParam("file") MultipartFile file ,
+                              @RequestParam("teacherId")Integer teacherId,
+                              @RequestParam("videoTitle") String videoTitle,
+                              @RequestParam("videoMainId") Integer videoMainId,
+                              @RequestParam("episodeId") Integer episodeId,
+                              @RequestParam("publicStatus") String publicStatus,
+                              HttpServletRequest httpServletRequest){
+        /*try {
             video = JacksonUtil.parseObject(httpServletRequest.getParameter("video"),Video.class);
         } catch (Exception e) {
             return RestResponse.failure("参数错误");
+        }*/
+        if(file==null || teacherId == null || videoTitle == null || videoMainId == null || episodeId == null || publicStatus == null){
+            return SystemResponse.badArgument();
         }
-        if(video==null || file==null){
-            return RestResponse.failure("参数错误");
-        }
+        Video video = new Video();
+        video.setTeacherId(teacherId);
+        video.setVideoTitle(videoTitle);
+        video.setVideoMainId(videoMainId);
+        video.setEpisodeId(episodeId);
+        video.setPublicStatus(publicStatus);
         try {
             return qiniuService.uploadVideo(file,video);
         } catch (IOException e) {
-            return RestResponse.failure(e.getMessage());
+            return SystemResponse.fail(-1,e.getMessage());
         } catch (NoSuchAlgorithmException e) {
-            return RestResponse.failure(e.getMessage());
+            return SystemResponse.fail(-1,e.getMessage());
         }
     }
 }

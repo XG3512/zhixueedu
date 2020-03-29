@@ -130,8 +130,10 @@ public class VideoController {
             return SystemResponse.badArgument();
         }
         List<VideoMain> videoMainList = video_mainService.getVideoListByTeacherId(teacherId, pageInfo);
+        Integer videoMainPageCount = video_mainService.getVideoMainPageCount(teacherId);
         Map result = Maps.newHashMap();
         result.put("videoMainList",videoMainList);
+        result.put("videoMainPageCount",videoMainPageCount);
         return SystemResponse.ok(result);
     }
 
@@ -182,8 +184,10 @@ public class VideoController {
             return SystemResponse.badArgument();
         }
         List<VideoMain> videoMainList = video_mainService.getVideoMainListByContent(teacherId, content, pageInfo);
+        Integer videoMainPageCount = video_mainService.getVideoMainPageCountByContent(teacherId, content);
         Map result = Maps.newHashMap();
         result.put("videoMainList",videoMainList);
+        result.put("videoMainPageCount",videoMainPageCount);
         return SystemResponse.ok(result);
     }
 

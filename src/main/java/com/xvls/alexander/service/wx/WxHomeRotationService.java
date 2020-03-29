@@ -22,4 +22,19 @@ public interface WxHomeRotationService {
      * 获得主页的视频列表
      */
     List<Video_main> getHomePageVideoList(Integer wxUserId);
+
+    /**
+     * 通过 homeRotationId，source 更改轮播图图片
+     * @param homeRotationId
+     * @param source
+     */
+    void updateHomeRotationSourse(Integer homeRotationId,String source);
+
+    /**
+     * 通过 homeRotationId，belongType，belongId 更新轮播图信息
+     * @param homeRotationId
+     * @param belongType
+     * @param belongId
+     */
+    void updateHomeRotationInfo(Integer homeRotationId,String belongType,Integer belongId);
 }

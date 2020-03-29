@@ -32,4 +32,25 @@ public class WxHomeRotationServiceImpl implements WxHomeRotationService {
     public List<Video_main> getHomePageVideoList(Integer wxUserId) {
         return wxVideoService.getHomePageVideoList(wxUserId);
     }
+
+    /**
+     * 通过 homeRotationId，source 更改轮播图图片
+     * @param homeRotationId
+     * @param source
+     */
+    @Override
+    public void updateHomeRotationSourse(Integer homeRotationId, String source) {
+        wxHomeRotationMapper.updateHomeRotationSourse(homeRotationId,source);
+    }
+
+    /**
+     * 通过 homeRotationId，belongType，belongId 更新轮播图信息
+     * @param homeRotationId
+     * @param belongType
+     * @param belongId
+     */
+    @Override
+    public void updateHomeRotationInfo(Integer homeRotationId, String belongType, Integer belongId) {
+        wxHomeRotationMapper.updateHomeRotationInfo(homeRotationId, belongType, belongId);
+    }
 }

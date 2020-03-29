@@ -9,10 +9,7 @@ import com.xvls.alexander.service.wx.WxLabelService;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +17,7 @@ import java.util.Map;
 /**
  * 视频的标签
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/wx/label")
 public class WxLabelController {

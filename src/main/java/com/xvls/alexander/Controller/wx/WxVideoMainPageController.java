@@ -38,29 +38,4 @@ public class WxVideoMainPageController {
 
         return WeChatResponseUtil.ok(result);
     }
-
-    /**
-     * 更新 视频轮播图
-     * @param file
-     * @param httpServletRequest
-     * @return
-     */
-    @RequestMapping("updateVideoRotation")
-    public Object updateVideoRotation(@RequestParam("file")MultipartFile file, HttpServletRequest httpServletRequest){
-
-        WxVideoRotation wxVideoRotation = null;
-
-        try {
-            wxVideoRotation = JacksonUtil.parseObject(httpServletRequest.getParameter("wxVideoRotation"),WxVideoRotation.class);
-            if(file == null || wxVideoRotation == null || wxVideoRotation.getVideoMainId() == null || wxVideoRotation.getVideoRotationId()==null){
-                return WeChatResponseUtil.badArgument();
-            }
-            wxVideoRotationService.updateVideoRotation(file,wxVideoRotation);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return WeChatResponseUtil.badArgument();
-        }
-
-        return WeChatResponseUtil.ok();
-    }
 }

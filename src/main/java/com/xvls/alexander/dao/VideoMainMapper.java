@@ -35,6 +35,14 @@ public interface VideoMainMapper extends BaseMapper<VideoMain> {
     List<VideoMain> getVideoMainListByContent(Integer teacherId,String content,PageInfo pageInfo);
 
     /**
+     * 通过 teacherId,content,pageInfo 获得模糊查询视频总数
+     * @param teacherId
+     * @param content
+     * @return
+     */
+    Integer getVideoMainPageCountByContent(Integer teacherId,String content);
+
+    /**
      * 更新视频主页图片
      * @param videoMainId
      * @param mainPage

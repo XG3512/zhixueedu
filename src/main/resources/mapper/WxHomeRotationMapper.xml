@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xvls.alexander.dao.WxHomeRotationMapper">
+
+    <resultMap id="homeRotation" type="com.xvls.alexander.entity.wx.WxHomeRotation">
+        <id column="home_rotation_id" property="homeRotationId"></id>
+        <result column="belong_type" property="belongType"></result>
+        <result column="belong_id" property="belongId"></result>
+        <result column="source" property="source"></result>
+    </resultMap>
+
+    <update id="updateHomeRotationSourse">
+        update home_rotation set source = #{source} where home_rotation_id = #{homeRotationId};
+    </update>
+
+    <update id="updateHomeRotationInfo">
+        update home_rotation set belong_type = #{belongType} , belong_id = #{belongId} where home_rotation_id = #{homeRotationId};
+    </update>
+
+</mapper>

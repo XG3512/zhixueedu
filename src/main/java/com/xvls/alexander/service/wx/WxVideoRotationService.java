@@ -16,9 +16,16 @@ public interface WxVideoRotationService {
     List<WxVideoRotation> getVideoRotation();
 
     /**
+     * 通过 videoRotationId，videoMainId 修改视频信息
+     * @param videoRotationId
+     * @param videoMainId
+     */
+    void updateVideoRotation(Integer videoRotationId,Integer videoMainId);
+
+    /**
      * 更新 视频轮播图 基本信息
      * @param file
-     * @param wxVideoRotation
+     * @param videoRotationId
      */
-    void updateVideoRotation(MultipartFile file, WxVideoRotation wxVideoRotation) throws IOException, NoSuchAlgorithmException;
+    String updateVideoRotationImage(MultipartFile file, Integer videoRotationId) throws IOException, NoSuchAlgorithmException;
 }

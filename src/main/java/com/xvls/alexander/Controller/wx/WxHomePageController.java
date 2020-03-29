@@ -7,14 +7,12 @@ import com.xvls.alexander.service.wx.WxHomeRotationService;
 import com.xvls.alexander.utils.JacksonUtil;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/wx/homePage")
 public class WxHomePageController {

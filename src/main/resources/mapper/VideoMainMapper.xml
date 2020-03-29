@@ -91,6 +91,10 @@
         ORDER BY video_main.video_date DESC
         limit #{pageInfo.pageNum},#{pageInfo.pageSize};
     </select>
+    <!--通过 teacherId,content,pageInfo 获得模糊查询视频总数-->
+    <select id="getVideoMainPageCountByContent" resultType="java.lang.Integer">
+        select count(*) from video_main where video_main.teacher_id = #{teacherId} and (video_main.video_main_title like #{content} or video_main.summary like #{content});
+    </select>
 
     <!--更新视频主页图片-->
     <update id="updateMainPage">

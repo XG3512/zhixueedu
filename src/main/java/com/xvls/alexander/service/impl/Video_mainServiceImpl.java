@@ -1,5 +1,6 @@
 package com.xvls.alexander.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xvls.alexander.dao.UsersMapper;
 import com.xvls.alexander.dao.VideoMainMapper;
 import com.xvls.alexander.dao.WxVideoMapper;
@@ -55,6 +56,18 @@ public class Video_mainServiceImpl implements Video_mainService {
     }
 
     /**
+     * 通过 teacherId 获得视频主页总数目
+     * @param teacherId
+     * @return
+     */
+    @Override
+    public Integer getVideoMainPageCount(Integer teacherId) {
+        QueryWrapper<VideoMain> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("teacher_id",teacherId);
+        return videoMainMapper.selectCount(queryWrapper);
+    }
+
+    /**
      * 通过 videoMainId 获得视频详细信息
      * @param videoMainId
      * @return
@@ -67,17 +80,29 @@ public class Video_mainServiceImpl implements Video_mainService {
     /**
      * 通过 teacherId,content,pageInfo 进行模糊查询
      * @param teacherId
-     * @param conent
+     * @param content
      * @param pageInfo
      * @return
      */
     @Override
-    public List<VideoMain> getVideoMainListByContent(Integer teacherId, String conent, PageInfo pageInfo) {
+    public List<VideoMain> getVideoMainListByContent(Integer teacherId, String content, PageInfo pageInfo) {
         Integer pageNum = pageInfo.getPageNum();
         Integer pageSize = pageInfo.getPageSize();
         pageNum=(pageNum-1)*pageSize;
-        conent = "%"+conent+"%";
-        return videoMainMapper.getVideoMainListByContent(teacherId,conent,new PageInfo(pageNum,pageSize));
+        content = "%"+content+"%";
+        return videoMainMapper.getVideoMainListByContent(teacherId,content,new PageInfo(pageNum,pageSize));
+    }
+
+    /**
+     * 通过 teacherId,content,pageInfo 获得模糊查询视频总数
+     * @param teacherId
+     * @param content
+     * @return
+     */
+    @Override
+    public Integer getVideoMainPageCountByContent(Integer teacherId, String content) {
+        content = "%"+content+"%";
+        return videoMainMapper.getVideoMainPageCountByContent(teacherId,content);
     }
 
     /**

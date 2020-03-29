@@ -26,6 +26,13 @@ public interface Video_mainService {
     List<VideoMain> getVideoListByTeacherId(Integer teacherId, PageInfo pageInfo);
 
     /**
+     * 通过 teacherId 获得视频主页总数目
+     * @param teacherId
+     * @return
+     */
+    Integer getVideoMainPageCount(Integer teacherId);
+
+    /**
      * 通过 videoMainId 获得视频详细信息
      * @param videoMainId
      * @return
@@ -35,11 +42,19 @@ public interface Video_mainService {
     /**
      * 通过 teacherId,content,pageInfo 进行模糊查询
      * @param teacherId
-     * @param conent
+     * @param content
      * @param pageInfo
      * @return
      */
-    List<VideoMain> getVideoMainListByContent(Integer teacherId,String conent,PageInfo pageInfo);
+    List<VideoMain> getVideoMainListByContent(Integer teacherId,String content,PageInfo pageInfo);
+
+    /**
+     * 通过 teacherId,content,pageInfo 获得模糊查询视频总数
+     * @param teacherId
+     * @param content
+     * @return
+     */
+    Integer getVideoMainPageCountByContent(Integer teacherId,String content);
 
     /**
      * 更新视频主页图片

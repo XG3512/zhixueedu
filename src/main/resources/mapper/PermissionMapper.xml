@@ -20,7 +20,7 @@
         <result column="permission_code" property="permissionCode"></result>
         <result column="parent_id" property="parentId"></result>
         <result column="role_id" property="roleId"></result>
-        <collection property="children" ofType="com.xvls.alexander.entity.Permission" column="permission_id" select="getRolePermissionChildren"></collection>
+        <collection property="children" ofType="com.xvls.alexander.entity.Permission" column="{permission_id = permission_id,role_id = role_id}" select="getRolePermissionChildren"></collection>
     </resultMap>
 
     <!--递归获得所有权限-->
@@ -47,7 +47,7 @@
         select permission.*,
         role_permission.role_id
         from permission
-        left join role_permission on role_permission.permission_id = permission.permission_id and role_permission.role_id = #{roleId}
+        left join role_permission on role_permission.permission_id = permission.permission_id and role_permission.role_id = #{role_id}
         where permission.parent_id = #{permission_id};
     </select>
 

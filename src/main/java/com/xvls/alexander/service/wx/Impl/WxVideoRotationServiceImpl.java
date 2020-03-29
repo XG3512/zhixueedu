@@ -32,14 +32,24 @@ public class WxVideoRotationServiceImpl implements WxVideoRotationService {
     }
 
     /**
-     * 更新 视频轮播图 基本信息
-     * @param file
-     * @param wxVideoRotation
+     * 通过 videoRotationId，videoMainId 修改视频信息
+     * @param videoRotationId
+     * @param videoMainId
      */
     @Override
-    public void updateVideoRotation(MultipartFile file, WxVideoRotation wxVideoRotation) throws IOException, NoSuchAlgorithmException {
+    public void updateVideoRotation(Integer videoRotationId, Integer videoMainId) {
+        wxVideoRotationMapper.updateVideoRotation(videoRotationId,videoMainId);
+    }
+
+    /**
+     * 更新 视频轮播图 基本信息
+     * @param file
+     * @param videoRotationId
+     */
+    @Override
+    public String updateVideoRotationImage(MultipartFile file, Integer videoRotationId) throws IOException, NoSuchAlgorithmException {
         File_download file_download = qiniuFileUtil.upload(file);
-        wxVideoRotation.setSource(file_download.getFileUrl());
-        wxVideoRotationMapper.updateById(wxVideoRotation);
+        wxVideoRotationMapper.updateVideoRotationImage(videoRotationId,file_download.getFileUrl());
+        return file_download.getFileUrl();
     }
 }
