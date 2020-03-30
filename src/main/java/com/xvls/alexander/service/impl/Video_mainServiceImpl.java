@@ -165,6 +165,25 @@ public class Video_mainServiceImpl implements Video_mainService {
         videoMainMapper.deleteVideo(videoIdList);
     }
 
+    /**
+     * 通过 userIdList 批量删除视频主页
+     * @param userIdList
+     */
+    @Override
+    public void deleteVideoMainPageByUserIdList(List<Integer> userIdList) {
+        videoMainMapper.deleteVideoMainPageByUserIdList(userIdList);
+    }
+
+    /**
+     * 通过 userIdList 批量删除视频
+     * @param userIdList
+     */
+    @Override
+    public void deleteVideoByUserIdList(List<Integer> userIdList) {
+        videoMainMapper.deleteVideoByUserIdList(userIdList);
+    }
+
+
     @Override
     public Double Calculate(Video_main video_main){
         Double result = null;

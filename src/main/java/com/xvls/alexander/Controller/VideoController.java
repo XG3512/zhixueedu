@@ -106,6 +106,7 @@ public class VideoController {
         }
         Map result = Maps.newHashMap();
         result.put("videoMainId",videoMainId);
+        result.put("url",file_download.getFileUrl());
         return SystemResponse.ok(result);
     }
 

@@ -80,4 +80,15 @@ public interface VideoMainMapper extends BaseMapper<VideoMain> {
      * @param videoIdList
      */
     void deleteVideo(List<Integer> videoIdList);
+
+    /**
+     * 通过 userIdList 批量删除视频主页
+     * @param userIdList
+     */
+    void deleteVideoMainPageByUserIdList(List<Integer> userIdList);
+    /**
+     * 通过 userIdList 批量删除视频
+     * @param userIdList
+     */
+    void deleteVideoByUserIdList(List<Integer> userIdList);
 }

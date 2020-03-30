@@ -184,6 +184,7 @@ public class QiniuServiceImpl implements QiniuService {
             Integer videoId = wxVideoService.insertVideo(video);
             Map result = Maps.newHashMap();
             result.put("videoId",videoId);
+            result.put("url",file_download.getFileUrl());
             return SystemResponse.ok(result);
         }
         return SystemResponse.ok();

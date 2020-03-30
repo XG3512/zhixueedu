@@ -34,6 +34,13 @@ public interface RoleMapper extends BaseMapper<Role> {
     void addRole_permissions(Integer roleId, List<Integer> permissions);
 
     /**
+     * 对用户 增加角色、修改角色
+     * @param userId
+     * @param roleIdList
+     */
+    void updateUserRole(Integer userId,List<Integer> roleIdList);
+
+    /**
      * 批量删除 role
      * @param roleIdList
      */
@@ -48,6 +55,12 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @param roleIdList
      */
     void deleteUser_roleByRoleIdList(List<Integer> roleIdList);
+
+    /**
+     * 通过 userIdList 删除user_role中的内容
+     * @param userIdList
+     */
+    void deleteUser_roleByUserId(List<Integer> userIdList);
 
     /**
      * 通过 roleId,roleName,editTime 修改 角色名称 和 编辑时间

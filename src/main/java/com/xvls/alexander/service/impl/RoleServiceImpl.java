@@ -1,5 +1,6 @@
 package com.xvls.alexander.service.impl;
 
+import com.google.common.collect.Lists;
 import com.xvls.alexander.dao.RoleMapper;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.Role;
@@ -74,6 +75,20 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
+     * 对用户 增加角色、修改角色
+     * @param userId
+     * @param roleIdList
+     */
+    @Override
+    public void updateUserRole(Integer userId, List<Integer> roleIdList) {
+        List<Integer> userIdList = Lists.newArrayList();
+        userIdList.add(userId);
+        this.deleteUser_roleByUserId(userIdList);
+        roleMapper.updateUserRole(userId,roleIdList);
+    }
+
+
+    /**
      * 批量删除 role 中相应的内容
      * @param roleIdList
      */
@@ -97,6 +112,16 @@ public class RoleServiceImpl implements RoleService {
     public void deleteUser_roleByRoleIdList(List<Integer> roleIdList) {
         roleMapper.deleteUser_roleByRoleIdList(roleIdList);
     }
+
+    /**
+     * 通过 userIdList 删除user_role中的内容
+     * @param userIdList
+     */
+    @Override
+    public void deleteUser_roleByUserId(List<Integer> userIdList) {
+        roleMapper.deleteUser_roleByUserId(userIdList);
+    }
+
 
     /**
      * 通过 roleId,roleName,editTime 修改 角色名称 和 编辑时间

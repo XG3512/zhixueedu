@@ -130,5 +130,19 @@
             #{videoId}
         </foreach>
     </delete>
+    <!--通过 userIdList 批量删除视频主页-->
+    <delete id="deleteVideoMainPageByUserIdList">
+        delete from video_main where 1=1 and
+        <foreach collection="list" open="teacher_id in (" close=")" item="userId" separator=",">
+            #{userId}
+        </foreach>
+    </delete>
+    <!--通过 userIdList 批量删除视频-->
+    <delete id="deleteVideoByUserIdList">
+        delete from video where 1=1 and
+        <foreach collection="list" open="teacher_id in (" close=")" item="userId" separator=",">
+            #{userId}
+        </foreach>
+    </delete>
 
 </mapper>

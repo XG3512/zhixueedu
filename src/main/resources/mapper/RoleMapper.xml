@@ -32,6 +32,14 @@
         </foreach>
     </insert>
 
+    <!--对用户 增加角色、修改角色-->
+    <insert id="updateUserRole">
+        insert into user_role values
+        <foreach collection="roleIdList" item="roleId" separator=",">
+            (#{userId},#{roleId})
+        </foreach>
+    </insert>
+
     <!--批量删除 role 中相应的内容-->
     <delete id="deleteRole">
         delete from role where 1=1 and
@@ -51,6 +59,14 @@
         delete from user_role where 1=1 and
         <foreach collection="list" open="role_id IN(" close=")" item="roleId" separator=",">
             #{roleId}
+        </foreach>
+    </delete>
+
+    <!--通过 userId 删除user_role中的内容-->
+    <delete id="deleteUser_roleByUserId">
+        delete from user_role where 1=1 and
+        <foreach collection="list" open="user_id IN(" close=")" item="userId" separator=",">
+            #{userId}
         </foreach>
     </delete>
 

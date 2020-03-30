@@ -4,6 +4,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xvls.alexander.dao.UsersMapper">
 
+    <resultMap id="usersList" type="com.xvls.alexander.entity.wx.Users">
+        <id column="user_id" property="userId"></id>
+        <result column="user_num" property="userNum"></result>
+        <result column="password" property="password"></result>
+        <result column="school_id" property="schoolId"></result>
+        <result column="school_name" property="schoolName"></result>
+        <result column="department_id" property="departmentId"></result>
+        <result column="major_id" property="majorId"></result>
+        <result column="class_id" property="classId"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="sex" property="sex"></result>
+        <result column="nation" property="nation"></result>
+        <result column="grade" property="grade"></result>
+        <result column="id_card" property="idCard"></result>
+        <result column="phone" property="phone"></result>
+        <result column="mail" property="mail"></result>
+        <result column="address" property="address"></result>
+        <result column="icon" property="icon"></result>
+        <result column="fans_num" property="fansNum"></result>
+        <result column="good_num" property="goodNum"></result>
+        <result column="collection_num" property="collectionNum"></result>
+        <result column="motto" property="motto"></result>
+        <result column="background" property="background"></result>
+        <collection property="roleList" ofType="com.xvls.alexander.entity.Role" column="user_id" select="getRoleList"></collection>
+    </resultMap>
+
     <!--通过嵌套查询用户、角色和权限信息-->
     <resultMap id="userRole" type="com.xvls.alexander.entity.wx.Users">
         <id column="user_id" property="userId"></id>
@@ -214,5 +240,39 @@
     <update id="wxUserLogout">
         update users set wx_user_id = null where user_id = #{userId};
     </update>
+
+    <!--                           后台管理端                                  -->
+    <!--通过 pageInfo 获得用户信息列表-->
+    <select id="getUsersList" resultMap="usersList">
+        SELECT users.*,
+        school.school_name
+        FROM users
+        left join school on school.school_id = users.school_id
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <!--后台管理端 通过 userId 获得用户信息-->
+    <select id="system_getUsersInfoById" resultMap="usersList">
+        SELECT users.*,
+        school.school_name
+        FROM users
+        left join school on school.school_id = users.school_id
+        where user_id = #{userId};
+    </select>
+
+    <update id="updateUsersInfo">
+        update users set user_num=#{userNum},school_id=#{schoolId},department_id=#{departmentId},
+        major_id=#{majorId},class_id=#{classId},user_name=#{userName},sex=#{sex},nation=#{nation},
+        grade=#{grade},id_card=#{idCard},phone=#{phone},mail=#{mail},address=#{address},motto=#{motto}
+        where user_id = #{userId};
+    </update>
+
+    <!--通过 userIdList 批量删除用户信息-->
+    <delete id="deleteUsers">
+        delete from users where 1=1 and
+        <foreach collection="list" open="user_id in (" close=")" item="userId" separator=",">
+            #{userId}
+        </foreach>
+    </delete>
 
 </mapper>

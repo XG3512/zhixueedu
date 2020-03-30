@@ -86,6 +86,7 @@ public class shiroConfig {
 
         /**后台管理端url管理*/
         filterMap.put("/SignIn/SignIn","anon");
+        filterMap.put("/system/users/getWxUsersInfoById","anon");
 
         /*动态*/
         filterMap.put("/system/article/**","custom");
@@ -111,6 +112,8 @@ public class shiroConfig {
         filterMap.put("/system/homeRotation","custom");
         /*视频轮播图管理*/
         filterMap.put("/system/videoRotation","custom");
+        /*用户管理*/
+        filterMap.put("/system/users/**","custom");
 
         //设置登录的请求
         //shiroFilterFactoryBean.setLoginUrl("/toLogin");

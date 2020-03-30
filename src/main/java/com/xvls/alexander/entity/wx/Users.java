@@ -51,6 +51,8 @@ public class Users extends Model<Users> implements Serializable {
     private Integer wxUserId;
     private String motto;//座右铭
 
+    private String background;
+
     @TableField(exist = false)//该字段在数据库表中不存在
     private Set<Role> roleList;//角色列表
 

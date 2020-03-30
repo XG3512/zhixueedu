@@ -98,6 +98,17 @@ public interface Video_mainService {
     void deleteVideo(List<Integer> videoIdList);
 
     /**
+     * 通过 userIdList 批量删除视频主页
+     * @param userIdList
+     */
+    void deleteVideoMainPageByUserIdList(List<Integer> userIdList);
+    /**
+     * 通过 userIdList 批量删除视频
+     * @param userIdList
+     */
+    void deleteVideoByUserIdList(List<Integer> userIdList);
+
+    /**
      * 计算热度
      * @param video_main
      * @return

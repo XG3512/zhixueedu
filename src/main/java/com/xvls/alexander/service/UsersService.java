@@ -1,8 +1,31 @@
 package com.xvls.alexander.service;
 
+import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Users;
 
+import java.util.List;
+
 public interface UsersService {
+
+    /**
+     * 通过 pageInfo 获得用户信息列表
+     * @param pageInfo
+     * @return
+     */
+    List<Users> getUsersList(PageInfo pageInfo);
+
+    /**
+     * 后台管理端 通过 userId 获得用户信息
+     * @param userId
+     * @return
+     */
+    Users system_getUsersInfoById(Integer userId);
+
+    /**
+     * 获得用户总数
+     * @return
+     */
+    Integer getUsersCount();
 
     /**
      * 微信端通过 userId 获取个人信息
@@ -46,6 +69,40 @@ public interface UsersService {
      * @param motto
      */
     void wxUpdateMotto(Integer userId,String motto);
+
+    /**
+     * 增加用户
+     * @param users
+     * @return
+     */
+    Integer addUser(Users users);
+
+    /**
+     * 修改用户信息
+     * @param userId
+     * @param userNum
+     * @param schoolId
+     * @param departmentId
+     * @param majorId
+     * @param classId
+     * @param userName
+     * @param sex
+     * @param nation
+     * @param grade
+     * @param idCard
+     * @param phone
+     * @param mail
+     * @param address
+     * @param motto
+     */
+    void updateUsersInfo(Integer userId,String userNum,Integer schoolId,Integer departmentId,Integer majorId,Integer classId,String userName,
+                         String sex,String nation,Integer grade,String idCard,String phone,String mail,String address,String motto);
+
+    /**
+     * 通过 userIdList 批量删除用户、对应的视频、角色信息
+     * @param userIdList
+     */
+    void deleteUsers(List<Integer> userIdList);
 
     String generatePassword(String password,String salt);
 }

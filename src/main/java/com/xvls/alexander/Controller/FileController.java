@@ -282,11 +282,11 @@ public class FileController {
      * @return
      */
     @RequestMapping("uploadBackgroundImg")
-    public RestResponse uploadBackgroundImg(@RequestParam("file")MultipartFile file,
+    public Object uploadBackgroundImg(@RequestParam("file")MultipartFile file,
                                             @RequestParam("type") String type,
                                             @RequestParam("id") Integer id){
         if(file==null||file.isEmpty()||type==null||id==null){
-            return RestResponse.failure("上传参数错误");
+            return SystemResponse.badArgument();
         }
         Map map = Maps.newHashMap();
         try {
@@ -296,7 +296,7 @@ public class FileController {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return RestResponse.success().setData(map);
+        return SystemResponse.ok(map);
     }
 
     /**
@@ -307,21 +307,23 @@ public class FileController {
      * @return
      */
     @RequestMapping("uploadIconImg")
-    public RestResponse uploadIconImg(@RequestParam("file") MultipartFile file,
+    public Object uploadIconImg(@RequestParam("file") MultipartFile file,
                                       @RequestParam("type") String type,
                                       @RequestParam("id") Integer id){
         if(file==null||file.isEmpty()||type==null||id==null){
-            return RestResponse.failure("上传参数错误");
+            return SystemResponse.badArgument();
         }
         Map map = Maps.newHashMap();
         try {
             map = qiniuService.uploadIconImg(file,type,id);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
+            return SystemResponse.fail(-1,e.getMessage());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            System.out.println(e);
+            return SystemResponse.fail(-1,e.getMessage());
         }
-        return RestResponse.success().setData(map);
+        return SystemResponse.ok(map);
     }
 
     /**
