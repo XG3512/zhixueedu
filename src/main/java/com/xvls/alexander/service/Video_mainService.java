@@ -2,8 +2,10 @@ package com.xvls.alexander.service;
 
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.VideoMain;
+import com.xvls.alexander.entity.wx.Video_episode;
 import com.xvls.alexander.entity.wx.Video_main;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,16 +62,18 @@ public interface Video_mainService {
      * 更新视频主页图片
      * @param videoMainId
      * @param mainPage
+     * @param editTime
      */
-    void updateMainPage(Integer videoMainId,String mainPage);
+    void updateMainPage(Integer videoMainId,String mainPage,Date editTime);
 
     /**
      * 通过 videoMainId,videoMainTitle,summary 修改视频主页信息
      * @param videoMainId
      * @param videoMainTitle
      * @param summary
+     * @param editTime
      */
-    void updateMainPageInfo(Integer videoMainId,String videoMainTitle,String summary);
+    void updateMainPageInfo(Integer videoMainId, String videoMainTitle, String summary, Date editTime);
 
     /**
      * 通过 videoId，videoTitle，episodeId 修改视频信息
@@ -114,4 +118,61 @@ public interface Video_mainService {
      * @return
      */
     Double Calculate(Video_main video_main);
+
+    /******************************视频审核************************************/
+    /**
+     * 通过 userId、pageInfo 获得视频主页审核列表
+     * @param userId
+     * @param verifyStatus
+     * @param pageInfo
+     * @return
+     */
+    List<VideoMain> getVerifyVideoMainList(Integer userId,String verifyStatus,PageInfo pageInfo);
+
+    /**
+     * 通过 userId,verifyStatus 获得视频主页审核的数目
+     * @param userId
+     * @param verifyStatus
+     * @return
+     */
+    Integer getVerifyVideoMainCount(Integer userId,String verifyStatus);
+
+    /**
+     * 通过 videoMainId,verifyStatus,pageInfo 获得视频审核状态
+     * @param videoMainId
+     * @param verifyStatus
+     * @param pageInfo
+     * @return
+     */
+    List<Video_episode> getVerifyVideoEpisodeList(Integer videoMainId,String verifyStatus,PageInfo pageInfo);
+
+    /**
+     * 通过 videoMainId,verifyStatus 获得视频审核的数目
+     * @param videoMainId
+     * @param verifyStatus
+     * @return
+     */
+    Integer getVerifyVideoEpisodeCount(Integer videoMainId,String verifyStatus);
+
+    /**
+     * 通过 verifyStatus 获得所有视频总数
+     * @param verifyStatus
+     * @return
+     */
+    Integer getAllVideoCountByVerifyStatus(String verifyStatus);
+
+    /**
+     * 通过 videoMainId，verifyStatus 修改视频审核状态
+     * @param videoMainId
+     * @param verifyStatus
+     */
+    void editVideoMainVerifyStatus(Integer videoMainId,String verifyStatus);
+
+    /**
+     * 通过 videoId，verifyStatus 修改 视频 审核状态
+     * @param videoId
+     * @param verifyStatus
+     */
+    void editVideoEpisodeVerifyStatus(Integer videoId,String verifyStatus);
+
 }

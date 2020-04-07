@@ -31,6 +31,26 @@
     </resultMap>
 
     <!--通过嵌套查询用户、角色和权限信息-->
+    <resultMap id="usersInfo" type="com.xvls.alexander.entity.wx.Users">
+        <id column="user_id" property="userId"></id>
+        <result column="user_num" property="userNum"></result>
+        <result column="password" property="password"></result>
+        <result column="school_id" property="schoolId"></result>
+        <result column="department_id" property="departmentId"></result>
+        <result column="major_id" property="majorId"></result>
+        <result column="class_id" property="classId"></result>
+        <result column="user_name" property="userName"></result>
+        <result column="sex" property="sex"></result>
+        <result column="nation" property="nation"></result>
+        <result column="grade" property="grade"></result>
+        <result column="id_card" property="idCard"></result>
+        <result column="phone" property="phone"></result>
+        <result column="mail" property="mail"></result>
+        <result column="address" property="address"></result>
+        <result column="icon" property="icon"></result>
+        <result column="salt" property="salt"></result>
+        <collection property="roleList" ofType="com.xvls.alexander.entity.Role" column="user_id" select="getRoleList"></collection>
+    </resultMap>
     <resultMap id="userRole" type="com.xvls.alexander.entity.wx.Users">
         <id column="user_id" property="userId"></id>
         <result column="user_num" property="userNum"></result>
@@ -52,6 +72,7 @@
         <collection property="roleList" ofType="com.xvls.alexander.entity.Role" column="user_id" select="getRoleList"></collection>
         <collection property="permissions" ofType="com.xvls.alexander.entity.Permission" column="user_id" select="getPermissions"></collection>
     </resultMap>
+    <!---->
     <resultMap id="roleList" type="com.xvls.alexander.entity.Role">
         <id column="role_id" property="roleId"></id>
         <result column="role_name" property="roleName"></result>
@@ -139,7 +160,7 @@
         where user_role.user_id = #{user_id} and permission.permission_code is not null
     </select>
     <!--嵌套查询-->
-    <select id="getUserInfoByUserId" resultMap="userRole">
+    <select id="getUserInfoByUserId" resultMap="usersInfo">
         select users.*
         from users
         where users.user_id = #{userId}

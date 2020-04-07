@@ -1,6 +1,7 @@
 package com.xvls.alexander.Controller;
 
 import com.google.common.collect.Maps;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Notice;
 import com.xvls.alexander.service.wx.WxNoticeService;
@@ -113,6 +114,7 @@ public class NoticeController {
      */
     @RequiresPermissions("notice:add")
     @RequestMapping("addNotice")
+    @SysLog("addNotice")
     public Object addNotice(@RequestBody String body){
         Integer schoolId = null;//学校ID
         String title = null;//标题
@@ -169,6 +171,7 @@ public class NoticeController {
      */
     @RequiresPermissions("notice:delete")
     @RequestMapping("deleteNotices")
+    @SysLog("deleteNotices")
     public Object deleteNotices(@RequestBody String bdoy){
         List<Integer> noticeIdList = null;
         try {

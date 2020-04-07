@@ -59,6 +59,7 @@ public class UserRealm extends AuthorizingRealm {
         //info.addStringPermission(currentUser.getPerms());
         // 授权
         Set<Permission> permissions = currentUser.getPermissions();
+        //System.out.println("permissions: "+permissions);
         Set<String> permissionCodes = Sets.newHashSet();
         for(Permission permission : permissions){
             if(StringUtils.isNotBlank(permission.getPermissionCode())){

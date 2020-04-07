@@ -75,4 +75,10 @@ public interface WxCommentsService {
      * @return
      */
     Integer getParentCommentsNum(String belongType,Integer id);
+
+    /**
+     * 获得评论总数
+     * @return
+     */
+    Integer getAllCommentNum();
 }

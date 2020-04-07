@@ -155,6 +155,13 @@ public interface WxArticleMapper extends BaseMapper<Article> {
     List<Article> searchArticle(Integer userId,String content,PageInfo pageInfo);
 
     /**
+     * 通过 pageInfo 获得热门动态
+     * @param pageInfo
+     * @return
+     */
+    List<Article> getSystemHomePageArticle(PageInfo pageInfo);
+
+    /**
      * 通过 userId，content 获得模糊查询数目
      * @param userId
      * @param content

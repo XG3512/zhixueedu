@@ -20,7 +20,8 @@
         <result column="permission_code" property="permissionCode"></result>
         <result column="parent_id" property="parentId"></result>
         <result column="role_id" property="roleId"></result>
-        <collection property="children" ofType="com.xvls.alexander.entity.Permission" column="{permission_id = permission_id,role_id = role_id}" select="getRolePermissionChildren"></collection>
+        <result column="role_id_flag" property="roleIdFlag"></result>
+        <collection property="children" ofType="com.xvls.alexander.entity.Permission" column="{permission_id = permission_id,role_id_flag = role_id_flag}" select="getRolePermissionChildren"></collection>
     </resultMap>
 
     <!--递归获得所有权限-->
@@ -38,16 +39,20 @@
     <!--通过 roleId 获得所有permission 并对已有权限进行标记-->
     <select id="getRolePermissions" resultMap="rolePermissionList">
         select permission.*,
-        role_permission.role_id
+        role_permission.role_id,
+        role.role_id 'role_id_flag'
         from permission
         left join role_permission on role_permission.permission_id = permission.permission_id and role_permission.role_id = #{roleId}
+        left join role on role.role_id = #{roleId}
         where (parent_id = 0 or parent_id is null );
     </select>
     <select id="getRolePermissionChildren" resultMap="rolePermissionList">
         select permission.*,
-        role_permission.role_id
+        role_permission.role_id,
+        role.role_id 'role_id_flag'
         from permission
-        left join role_permission on role_permission.permission_id = permission.permission_id and role_permission.role_id = #{role_id}
+        left join role_permission on role_permission.permission_id = permission.permission_id and role_permission.role_id = #{role_id_flag}
+        left join role on role.role_id = #{role_id_flag}
         where permission.parent_id = #{permission_id};
     </select>
 

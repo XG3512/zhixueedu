@@ -24,6 +24,12 @@ public interface RoleService {
     List<Role> getRoleListByName(PageInfo pageInfo,String roleName);
 
     /**
+     * 获得所有角色
+     * @return
+     */
+    List<Role> getAllRole();
+
+    /**
      * 获取角色数据总条数
      * @return
      */

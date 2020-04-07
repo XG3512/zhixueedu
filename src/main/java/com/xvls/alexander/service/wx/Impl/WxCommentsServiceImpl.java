@@ -122,5 +122,14 @@ public class WxCommentsServiceImpl implements WxCommentsService {
         return wxCommentsMapper.getParentCommentsNum(belongType,id);
     }
 
+    /**
+     * 获得评论总数
+     * @return
+     */
+    @Override
+    public Integer getAllCommentNum() {
+        return wxCommentsMapper.selectCount(null);
+    }
+
 
 }

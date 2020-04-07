@@ -105,6 +105,15 @@ public class WxNewsServiceImpl implements WxNewsService {
     }
 
     /**
+     * 获得通知总数
+     * @return
+     */
+    @Override
+    public Integer getAllNewsCount() {
+        return wxNewsMapper.selectCount(null);
+    }
+
+    /**
      * 通过 newsIdList数组 批量删除学校通知
      * @param newsIdList
      */

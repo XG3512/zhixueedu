@@ -46,6 +46,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
+     * 获得所有角色
+     * @return
+     */
+    @Override
+    public List<Role> getAllRole() {
+        return roleMapper.selectList(null);
+    }
+
+    /**
      * 获取角色数据总条数
      * @return
      */

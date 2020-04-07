@@ -34,6 +34,7 @@ public class Video_main extends Model<Video_main> {
     private Integer teacherFansNum;//教师粉丝数
 
     private Date videoDate;//日期
+    private Date editTime;//编辑日期
     private Integer commentNum;//评论数
     private Boolean commentStatus;//评论状态
     private int videoLength;//视频总长度

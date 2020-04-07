@@ -116,6 +116,15 @@ public class WxNoticeServiceImpl implements WxNoticeService {
     }
 
     /**
+     * 获得 招生信息 总数
+     * @return
+     */
+    @Override
+    public Integer getAllNoticeCount() {
+        return wxNoticeMapper.selectCount(null);
+    }
+
+    /**
      * 招生信息搜索
      * @param userId
      * @param content

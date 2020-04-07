@@ -1,6 +1,7 @@
 package com.xvls.alexander.Controller;
 
 import com.google.common.collect.Maps;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.Permission;
 import com.xvls.alexander.entity.Role;
@@ -71,6 +72,18 @@ public class RoleController {
             return SystemResponse.badArgument();
         }
         List<Role> roleList = roleService.getRoleListByName(pageInfo, roleName);
+        Map result = Maps.newHashMap();
+        result.put("roleList",roleList);
+        return SystemResponse.ok(result);
+    }
+
+    /**
+     * 获得所有角色
+     * @return
+     */
+    @RequestMapping("getAllRole")
+    public Object getAllRole(){
+        List<Role> roleList = roleService.getAllRole();
         Map result = Maps.newHashMap();
         result.put("roleList",roleList);
         return SystemResponse.ok(result);
@@ -153,6 +166,7 @@ public class RoleController {
      */
     @RequiresPermissions("role:update")
     @RequestMapping("updateRolePermission")
+    @SysLog("通过 roleId，permissionIdList 更新角色权限。会先把角色的所有权限删除，然后再把权限添加进去")
     public Object updateRolePermission(@RequestBody String body){
         Integer roleId = null;
         List<Integer> permissionIdList = null;
@@ -177,6 +191,7 @@ public class RoleController {
      */
     @RequiresPermissions("role:update")
     @RequestMapping("updateRoleName")
+    @SysLog("通过 roleId，roleName 更新角色名称")
     public Object updateRoleName(@RequestBody String body){
         Integer roleId = null;
         String roleName = null;
@@ -204,6 +219,7 @@ public class RoleController {
      */
     @RequiresPermissions("role:delete")
     @RequestMapping("deleteRoles")
+    @SysLog("通过 roleIdList 批量删除 role 和 role_permission 和 user_role 中相应的内容")
     public Object deleteRoles(@RequestBody String body){
         List<Integer> roleIdList = null;
         try {

@@ -64,5 +64,13 @@ public interface WxSchoolService {
      */
     void updateSchoolGoodCollectionNum(Integer schoolId);
 
+    /**********************************后台管理端**********************************/
+
+    /**
+     * 获得学校总数
+     * @return
+     */
+    Integer getAllSchoolCount();
+
 
 }

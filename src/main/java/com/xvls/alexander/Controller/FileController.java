@@ -3,6 +3,7 @@ package com.xvls.alexander.Controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.entity.PageInfo;
@@ -213,6 +214,7 @@ public class FileController {
      * @param httpServletRequest
      * @return
      */
+    @RequiresPermissions("article:add")
     @RequestMapping("uploadEditorFile")
     public Object uploadEditorFile(@RequestParam("file") MultipartFile file,HttpServletRequest httpServletRequest){
         if(file == null){
@@ -282,6 +284,7 @@ public class FileController {
      * @return
      */
     @RequestMapping("uploadBackgroundImg")
+    @SysLog("上传 学校（S）或教师（T）的背景图片")
     public Object uploadBackgroundImg(@RequestParam("file")MultipartFile file,
                                             @RequestParam("type") String type,
                                             @RequestParam("id") Integer id){
@@ -307,6 +310,7 @@ public class FileController {
      * @return
      */
     @RequestMapping("uploadIconImg")
+    @SysLog("上传 学校（S）或教师（T）的头像图片")
     public Object uploadIconImg(@RequestParam("file") MultipartFile file,
                                       @RequestParam("type") String type,
                                       @RequestParam("id") Integer id){
@@ -333,6 +337,7 @@ public class FileController {
      */
     @RequiresPermissions("video_main:add")
     @RequestMapping("uploadVideo")
+    @SysLog("上传视频")
     public Object uploadVideo(@RequestParam("file") MultipartFile file ,
                               @RequestParam("teacherId")Integer teacherId,
                               @RequestParam("videoTitle") String videoTitle,

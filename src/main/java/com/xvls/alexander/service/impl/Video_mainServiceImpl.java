@@ -7,6 +7,7 @@ import com.xvls.alexander.dao.WxVideoMapper;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.VideoMain;
 import com.xvls.alexander.entity.wx.Users;
+import com.xvls.alexander.entity.wx.Video_episode;
 import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.Video_mainService;
 import com.xvls.alexander.service.wx.WxVideoService;
@@ -109,10 +110,11 @@ public class Video_mainServiceImpl implements Video_mainService {
      * 更新视频主页图片
      * @param videoMainId
      * @param mainPage
+     * @param editTime
      */
     @Override
-    public void updateMainPage(Integer videoMainId, String mainPage) {
-        videoMainMapper.updateMainPage(videoMainId,mainPage);
+    public void updateMainPage(Integer videoMainId, String mainPage,Date editTime) {
+        videoMainMapper.updateMainPage(videoMainId,mainPage,editTime);
     }
 
     /**
@@ -120,10 +122,11 @@ public class Video_mainServiceImpl implements Video_mainService {
      * @param videoMainId
      * @param videoMainTitle
      * @param summary
+     * @param editTime
      */
     @Override
-    public void updateMainPageInfo(Integer videoMainId, String videoMainTitle, String summary) {
-        videoMainMapper.updateMainPageInfo(videoMainId,videoMainTitle,summary);
+    public void updateMainPageInfo(Integer videoMainId, String videoMainTitle, String summary, Date editTime) {
+        videoMainMapper.updateMainPageInfo(videoMainId,videoMainTitle,summary,editTime);
     }
 
     /**
@@ -135,6 +138,7 @@ public class Video_mainServiceImpl implements Video_mainService {
     @Override
     public void updateVideoInfo(Integer videoId, String videoTitle, Integer episodeId) {
         videoMainMapper.updateVideoInfo(videoId,videoTitle,episodeId);
+        videoMainMapper.updateVideoMainEditTimeByVideoId(videoId,new Date());
     }
 
     /**
@@ -200,5 +204,85 @@ public class Video_mainServiceImpl implements Video_mainService {
         //Double temp = Math.pow(Math.E,0.01279*(date-videoDate));
         result = result/temp;
         return result;
+    }
+
+    /******************************视频审核************************************/
+    /**
+     * 通过 userId、pageInfo 获得视频审核列表
+     * @param userId
+     * @param verifyStatus
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<VideoMain> getVerifyVideoMainList(Integer userId,String verifyStatus,PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return videoMainMapper.getVerifyVideoMainList(userId,verifyStatus,new PageInfo(pageNum,pageSize));
+    }
+
+    /**
+     * 通过 userId,verifyStatus 获得视频主页审核的数目
+     * @param userId
+     * @param verifyStatus
+     * @return
+     */
+    @Override
+    public Integer getVerifyVideoMainCount(Integer userId, String verifyStatus) {
+        return videoMainMapper.getVerifyVideoMainCount(userId,verifyStatus);
+    }
+
+    /**
+     * 通过 videoMainId,verifyStatus,pageInfo 获得视频集数列表
+     * @param videoMainId
+     * @param verifyStatus
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Video_episode> getVerifyVideoEpisodeList(Integer videoMainId,String verifyStatus,PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum=(pageNum-1)*pageSize;
+        return videoMainMapper.getVerifyVideoEpisodeList(videoMainId,verifyStatus,new PageInfo(pageNum,pageSize));
+    }
+
+    /**
+     * 通过 videoMainId,verifyStatus 获得视频审核的数目
+     * @param videoMainId
+     * @param verifyStatus
+     * @return
+     */
+    @Override
+    public Integer getVerifyVideoEpisodeCount(Integer videoMainId, String verifyStatus) {
+        return videoMainMapper.getVerifyVideoEpisodeCount(videoMainId,verifyStatus);
+    }
+
+    @Override
+    public Integer getAllVideoCountByVerifyStatus(String verifyStatus) {
+        QueryWrapper<VideoMain> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("verify_status",verifyStatus);
+        return videoMainMapper.selectCount(queryWrapper);
+    }
+
+    /**
+     * 通过 videoMainId，verifyStatus 修改视频主页审核状态
+     * @param videoMainId
+     * @param verifyStatus
+     */
+    @Override
+    public void editVideoMainVerifyStatus(Integer videoMainId, String verifyStatus) {
+        videoMainMapper.editVideoMainVerifyStatus(videoMainId,verifyStatus);
+    }
+
+    /**
+     * 通过 videoId，verifyStatus 修改 视频 审核状态
+     * @param videoId
+     * @param verifyStatus
+     */
+    @Override
+    public void editVideoEpisodeVerifyStatus(Integer videoId, String verifyStatus) {
+        videoMainMapper.editVideoEpisodeVerifyStatus(videoId,verifyStatus);
     }
 }

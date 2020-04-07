@@ -361,6 +361,13 @@
         where article.school_id IN (select users.school_id from users where users.user_id = #{userId})
     </select>
 
+    <select id="getSystemHomePageArticle" resultMap="system_article">
+        select *
+        from article
+        ORDER BY article.heat_of_article desc
+        limit #{pageNum},#{pageSize}
+    </select>
+
     <update id="updateArticleCommentStatus">
         update article set comment_status = #{commentStatus}
         where article_id = #{articleId}

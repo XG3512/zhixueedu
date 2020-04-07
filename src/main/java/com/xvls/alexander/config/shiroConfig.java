@@ -2,6 +2,7 @@ package com.xvls.alexander.config;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -67,7 +68,7 @@ public class shiroConfig {
         shiroFilterFactoryBean.setFilters(filter);
 
         //拦截
-        Map<String, String> filterMap = new HashMap<>();
+        Map<String, String> filterMap = new LinkedHashMap<>();
         //授权
 
         filterMap.put("/user/add","perms[user:add]");
@@ -87,6 +88,7 @@ public class shiroConfig {
         /**后台管理端url管理*/
         filterMap.put("/SignIn/SignIn","anon");
         filterMap.put("/system/users/getWxUsersInfoById","anon");
+        filterMap.put("/system/role/getAllRole","anon");
 
         /*动态*/
         filterMap.put("/system/article/**","custom");
@@ -114,6 +116,16 @@ public class shiroConfig {
         filterMap.put("/system/videoRotation","custom");
         /*用户管理*/
         filterMap.put("/system/users/**","custom");
+        /*主页轮播图*/
+        filterMap.put("/system/homeRotation/**","custom");
+        /*视频轮播图*/
+        filterMap.put("/system/videoRotation/**","custom");
+        /*请求记录*/
+        filterMap.put("/system/requestRecord/**","custom");
+        /*上传文件*/
+        filterMap.put("/file/**","custom");
+        /*首页*/
+        filterMap.put("/system/homePage/**","custom");
 
         //设置登录的请求
         //shiroFilterFactoryBean.setLoginUrl("/toLogin");
@@ -211,17 +223,27 @@ public class shiroConfig {
         return redisSessionDAO;
     }
 
+
+    /**
+     * 保证实现了Shiro内部lifecycle函数的bean执行
+     * @return
+     */
+    @Bean
+    public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor(){
+        return new LifecycleBeanPostProcessor();
+    }
+
     /**
      * 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions)
      * 配置以下两个bean(DefaultAdvisorAutoProxyCreator和AuthorizationAttributeSourceAdvisor)即可实现此功能
      * @return
      */
-    /*@Bean
+    @Bean
     public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator(){
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
         return advisorAutoProxyCreator;
-    }*/
+    }
     @Bean
         public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") DefaultWebSecurityManager securityManager){
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();

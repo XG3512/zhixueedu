@@ -127,6 +127,7 @@ public class LoginController {
             result.put("permissionList",userInfo.getPermissions());*/
             List<System_menu> menuList = system_menuService.getMenuListById(userInfo.getUserId());
 
+            userInfo.setPermissions(null);
             result.put("userInfo",userInfo);
             result.put("menuList",menuList);
             result.put("token",user.getSession().getId());

@@ -2,11 +2,13 @@ package com.xvls.alexander.Controller;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.VideoMain;
 import com.xvls.alexander.entity.wx.Label;
 import com.xvls.alexander.entity.wx.Video;
+import com.xvls.alexander.entity.wx.Video_episode;
 import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.V_labelService;
 import com.xvls.alexander.service.Video_mainService;
@@ -47,6 +49,7 @@ public class VideoController {
      */
     @RequiresPermissions("video_main:add")
     @RequestMapping("uploadVideoMain")
+    @SysLog("上传视频主页")
     public Object uploadVideoMain(@RequestParam("mainPage") MultipartFile mainPage,HttpServletRequest httpServletRequest){
         Video_main video_main = null;
         List<Integer> labelIdList = null;
@@ -93,6 +96,7 @@ public class VideoController {
 
         video_main.setMainPage(file_download.getFileUrl());
         video_main.setVideoDate(new Date());
+        video_main.setEditTime(new Date());
         video_main.setVerifyStatus("审核中");
         video_main.setCollectionNum(0);
         video_main.setCommentNum(0);
@@ -199,6 +203,7 @@ public class VideoController {
      */
     @RequiresPermissions("video_main:update")
     @RequestMapping("updateMainPageInfo")
+    @SysLog("修改视频主页信息 通过 videoMainId,labelIdList(所有标签ID),videoMainTitle,summary")
     public Object updateMainPageInfo(@RequestBody String body){
         Integer videoMainId = null;
         List<Integer> labelIdList = null;
@@ -218,7 +223,8 @@ public class VideoController {
             return SystemResponse.badArgument();
         }
         v_labelService.updateV_labels(videoMainId,labelIdList);
-        video_mainService.updateMainPageInfo(videoMainId,videoMainTitle,summary);
+        video_mainService.updateMainPageInfo(videoMainId,videoMainTitle,summary,new Date());
+        video_mainService.editVideoMainVerifyStatus(videoMainId,"审核中");
         return SystemResponse.ok();
     }
 
@@ -229,6 +235,7 @@ public class VideoController {
      */
     @RequiresPermissions("video_main:update")
     @RequestMapping("updateVideoInfo")
+    @SysLog("修改视频信息 通过 videoId，videoTitle，episodeId")
     public Object updateVideoInfo(@RequestBody String body){
         Integer videoId = null;
         String videoTitle = null;
@@ -245,6 +252,7 @@ public class VideoController {
             return SystemResponse.badArgument();
         }
         video_mainService.updateVideoInfo(videoId,videoTitle,episodeId);
+        video_mainService.editVideoEpisodeVerifyStatus(videoId,"审核中");
         return SystemResponse.ok();
     }
 
@@ -256,6 +264,7 @@ public class VideoController {
      */
     @RequiresPermissions("video_main:update")
     @RequestMapping("updateMainPage")
+    @SysLog("更新视频主页图片 通过 mainPage，videoMainId")
     public Object updateMainPage(@RequestParam("mainPage") MultipartFile mainPage,@RequestParam("videoMainId") Integer videoMainId){
         if(mainPage == null || videoMainId == null){
             return SystemResponse.badArgument();
@@ -270,8 +279,11 @@ public class VideoController {
             System.out.println(e);
             return SystemResponse.fail(-1,"上传失败");
         }
-        video_mainService.updateMainPage(videoMainId,file_download.getFileUrl());
-        return SystemResponse.ok();
+        video_mainService.updateMainPage(videoMainId,file_download.getFileUrl(),new Date());
+        video_mainService.editVideoMainVerifyStatus(videoMainId,"审核中");
+        Map result = Maps.newHashMap();
+        result.put("url",file_download.getFileUrl());
+        return SystemResponse.ok(result);
     }
 
     /**
@@ -281,6 +293,7 @@ public class VideoController {
      */
     @RequiresPermissions("video_main:delete")
     @RequestMapping("deleteVideoMain")
+    @SysLog("通过 videoMainIdList 批量删除视频主页信息和相关视频")
     public Object deleteVideoMain(@RequestBody String body){
         List<Integer> videoMainIdList = null;
         try {
@@ -303,6 +316,7 @@ public class VideoController {
      */
     @RequiresPermissions("video_main:delete")
     @RequestMapping("deleteVideo")
+    @SysLog("通过 videoIdList 批量删除视频")
     public Object deleteVideo(@RequestBody String body){
         List<Integer> videoIdList = null;
         try {
@@ -317,4 +331,122 @@ public class VideoController {
         video_mainService.deleteVideo(videoIdList);
         return SystemResponse.ok();
     }
+
+    /******************************视频审核************************************/
+    /**
+     * 通过 userId、verifyStatus、pageInfo 获得视频主页审核列表
+     * @param body
+     * @return
+     */
+    @RequiresPermissions("videoVerify:select")
+    @RequestMapping("getVerifyVideoList")
+    public Object getVerifyVideoMainList(@RequestBody String body){
+        Integer userId = null;
+        PageInfo pageInfo = null;
+        String verifyStatus = null;
+        try {
+            userId = JacksonUtil.parseInteger(body,"userId");
+            verifyStatus = JacksonUtil.parseString(body,"verifyStatus");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+            if(userId == null || verifyStatus == null || pageInfo == null){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return SystemResponse.badArgument();
+        }
+        List<VideoMain> verifyVideoMainList = video_mainService.getVerifyVideoMainList(userId, verifyStatus, pageInfo);
+        Integer verifyVideoMainCount = video_mainService.getVerifyVideoMainCount(userId, verifyStatus);
+        Map result = Maps.newHashMap();
+        result.put("verifyVideoMainList",verifyVideoMainList);
+        result.put("videoMainCount",verifyVideoMainCount);
+        return SystemResponse.ok(result);
+    }
+
+
+    /**
+     * 通过 videoMainId,verifyStatus,pageInfo 获得视频集数列表
+     * @param body
+     * @return
+     */
+    @RequiresPermissions("videoVerify:select")
+    @RequestMapping("getVerifyVideoEpisodeList")
+    public Object getVerifyVideoEpisodeList(@RequestBody String body){
+        Integer videoMainId = null;
+        String verifyStatus = null;
+        PageInfo pageInfo = null;
+        try {
+            videoMainId = JacksonUtil.parseInteger(body,"videoMainId");
+            verifyStatus = JacksonUtil.parseString(body,"verifyStatus");
+            pageInfo = JacksonUtil.parseObject(body,"pageInfo",PageInfo.class);
+            if (videoMainId == null || pageInfo == null){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return SystemResponse.badArgument();
+        }
+        List<Video_episode> verifyVideoList = video_mainService.getVerifyVideoEpisodeList(videoMainId,verifyStatus,pageInfo);
+        Integer videoEpisodeCount = video_mainService.getVerifyVideoEpisodeCount(videoMainId, verifyStatus);
+        Map result = Maps.newHashMap();
+        result.put("verifyVideoList",verifyVideoList);
+        result.put("videoEpisodeCount",videoEpisodeCount);
+        return SystemResponse.ok(result);
+    }
+
+    /**
+     * 通过 videoMainId，verifyStatus 修改 视频主页 审核状态
+     * @param body
+     * @return
+     */
+    @RequiresPermissions("videoVerify:update")
+    @RequestMapping("editVideoMainVerifyStatus")
+    @SysLog("通过 videoMainId，verifyStatus 修改 视频主页 审核状态")
+    public Object editVideoMainVerifyStatus(@RequestBody String body){
+        Integer videoMainId = null;
+        String verifyStatus = null;
+        try {
+            videoMainId = JacksonUtil.parseInteger(body,"videoMainId");
+            verifyStatus = JacksonUtil.parseString(body,"verifyStatus");
+            if (videoMainId == null || verifyStatus == null){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return SystemResponse.badArgument();
+        }
+        video_mainService.editVideoMainVerifyStatus(videoMainId,verifyStatus);
+        return SystemResponse.ok();
+    }
+
+    /**
+     *通过 videoId，videoMainId，verifyStatus 修改 视频 审核状态
+     * @param body
+     * @return
+     */
+    @RequiresPermissions("videoVerify:update")
+    @RequestMapping("editVideoEpisodeVerifyStatus")
+    @SysLog("通过 videoId，videoMainId，verifyStatus 修改 视频 审核状态")
+    public Object editVideoEpisodeVerifyStatus(@RequestBody String body){
+        Integer videoId = null;
+        Integer videoMainId = null;
+        String verifyStatus = null;
+        try {
+            videoId = JacksonUtil.parseInteger(body,"videoId");
+            videoMainId = JacksonUtil.parseInteger(body,"videoMainId");
+            verifyStatus = JacksonUtil.parseString(body,"verifyStatus");
+            if (videoId == null || videoMainId == null || verifyStatus == null){
+                return SystemResponse.badArgumentValue();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return SystemResponse.badArgument();
+        }
+        video_mainService.editVideoEpisodeVerifyStatus(videoId,verifyStatus);
+        if (verifyStatus.equals("通过")){
+            video_mainService.editVideoMainVerifyStatus(videoMainId,"通过");
+        }
+        return SystemResponse.ok();
+    }
+
 }

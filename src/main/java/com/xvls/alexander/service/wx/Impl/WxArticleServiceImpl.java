@@ -259,6 +259,19 @@ public class WxArticleServiceImpl implements WxArticleService {
     }
 
     /**
+     * 通过 pageInfo 获得热门动态
+     * @param pageInfo
+     * @return
+     */
+    @Override
+    public List<Article> getSystemHomePageArticle(PageInfo pageInfo) {
+        Integer pageNum = pageInfo.getPageNum();
+        Integer pageSize = pageInfo.getPageSize();
+        pageNum = (pageNum-1)*pageSize;
+        return wxArticleMapper.getSystemHomePageArticle(new PageInfo(pageNum,pageSize));
+    }
+
+    /**
      * 通过 userId，title 获得模糊查询数目
      * @param userId
      * @param content
@@ -278,6 +291,15 @@ public class WxArticleServiceImpl implements WxArticleService {
     @Override
     public Integer getArticleNumByUserId(Integer userId) {
         return wxArticleMapper.getArticleNumByUserId(userId);
+    }
+
+    /**
+     * 获得动态总数
+     * @return
+     */
+    @Override
+    public Integer getAllArticleNum() {
+        return wxArticleMapper.selectCount(null);
     }
 
     /**

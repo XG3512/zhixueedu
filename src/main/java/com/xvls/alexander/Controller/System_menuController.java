@@ -1,6 +1,7 @@
 package com.xvls.alexander.Controller;
 
 import com.google.common.collect.Maps;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.System_menu;
 import com.xvls.alexander.service.System_menuService;
 import com.xvls.alexander.utils.JacksonUtil;
@@ -58,6 +59,7 @@ public class System_menuController {
      */
     @RequiresPermissions("system_menu:add")
     @RequestMapping("addMenu")
+    @SysLog("增加 menu")
     public Object addMenu(@RequestBody String body){
         System_menu system_menu = null;
         try {
@@ -82,6 +84,7 @@ public class System_menuController {
      */
     @RequiresPermissions("system_menu:update")
     @RequestMapping("updateMenu")
+    @SysLog("通过 system_menu 更新菜单")
     public Object updateMenu(@RequestBody String body){
         System_menu system_menu = null;
         try {
@@ -104,6 +107,7 @@ public class System_menuController {
      */
     @RequiresPermissions("system_menu:delete")
     @RequestMapping("deleteMenu")
+    @SysLog("通过 menuId 删除菜单及其子菜单")
     public Object deleteMenu(@RequestParam("menuId") Integer menuId){
          if(menuId == null){
              return SystemResponse.badArgument();

@@ -2,6 +2,7 @@ package com.xvls.alexander.Controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.File_belong;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Article;
@@ -40,6 +41,7 @@ public class ArticleController {
      */
     @RequiresPermissions("article:add")
     @RequestMapping("addArticle")
+    @SysLog("添加 动态")
     public Object addArticle(@RequestBody String body){
 
         Integer schoolId = null;
@@ -174,6 +176,7 @@ public class ArticleController {
      */
     @RequiresPermissions("article:updateCommentStatus")
     @RequestMapping("setArticleCommentStatus")
+    @SysLog("通过 articleId，userId，commentStatus 更新评论状态")
     public Object setArticleCommentStatus(@RequestParam("articleId") Integer articleId,
                                           @RequestParam("commentStatus")Boolean commentStatus){
         if(articleId == null || commentStatus == null){
@@ -190,6 +193,7 @@ public class ArticleController {
      */
     @RequiresPermissions("article:delete")
     @RequestMapping("deleteArticleByIdList")
+    @SysLog("通过 articleId 删除动态及file_belong")
     public Object deleteArticleByIdList(@RequestBody String body){
         List<Integer> articleIdList = null;
         try {

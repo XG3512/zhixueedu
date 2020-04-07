@@ -31,6 +31,7 @@ public class VideoMain extends Model<VideoMain> {
     private Integer collectionNum;//收藏数
 
     private Date videoDate;//日期
+    private Date editTime;//编辑时间
     private Integer commentNum;//评论数
     private Boolean commentStatus;//评论状态
     private int videoLength;//视频总长度

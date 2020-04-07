@@ -2,6 +2,7 @@ package com.xvls.alexander.Controller;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.google.common.collect.Maps;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.WxNews;
 import com.xvls.alexander.service.wx.WxNewsService;
@@ -121,6 +122,7 @@ public class NewsController {
      */
     @RequiresPermissions("news:add")
     @RequestMapping("addNews")
+    @SysLog("添加通知")
     public Object addNews(@RequestBody String body) throws ParseException {
         Integer schoolId = null;//学校id
         String newsDate = null;//通知日期
@@ -166,6 +168,7 @@ public class NewsController {
      */
     @RequiresPermissions("news:delete")
     @RequestMapping("deleteNews")
+    @SysLog("通过 newsIdList数组 批量删除学校通知")
     public Object deleteNews(@RequestBody String body){
         List<Integer> newsIdList = null;
         try {

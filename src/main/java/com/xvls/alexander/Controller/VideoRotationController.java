@@ -1,6 +1,7 @@
 package com.xvls.alexander.Controller;
 
 import com.google.common.collect.Maps;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.wx.WxVideoRotation;
 import com.xvls.alexander.service.wx.WxVideoRotationService;
 import com.xvls.alexander.utils.JacksonUtil;

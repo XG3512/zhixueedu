@@ -1,6 +1,7 @@
 package com.xvls.alexander.Controller;
 
 import com.google.common.collect.Maps;
+import com.xvls.alexander.annotation.SysLog;
 import com.xvls.alexander.entity.File_download;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Users;
@@ -58,6 +59,7 @@ public class UsersController {
      * @return
      */
     @RequestMapping("wxUpdatePassword")
+    @SysLog("微信端 修改教务系统账号的密码")
     public Object wxUpdatePassword(@RequestParam("userId") Integer userId,@RequestParam("oldPassword")String oldPassword,@RequestParam("password")String password){
         if(userId == null || oldPassword == null || password == null){
             return WeChatResponseUtil.badArgument();
@@ -157,6 +159,7 @@ public class UsersController {
      * 获得用户总数
      * @return
      */
+    @RequiresPermissions("users:select")
     @RequestMapping("getUsersCount")
     public Object getUsersCount(){
         Integer usersCount = usersService.getUsersCount();
@@ -191,6 +194,7 @@ public class UsersController {
      */
     @RequiresPermissions("users:add")
     @RequestMapping("addUser")
+    @SysLog("添加用户")
     public Object addUser(@RequestParam("icon") MultipartFile icon, @RequestParam("background")MultipartFile background, HttpServletRequest httpServletRequest){
         if(icon == null || background == null){
             return SystemResponse.badArgument();
@@ -243,6 +247,7 @@ public class UsersController {
      */
     @RequiresPermissions("users:update")
     @RequestMapping("updatePassword")
+    @SysLog("直接修改密码")
     public Object updatePassword(@RequestParam("userId")Integer userId,@RequestParam("password") String password){
         if(userId == null || password == null){
             return SystemResponse.badArgument();
@@ -258,6 +263,7 @@ public class UsersController {
      */
     @RequiresPermissions("users:update")
     @RequestMapping("updateUsersInfo")
+    @SysLog("修改用户信息")
     public Object updateUsersInfo(@RequestBody String body){
         Integer userId = null;
         String userNum = null;
@@ -309,6 +315,7 @@ public class UsersController {
      */
     @RequiresPermissions("users:update")
     @RequestMapping("updateUserRole")
+    @SysLog("通过 userId、roleIdList 更改用户角色信息")
     public Object updateUserRole(@RequestBody String body){
         Integer userId = null;
         List<Integer> roleIdList = null;
@@ -333,6 +340,7 @@ public class UsersController {
      */
     @RequiresPermissions("users:delete")
     @RequestMapping("deleteUsers")
+    @SysLog("通过 userIdList 批量删除用户、对应的视频、角色信息")
     public Object deleteUsers(@RequestBody String body){
         List<Integer> userIdList = null;
         try {

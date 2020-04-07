@@ -28,6 +28,9 @@ public class Permission extends Model<Permission> implements Serializable {
     private Integer roleId;
 
     @TableField(exist = false)
+    private Integer roleIdFlag;
+
+    @TableField(exist = false)
     private List<Permission> children;
 
 }

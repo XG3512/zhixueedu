@@ -113,5 +113,14 @@ public class WxSchoolServiceImpl implements WxSchoolService {
         wxSchoolMapper.updateSchoolGoodCollectionNum(schoolId);
     }
 
+    /**
+     * 获得 学校 总数
+     * @return
+     */
+    @Override
+    public Integer getAllSchoolCount() {
+        return wxSchoolMapper.selectCount(null);
+    }
+
 
 }

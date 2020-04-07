@@ -72,6 +72,12 @@ public interface WxNewsService {
     Integer getNewsCount(Integer userId);
 
     /**
+     * 获得通知总数
+     * @return
+     */
+    Integer getAllNewsCount();
+
+    /**
      * 通过 newsIdList数组 批量删除学校通知
      * @param newsIdList
      */
