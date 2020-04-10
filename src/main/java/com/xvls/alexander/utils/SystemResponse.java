@@ -78,4 +78,8 @@ public class SystemResponse extends HashMap<String, Object> {
     }
 
     public static Object authorizationException(){ return fail(507, "授权异常"); }
+
+    public static Object contentIllegal(){
+        return fail(87014,"内容含有违法违规内容");
+    }
 }

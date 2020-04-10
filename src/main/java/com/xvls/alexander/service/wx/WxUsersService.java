@@ -23,6 +23,14 @@ public interface WxUsersService {
     Users getUserInfo(String userNum,Integer schoolId,String role);
 
     /**
+     * 通过 userNum,role 获得用户信息（系统管理员）
+     * @param userNum
+     * @param role
+     * @return
+     */
+    Users getUserInfo(String userNum,String role);
+
+    /**
      * 通过 userId 获得用户信息
      * @param userId
      * @return

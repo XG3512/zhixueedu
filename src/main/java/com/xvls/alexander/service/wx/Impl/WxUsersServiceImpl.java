@@ -59,6 +59,11 @@ public class WxUsersServiceImpl implements WxUsersService {
         return usersMapper.getUserInfo(userNum,schoolId,role);
     }
 
+    @Override
+    public Users getUserInfo(String userNum, String role) {
+        return usersMapper.getUserInfoByUserNum_RoleId(userNum,role);
+    }
+
     /**
      * 通过 userId 获得用户信息
      * @param userId

@@ -9,10 +9,12 @@ import com.xvls.alexander.entity.wx.*;
 import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.impl.UserServiceImpl;
 import com.xvls.alexander.service.wx.*;
+import com.xvls.alexander.utils.ContentSecurityUtil;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -31,6 +33,8 @@ public class TestUserMapper2 {
     WxUsersService wxUsersService;
     @Autowired
     UsersMapper usersMapper;
+    @Autowired
+    ContentSecurityUtil contentSecurityUtil;
 
     @Test
     public void testSelectById(){
@@ -344,6 +348,15 @@ public class TestUserMapper2 {
         List<Comments> comments = wxCommentsMapper.getMainComments("V", 1, new PageInfo(0, 6));
         System.out.println(comments);
 
+    }
+
+    @Test
+    public void testMsgSecCheck(){
+        String content1 = "特3456书yuuo莞6543李zxcz蒜7782法fgnv级";
+        String content2 = "完2347全dfji试3726测asad感3847知qwez到";
+        String content3 = "真好";
+        Object result = contentSecurityUtil.msgSecCheck(content1);
+        System.out.println(result);
     }
 
 }

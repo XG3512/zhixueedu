@@ -21,10 +21,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RequestCountRecordAspect {
 
-    private static String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
-    private static String key = "requireRecord"+date;
-
-
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -37,6 +33,8 @@ public class RequestCountRecordAspect {
      */
     @Before("controllerRecord()")
     public void doBefore(JoinPoint joinPoint){
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
+        String key = "requireRecord"+date;
         if(stringRedisTemplate.hasKey(key)){//如果键存在
             Integer count = Integer.valueOf(stringRedisTemplate.opsForValue().get(key));
             count = count + 1;

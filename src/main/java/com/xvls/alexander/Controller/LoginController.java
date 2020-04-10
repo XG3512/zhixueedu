@@ -88,7 +88,12 @@ public class LoginController {
         Subject user = SecurityUtils.getSubject();
         /*shiro 封装用户的登录数据*/
         /**根据user_num,school,role获取userId**/
-        Users userInfo = wxUsersService.getUserInfo(userNum, schoolId, role);
+        Users userInfo = null;
+        if(schoolId == -1){
+            userInfo = wxUsersService.getUserInfo(userNum,role);
+        }else{
+            userInfo = wxUsersService.getUserInfo(userNum, schoolId, role);
+        }
         if(userInfo == null){
             return SystemResponse.fail(-1,"账号或密码错误！");
         }

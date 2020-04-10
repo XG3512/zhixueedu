@@ -122,3 +122,7 @@ xvls_qiniu:
   qiniuAccess: fVm1qUAtREn6wyBjzJhB7JE4piRHgzypdtvTTCFV
   qiniuKey: 3MngPq1ovKCCCjkOwucoQC7Gxg_clZRJMRFTnKKy
   bucketName: test01
+# 微信小程序
+xvls_weixin:
+  appid: wxfc75ed61bcc8838e
+  secret: 78b473fdb261fa9b25ba9e8fd7d32d13

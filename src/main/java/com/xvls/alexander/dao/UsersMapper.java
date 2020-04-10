@@ -30,6 +30,7 @@ public interface UsersMapper extends BaseMapper<Users> {
 
     Integer getUserId(String userNum, Integer schoolId, String role);
 
+
     /**
      * 通过 userNum,schoolId,role 获得用户信息
      * @param userNum
@@ -38,6 +39,14 @@ public interface UsersMapper extends BaseMapper<Users> {
      * @return
      */
     Users getUserInfo(String userNum,Integer schoolId,String role);
+
+    /**
+     * 通过 userNum,role 获得用户信息（系统管理员）
+     * @param userNum
+     * @param role
+     * @return
+     */
+    Users getUserInfoByUserNum_RoleId(String userNum,String role);
 
     /**
      * 通过 userId 获得用户信息

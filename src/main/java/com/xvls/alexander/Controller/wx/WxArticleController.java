@@ -1,13 +1,15 @@
 package com.xvls.alexander.Controller.wx;
 
 import com.google.common.collect.Maps;
-import com.xvls.alexander.dao.WxCommentsMapper;
+import com.xvls.alexander.entity.MsgSecCheckResult;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Article;
 import com.xvls.alexander.entity.wx.Comments;
 import com.xvls.alexander.service.wx.WxArticleService;
 import com.xvls.alexander.service.wx.WxCommentsService;
+import com.xvls.alexander.utils.ContentSecurityUtil;
 import com.xvls.alexander.utils.JacksonUtil;
+import com.xvls.alexander.utils.SystemResponse;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +36,8 @@ public class WxArticleController {
     WxArticleService wxArticleService;
     @Autowired
     WxCommentsService wxCommentsService;
+    @Autowired
+    ContentSecurityUtil contentSecurityUtil;
 
     /**
      * 通过 页数 获取全部动态信息
@@ -153,24 +157,35 @@ public class WxArticleController {
         if(wxUserId==null || articleId==null || vcContent==null || parentVcId==null){
             return WeChatResponseUtil.badArgument();
         }
-        Comments comments = new Comments();
-        comments.setWxUserId(wxUserId);
-        comments.setBelongId(articleId);
-        comments.setBelongType("A");
-        comments.setVcContent(vcContent);
-        comments.setVcDate(new Date());
-        comments.setParentVcId(parentVcId);
-        comments.setParentName(parentName);
 
-        /**
-         * 增加评论数量
-         */
-        wxArticleService.addArticleCommentNum(articleId);
+        HashMap checkResult = (HashMap) contentSecurityUtil.msgSecCheck(vcContent);
+        MsgSecCheckResult msgSecCheckResult = (MsgSecCheckResult)checkResult.get("data");
+        if(checkResult.get("code").equals(0) && msgSecCheckResult.getErrcode().equals(0)){
+            Comments comments = new Comments();
+            comments.setWxUserId(wxUserId);
+            comments.setBelongId(articleId);
+            comments.setBelongType("A");
+            comments.setVcContent(vcContent);
+            comments.setVcDate(new Date());
+            comments.setParentVcId(parentVcId);
+            comments.setParentName(parentName);
 
-        Integer commentId = wxCommentsService.addComment(comments);
-        Map result = Maps.newHashMap();
-        result.put("commentId",commentId);
-        return WeChatResponseUtil.ok(result);
+            /**
+             * 增加评论数量
+             */
+            wxArticleService.addArticleCommentNum(articleId);
+
+            Integer commentId = wxCommentsService.addComment(comments);
+            Map result = Maps.newHashMap();
+            result.put("commentId",commentId);
+            return WeChatResponseUtil.ok(result);
+        }else if (checkResult.get("code").equals(0) && msgSecCheckResult.getErrcode().equals(87014)){
+            return WeChatResponseUtil.contentIllegal();
+        }else{
+            return WeChatResponseUtil.fail(-1,"评论失败！");
+        }
+
+
     }
 
     /**

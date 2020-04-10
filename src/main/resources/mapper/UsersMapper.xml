@@ -159,6 +159,14 @@
         left join permission on permission.permission_id = role_permission.permission_id
         where user_role.user_id = #{user_id} and permission.permission_code is not null
     </select>
+    <!--通过 userNum,role 获得用户信息（系统管理员）-->
+    <select id="getUserInfoByUserNum_RoleId" resultMap="userRole">
+        select users.*
+        from users
+        left join user_role on users.user_id = user_role.user_id
+        left join role on user_role.role_id = role.role_id
+        where users.user_num = #{userNum} and role.role_name = #{role}
+    </select>
     <!--嵌套查询-->
     <select id="getUserInfoByUserId" resultMap="usersInfo">
         select users.*

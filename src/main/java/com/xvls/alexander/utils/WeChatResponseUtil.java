@@ -105,5 +105,9 @@ public class WeChatResponseUtil {
     public static Object unauthz() {
         return fail(506, "无操作权限");
     }
+
+    public static Object contentIllegal(){
+        return fail(87014,"内容含有违法违规内容");
+    }
 }
 

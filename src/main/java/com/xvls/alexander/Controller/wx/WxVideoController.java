@@ -1,13 +1,16 @@
 package com.xvls.alexander.Controller.wx;
 
 import com.google.common.collect.Maps;
+import com.xvls.alexander.entity.MsgSecCheckResult;
 import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.*;
 import com.xvls.alexander.service.wx.WxCommentsService;
 import com.xvls.alexander.service.wx.WxV_historyService;
 import com.xvls.alexander.service.wx.WxVideoRotationService;
 import com.xvls.alexander.service.wx.WxVideoService;
+import com.xvls.alexander.utils.ContentSecurityUtil;
 import com.xvls.alexander.utils.JacksonUtil;
+import com.xvls.alexander.utils.SystemResponse;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +36,8 @@ public class WxVideoController {
     WxCommentsService wxCommentsService;
     @Autowired
     WxVideoRotationService wxVideoRotationService;
+    @Autowired
+    ContentSecurityUtil contentSecurityUtil;
     /**
      * 获得视频列表信息
      * @return
@@ -127,24 +133,32 @@ public class WxVideoController {
         if(wxUserId==null || videoMainId==null || vcContent==null || parentVcId==null){
             return WeChatResponseUtil.badArgument();
         }
-        Comments comments = new Comments();
-        comments.setWxUserId(wxUserId);
-        comments.setBelongId(videoMainId);
-        comments.setBelongType("V");
-        comments.setVcContent(vcContent);
-        comments.setVcDate(new Date());
-        comments.setParentVcId(parentVcId);
-        comments.setParentName(parentName);
+        HashMap checkResult = (HashMap) contentSecurityUtil.msgSecCheck(vcContent);
+        MsgSecCheckResult msgSecCheckResult = (MsgSecCheckResult)checkResult.get("data");
+        if(checkResult.get("code").equals(0) && msgSecCheckResult.getErrcode().equals(0)){
+            Comments comments = new Comments();
+            comments.setWxUserId(wxUserId);
+            comments.setBelongId(videoMainId);
+            comments.setBelongType("V");
+            comments.setVcContent(vcContent);
+            comments.setVcDate(new Date());
+            comments.setParentVcId(parentVcId);
+            comments.setParentName(parentName);
 
-        /**
-         * 增加评论数量
-         */
-        wxVideoService.addVideoCommentNum(videoMainId);
+            /**
+             * 增加评论数量
+             */
+            wxVideoService.addVideoCommentNum(videoMainId);
 
-        Integer commentId = wxCommentsService.addComment(comments);
-        Map result = Maps.newHashMap();
-        result.put("commentId",commentId);
-        return WeChatResponseUtil.ok(result);
+            Integer commentId = wxCommentsService.addComment(comments);
+            Map result = Maps.newHashMap();
+            result.put("commentId",commentId);
+            return WeChatResponseUtil.ok(result);
+        }else if (checkResult.get("code").equals(0) && msgSecCheckResult.getErrcode().equals(87014)){
+            return SystemResponse.contentIllegal();
+        }else{
+            return SystemResponse.fail(-1,"评论失败！");
+        }
     }
 
     /**

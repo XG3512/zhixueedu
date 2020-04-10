@@ -17,6 +17,7 @@ import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +31,12 @@ import java.util.Map;
 @Validated
 public class WxLoginController{
 
-    private static String appid="wx085b04d8a31a7f20";
-    private static String secret="2aa9adb26f6a5b91485e8debdff3dfb2";//22c9a164892a1696eef3347fa6c34340
+    //private static String appid="wxfc75ed61bcc8838e";
+    //private static String secret="78b473fdb261fa9b25ba9e8fd7d32d13";//22c9a164892a1696eef3347fa6c34340
+    @Value("${xvls_weixin.appid}")
+    private String appid;
+    @Value("${xvls_weixin.secret}")
+    private String secret;
 
     private final WxMaServiceImpl wxMaService = new WxMaServiceImpl();
 
@@ -89,9 +94,7 @@ public class WxLoginController{
             System.out.println(e.getCause());
             return WeChatResponseUtil.badArgument();
         }
-        if(wxUserId==null || userInfo==null||
-                (userInfo.getAvatarUrl()==null && userInfo.getCity()==null && userInfo.getAvatarUrl()==null && userInfo.getCountry()==null && userInfo.getGender()==null
-                        && userInfo.getLanguage()==null && userInfo.getNickname()==null && userInfo.getProvince()==null)){
+        if(wxUserId==null || userInfo==null || userInfo.getNickname()==null || userInfo.getAvatarUrl() == null){
             return WeChatResponseUtil.badArgumentValue();
         }
         /**更新数据**/
