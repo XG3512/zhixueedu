@@ -176,7 +176,6 @@ public class WxCommentController {
             commentIdList = JacksonUtil.parseIntegerList(body, "commentIdList");
             belongType = JacksonUtil.parseString(body,"belongType");
             belongId = JacksonUtil.parseInteger(body,"belongId");
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return SystemResponse.fail(-1,"Json转换出错");

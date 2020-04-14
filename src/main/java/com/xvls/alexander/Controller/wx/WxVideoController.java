@@ -155,9 +155,9 @@ public class WxVideoController {
             result.put("commentId",commentId);
             return WeChatResponseUtil.ok(result);
         }else if (checkResult.get("code").equals(0) && msgSecCheckResult.getErrcode().equals(87014)){
-            return SystemResponse.contentIllegal();
+            return WeChatResponseUtil.contentIllegal();
         }else{
-            return SystemResponse.fail(-1,"评论失败！");
+            return WeChatResponseUtil.fail(-1,"评论失败！");
         }
     }
 

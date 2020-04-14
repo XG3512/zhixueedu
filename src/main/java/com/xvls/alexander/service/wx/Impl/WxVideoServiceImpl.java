@@ -7,6 +7,7 @@ import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Label;
 import com.xvls.alexander.entity.wx.Video;
 import com.xvls.alexander.entity.wx.Video_main;
+import com.xvls.alexander.service.wx.WxToolBarService;
 import com.xvls.alexander.service.wx.WxVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -180,7 +181,7 @@ public class WxVideoServiceImpl implements WxVideoService {
      */
     @Override
     public void updateVideoCommentNum(Integer videoMainId) {
-
+        wxVideoMapper.updateVideoCommentNum(videoMainId);
     }
 
 
@@ -284,7 +285,12 @@ public class WxVideoServiceImpl implements WxVideoService {
         Long date = new Date().getTime()/3600000;
 
         result = (playNum*0.0769+commentNum*0.1538+goodNum*0.3077+collectionNum*0.4615)*1000+100.0;//1,2,4,6
-        Double temp = Math.pow(date-videoDate+2,1.4);
+        Double temp;
+        if((date-videoDate)>=168){
+            temp = Math.pow(168+2,1.36);
+        }else{
+            temp = Math.pow(date-videoDate+2,1.36);
+        }
         //Double temp = Math.pow(Math.E,0.01279*(date-videoDate));
         result = result/temp;
         return result;

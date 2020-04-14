@@ -8,6 +8,7 @@ import com.xvls.alexander.entity.PageInfo;
 import com.xvls.alexander.entity.wx.Article;
 import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.wx.WxArticleService;
+import com.xvls.alexander.service.wx.WxToolBarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class WxArticleServiceImpl implements WxArticleService {
     WxArticleMapper wxArticleMapper;
     @Autowired
     FileBelongMapper fileBelongMapper;
+    @Autowired
+    WxToolBarService wxToolBarService;
 
     @Override
     public List<Article> getArticleByPage(PageInfo pageInfo,Integer wxUserId) {
@@ -320,6 +323,8 @@ public class WxArticleServiceImpl implements WxArticleService {
     public void deleteArticleByIdList(List<Integer> articleIdList) {
         fileBelongMapper.deleteFileBelongByArticleIdList(articleIdList);
         wxArticleMapper.deleteArticleByIdList(articleIdList);
+        wxToolBarService.deleteCollections("A",articleIdList);
+        wxToolBarService.deleteGoods("A",articleIdList);
     }
 
     public Double Calculate(Article article){
@@ -333,7 +338,7 @@ public class WxArticleServiceImpl implements WxArticleService {
         Long date = new Date().getTime()/3600000;
 
         result = (readNum*0.0769+commentNum*0.1538+goodNum*0.3077+collectionNum*0.4615)*1000+100.0;//1,2,4,6
-        Double temp = Math.pow(date-articleTime+2,1.4);
+        Double temp = Math.pow(date-articleTime+2,1.3305);
         //Double temp = Math.pow(Math.E,0.01279*(date-videoDate));
         result = result/temp;
         return result;

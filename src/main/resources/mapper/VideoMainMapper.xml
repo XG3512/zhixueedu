@@ -181,6 +181,14 @@
         where video.video_main_id = #{videoMainId} and verify_status = #{verifyStatus};
     </select>
 
+    <select id="getVideoMainIdList" resultType="java.lang.Integer">
+        select video_main_id from video_main
+        where 1=1 and
+        <foreach collection="list" open="teacher_id in (" close=")" item="userId" separator=",">
+            #{userId}
+        </foreach>
+    </select>
+
     <!--通过 videoMainId，verifyStatus 修改视频主页审核状态-->
     <update id="editVideoMainVerifyStatus">
         update video_main set verify_status = #{verifyStatus} where video_main_id = #{videoMainId};

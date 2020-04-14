@@ -1,6 +1,7 @@
 package com.xvls.alexander.service.wx.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xvls.alexander.dao.WxCollectionMapper;
 import com.xvls.alexander.dao.WxFollow_schoolMapper;
 import com.xvls.alexander.dao.WxFollow_teacherMapper;
 import com.xvls.alexander.dao.WxGoodMapper;
@@ -11,6 +12,8 @@ import com.xvls.alexander.service.wx.*;
 import com.xvls.alexander.utils.WeChatResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class WxToolBarServiceImpl implements WxToolBarService {
@@ -30,6 +33,8 @@ public class WxToolBarServiceImpl implements WxToolBarService {
     WxUsersService wxUsersService;
     @Autowired
     WxSchoolService wxSchoolService;
+    @Autowired
+    WxCollectionMapper wxCollectionMapper;
 
     /**
      * 对动态进行点赞 , 在前端进行判断是否已经点赞
@@ -304,6 +309,26 @@ public class WxToolBarServiceImpl implements WxToolBarService {
         QueryWrapper<Follow_school> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("wx_user_id",wxUserId);
         return wxFollow_schoolMapper.selectCount(queryWrapper);
+    }
+
+    /**
+     * 通过 belongType,belongIdList 批量删除收藏记录
+     * @param belongType
+     * @param belongIdList
+     */
+    @Override
+    public void deleteCollections(String belongType, List<Integer> belongIdList) {
+        wxCollectionMapper.deleteCollections(belongType,belongIdList);
+    }
+
+    /**
+     * 通过 belongType，belongIdList 批量删除点赞记录
+     * @param belongType
+     * @param belongIdList
+     */
+    @Override
+    public void deleteGoods(String belongType, List<Integer> belongIdList) {
+        wxGoodMapper.deleteGoods(belongType,belongIdList);
     }
 
 }

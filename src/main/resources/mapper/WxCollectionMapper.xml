@@ -4,17 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xvls.alexander.dao.WxCollectionMapper">
 
-    <resultMap id="article" type="com.xvls.alexander.entity.wx.Article">
-        <id column="collection_type" property="collectionType"></id>
-        <result column="collection_id" property="collectionId"></result>
-        <result column="wxUser_id" property="wxUserId"></result>
-        <result column="collection_date" property="collectionDate"></result>
-        <result column="group_id" property="groupId"></result>
-    </resultMap>
-
     <delete id="deleteCollection">
         delete from collection
         where collection_type=#{collectionType} and collection_id=#{collectionId} and wx_user_id=#{wxUserId}
+    </delete>
+
+    <delete id="deleteCollections">
+        delete from collection where collection_type = #{belongType} and
+        <foreach collection="belongIdList" open="collection_id in (" close=")" item="belongId" separator=",">
+            #{belongId}
+        </foreach>
     </delete>
 
 </mapper>

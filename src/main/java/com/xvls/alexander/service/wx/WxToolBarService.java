@@ -50,4 +50,18 @@ public interface WxToolBarService {
      */
     Integer getFollowSchoolCount(Integer wxUserId);
 
+    /****************************后台管理端*****************************/
+    /**
+     * 通过 belongType,belongIdList 批量删除收藏记录
+     * @param belongType
+     * @param belongIdList
+     */
+    void deleteCollections(String belongType,List<Integer> belongIdList);
+    /**
+     * 通过 belongType，belongIdList 批量删除点赞记录
+     * @param belongType
+     * @param belongIdList
+     */
+    void deleteGoods(String belongType,List<Integer> belongIdList);
+
 }

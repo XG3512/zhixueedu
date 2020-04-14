@@ -10,6 +10,7 @@ import com.xvls.alexander.entity.wx.Users;
 import com.xvls.alexander.entity.wx.Video_episode;
 import com.xvls.alexander.entity.wx.Video_main;
 import com.xvls.alexander.service.Video_mainService;
+import com.xvls.alexander.service.wx.WxToolBarService;
 import com.xvls.alexander.service.wx.WxVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class Video_mainServiceImpl implements Video_mainService {
     WxVideoService wxVideoService;
     @Autowired
     VideoMainMapper videoMainMapper;
+    @Autowired
+    WxToolBarService wxToolBarService;
 
     /**
      * 上传 视频主页 信息
@@ -67,6 +70,7 @@ public class Video_mainServiceImpl implements Video_mainService {
         queryWrapper.eq("teacher_id",teacherId);
         return videoMainMapper.selectCount(queryWrapper);
     }
+
 
     /**
      * 通过 videoMainId 获得视频详细信息
@@ -149,6 +153,8 @@ public class Video_mainServiceImpl implements Video_mainService {
     public void deleteVideoMain(List<Integer> videoMainIdList) {
         videoMainMapper.deleteVideoMain(videoMainIdList);
         this.deleteVideoByMainId(videoMainIdList);
+        wxToolBarService.deleteGoods("V",videoMainIdList);
+        wxToolBarService.deleteCollections("V",videoMainIdList);
     }
 
     /**
@@ -170,12 +176,25 @@ public class Video_mainServiceImpl implements Video_mainService {
     }
 
     /**
+     * 通过 userIdList 获得视频idList
+     * @param userIdList
+     * @return
+     */
+    @Override
+    public List<Integer> getVideoMainIdList(List<Integer> userIdList) {
+        return videoMainMapper.getVideoMainIdList(userIdList);
+    }
+
+    /**
      * 通过 userIdList 批量删除视频主页
      * @param userIdList
      */
     @Override
     public void deleteVideoMainPageByUserIdList(List<Integer> userIdList) {
+        List<Integer> videoMainIdList = videoMainMapper.getVideoMainIdList(userIdList);
         videoMainMapper.deleteVideoMainPageByUserIdList(userIdList);
+        wxToolBarService.deleteCollections("V",videoMainIdList);
+        wxToolBarService.deleteGoods("V",videoMainIdList);
     }
 
     /**

@@ -103,6 +103,13 @@ public interface VideoMainMapper extends BaseMapper<VideoMain> {
      */
     void deleteVideoByUserIdList(List<Integer> userIdList);
 
+    /**
+     * 通过 userIdList 获得视频idList
+     * @param userIdList
+     * @return
+     */
+    List<Integer> getVideoMainIdList(List<Integer> userIdList);
+
     /******************************视频审核************************************/
     /**
      * 通过 userId、pageInfo 获得视频审核列表

@@ -3,6 +3,7 @@ package com.xvls.alexander;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
 import com.xvls.alexander.dao.*;
 import com.xvls.alexander.entity.*;
 import com.xvls.alexander.entity.wx.*;
@@ -357,6 +358,19 @@ public class TestUserMapper2 {
         String content3 = "真好";
         Object result = contentSecurityUtil.msgSecCheck(content1);
         System.out.println(result);
+    }
+
+    @Test
+    public void testDeleteGoods(){
+        List<Integer> list = Lists.newArrayList();
+        list.add(6);
+        wxToolBarService.deleteGoods("A",list);
+    }
+    @Test
+    public void testDeleteCollections(){
+        List<Integer> list = Lists.newArrayList();
+        list.add(22);
+        wxToolBarService.deleteCollections("V",list);
     }
 
 }

@@ -1,8 +1,7 @@
 package com.xvls.alexander.utils;
 
 /**
- * Created by wangl on 2018/1/14.
- * todo:计算文件在七牛云存储上的 hash 值
+ * 计算文件在七牛云存储上的 hash 值
  */
 
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class QETag {
 
-    private final int CHUNK_SIZE = 1 << 22;
+    private final int CHUNK_SIZE = 1 << 22;//4M
 
     public byte[] sha1(byte[] data) throws NoSuchAlgorithmException {
         MessageDigest mDigest = MessageDigest.getInstance("sha1");
