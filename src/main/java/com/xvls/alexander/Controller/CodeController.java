@@ -62,11 +62,11 @@ public class CodeController {
             //response.setDateHeader("Expires", 0);
             //String verifyCode = VerifyCodeUtil.generateTextCode(VerifyCodeUtil.TYPE_ALL_MIXED, 4, null);
             //定义图形验证码的长和宽
-            ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(200, 100, 1, 6);
+            ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(200, 100, 4, 6);
             String verifyCode = captcha.getCode();
             //将验证码放到HttpSession里面
             //request.getSession().setAttribute(Constants.VALIDATE_CODE, verifyCode);
-            redisTemplate.opsForValue().set(verifyCodeId,verifyCode,1, TimeUnit.HOURS);
+            redisTemplate.opsForValue().set(verifyCodeId,verifyCode,30, TimeUnit.MINUTES);
             LOGGER.info("本次生成的验证码为[" + verifyCode + "],已存放到redis中,verifyCodeId为："+verifyCodeId);
             //设置输出的内容的类型为JPEG图像
             //response.setContentType("image/jpeg");
