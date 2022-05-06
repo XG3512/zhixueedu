@@ -154,8 +154,8 @@ public class TestUserMapper2 {
 
     @Test
     public void testString(){
-         String path="http://xvls.top/";
-        String imgPath = "http://xvls.top/jpgc2477d97-b18d-4b7f-badc-fcdbd99f6d3a";
+         String path="http://zhixueedu.xyz/";
+        String imgPath = "http://zhixueedu.xyz/jpgc2477d97-b18d-4b7f-badc-fcdbd99f6d3a";
         imgPath = imgPath.replace(path, "");
         System.out.println(imgPath);
     }

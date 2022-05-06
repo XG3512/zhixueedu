@@ -100,17 +100,17 @@ server:
   servlet:
     context-path: /xvls
   ssl:
-    key-store: classpath:xvls_top.jks
-    key-password: g5c965jc62fa2lu
+    key-store: classpath:zhixueedu.xyz.jks
+    key-password: toor123
     key-store-type: JKS
 spring:
   profiles: dev
   # 数据源配置
   datasource:
-    url: jdbc:mysql://139.159.240.77:3306/xvls_alexander?useUnicode=true&characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=true&serverTimezone=UTC
-    username: myuser
-    password: 1102837040
-
+    url: jdbc:mysql://111.229.225.53:3306/xvls_alexander?useUnicode=true&characterEncoding=UTF-8&useSSL=false&tinyInt1isBit=true&serverTimezone=UTC
+    username: lala
+    password: toor123
+#139.159.240.77:3306
 # xvls自定义全局数据
 # shiroConfig.java中的密码加密设置
 xvls_shiro:
@@ -118,11 +118,12 @@ xvls_shiro:
   setHashIterations: 6
   setStoredCredentialsHexEncoded: true
 xvls_qiniu:
-  path: https://xvls.top/
-  qiniuAccess: fVm1qUAtREn6wyBjzJhB7JE4piRHgzypdtvTTCFV
-  qiniuKey: 3MngPq1ovKCCCjkOwucoQC7Gxg_clZRJMRFTnKKy
-  bucketName: test01
+  path: https://www.sdlyjs.cn/
+  qiniuAccess: MtpXtPdtf0t9ZAbgZsUvacLGfkqMyyi4gj7khlZF
+  qiniuKey: XMP48-FytVtUytAABY-ejGyFllEkPoZvSkJNXK6b
+  bucketName: zhixueedu
+
 # 微信小程序
 xvls_weixin:
-  appid: wxfc75ed61bcc8838e
-  secret: 78b473fdb261fa9b25ba9e8fd7d32d13
+  appid: wx7afc596cf2fc1cd8
+  secret: ad0bd141b2889ed48c2aaae9cdb192ee

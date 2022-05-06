@@ -36,16 +36,16 @@ public class QiniuFileUtil {
 	private static final Logger LOGGER = LoggerFactory.getLogger(QiniuFileUtil.class);
 
 	//@Value("${xvls_qiniu.path}")
-	private static String path="http://xvls.top/";
+	private static String path="https://www.sdlyjs.cn/";
 
 	//@Value("${xvls_qiniu.qiniuAccess}")
-	private static String qiniuAccess="fVm1qUAtREn6wyBjzJhB7JE4piRHgzypdtvTTCFV";
+	private static String qiniuAccess="MtpXtPdtf0t9ZAbgZsUvacLGfkqMyyi4gj7khlZF";
 
 	//@Value("${xvls_qiniu.qiniuKey}")
-	private static String qiniuKey="3MngPq1ovKCCCjkOwucoQC7Gxg_clZRJMRFTnKKy";
+	private static String qiniuKey="XMP48-FytVtUytAABY-ejGyFllEkPoZvSkJNXK6b";
 
 	//@Value("${xvls_qiniu.bucketName}")
-	private static String bucketName="test01";
+	private static String bucketName="zhixueedu";
 
 	/***
 	 * 普通用户上传图片
@@ -58,7 +58,7 @@ public class QiniuFileUtil {
 		File_download rescource = new File_download();
 		Boolean islongimage = false;
 
-		Configuration config = new Configuration(Region.region0());
+		Configuration config = new Configuration(Region.region1());
 		String fileName = "", extName = "", filePath = "";
 		if (null != file && !file.isEmpty()) {
 			extName = file.getOriginalFilename().substring(
@@ -135,7 +135,7 @@ public class QiniuFileUtil {
 	 * @throws NoSuchAlgorithmException
 	 */
 	public static String uploadBySystem(BufferedImage file) throws IOException, NoSuchAlgorithmException {
-		Configuration config = new Configuration(Region.region0());
+		Configuration config = new Configuration(Region.region1());
 		String fileName = "", extName = "Qrcode", filePath = "";
 		if (null != file) {
 			fileName = extName + UUID.randomUUID();
@@ -174,7 +174,7 @@ public class QiniuFileUtil {
 	 * @param imgPath
 	 */
 	public static RestResponse deleteQiniuP(String imgPath) {
-		Configuration config = new Configuration(Region.region0());
+		Configuration config = new Configuration(Region.region1());
 		Auth auth = Auth.create(qiniuAccess, qiniuKey);
 		BucketManager bucketManager = new BucketManager(auth,config);
 		imgPath = imgPath.replace(path, "");
@@ -209,7 +209,7 @@ public class QiniuFileUtil {
 	 * @return
 	 */
 	public static String uploadImageSrc(String src){
-		Configuration config = new Configuration(Region.region0());
+		Configuration config = new Configuration(Region.region1());
 		Auth auth = Auth.create(qiniuAccess, qiniuKey);
 		BucketManager bucketManager = new BucketManager(auth, config);
 		String fileName = UUID.randomUUID().toString(),filePath="";
@@ -242,7 +242,7 @@ public class QiniuFileUtil {
 	 * @return
 	 */
 	public static String uploadLocalImg(String src) throws IOException, NoSuchAlgorithmException{
-		Configuration config = new Configuration(Region.region0());
+		Configuration config = new Configuration(Region.region1());
 		UploadManager uploadManager = new UploadManager(config);
 		Auth auth = Auth.create(qiniuAccess, qiniuKey);
 		String token = auth.uploadToken(bucketName);
@@ -296,7 +296,7 @@ public class QiniuFileUtil {
 		if(name.isEmpty()){
 			return RestResponse.failure("图片名称不能为空");
 		}
-		Configuration config = new Configuration(Region.region0());
+		Configuration config = new Configuration(Region.region1());
 		UploadManager uploadManager = new UploadManager(config);
 		Auth auth = Auth.create(qiniuAccess, qiniuKey);
 		String token = auth.uploadToken(bucketName),filePath;
@@ -319,7 +319,7 @@ public class QiniuFileUtil {
 	 */
 	public static void SetFileExistsDays(String key,int days){
 		//构造一个带指定 Region 对象的配置类
-		Configuration cfg = new Configuration(Region.region0());
+		Configuration cfg = new Configuration(Region.region1());
 		//...其他参数参考类注释
 		//过期天数，该文件10天后删除
 		//int days = 10;
